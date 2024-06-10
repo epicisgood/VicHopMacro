@@ -34,32 +34,32 @@ MainLoop(){
         return 1
     }
     ; Check for Vic's presence after specific actions
-    if (Vic_Detect("Warning.png") == 1) {
+    if (Vic_Detect("img/Warning.png") == 1) {
         AttackVic()
         return 1
     }
     ResetCharacter()
     MountainTop()
-    if (Vic_Detect("Warning.png") == 1) {
+    if (Vic_Detect("img/Warning.png") == 1) {
         AttackVic()
         return 1
     }
     ResetCharacter()
     Rose()
-    if (Vic_Detect("Warning.png") == 1) {
+    if (Vic_Detect("img/Warning.png") == 1) {
         AttackVic()
         return 1
     }
     ResetCharacter()
     Cactus()
-    if (Vic_Detect("Warning.png") == 1) {
+    if (Vic_Detect("img/Warning.png") == 1) {
         AttackVic()
         return 1
     }
-    ; Close RobloxPlayerBeta.exe
+
     RunWait, taskkill /F /IM RobloxPlayerBeta.exe, , Hide
 
-return 1 ; Continue the loop
+return 1 
 }
 
 JoinServer(){
@@ -78,18 +78,23 @@ DragScroll() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
 
     MouseClickDrag, middle, 300, 302, 300, 300
-    ; Wait for the drag to complete
+
     Sleep, 500
-    ; Check if the mouse moved to the expected position
+
     MouseGetPos, xpos, ypos
     if (xpos != 300 || ypos != 300) {
         return 1 ; Drag Success
     }
     MouseClickDrag, right, 300, 302, 300, 300
-return 0 ; Drag successful
+return 0 ; Drag fail
 }
 
 CheckForNight() {
-    PixelGetColor, color, 950, 100
-return color 
+    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    
+    WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    centerX := x + (width // 2)
+    PixelGetColor, color, centerX, 150    
+    return color
 }
+

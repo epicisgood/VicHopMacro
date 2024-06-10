@@ -1,7 +1,10 @@
 #NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
 CoordMode, Pixel, Screen ; Set coordinate mode to screen.
 
+global current_hive := 1
+
 StartServer() {
+    global current_hive
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     Sleep, 200
     Send, .
@@ -20,7 +23,6 @@ StartServer() {
     if current_hive {
         ResetCharacter()
     }
-
 }
 
 DetectLoading(loadingColor, timeout) {
@@ -45,7 +47,7 @@ DetectLoading(loadingColor, timeout) {
         Sleep, 100
     }
 
-    return true ; Loading completed within the timeout
+    return true ; Loading success
 }
 
 ZoomOut() {
@@ -56,6 +58,7 @@ ZoomOut() {
 }
 
 FindHiveSlot() {
+    global current_hive
     Sleep, 300
     Send, {a down}
     Sleep, 500
@@ -79,113 +82,124 @@ FindHiveSlot() {
 }
 
 ClaimHive(current_hive) {
-    ImagePath := "Hive.png"
-        WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+    ImagePath := "img/Hive.png"
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
 
-        if RobloxWindowID
-        {
-            WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
-            Sleep, 1000
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+        Sleep, 1000
 
-            ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxWidth, RobloxHeight, *32 %ImagePath%
+        ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
 
-            if ErrorLevel = 0
-            {
-                send {e down}
-                Sleep, 200
-                Send, {e up}
-                return current_hive
-            }
+        if (ErrorLevel = 0) {
+            Send {e down}
+            Sleep, 200
+            Send {e up}
+            return current_hive
+        } else {
             return 0
+        }
+    } else {
+        return 0
     }
 }
-    ResetCharacter() {
-        Send, {Esc down}
-        Sleep, 100
-        Send, {Esc up}
-        Sleep, 100
-        Send, {r down}
-        Sleep, 100
-        Send, {r up}
-        Sleep, 100
-        Send, {Enter down}
-        Sleep, 100
-        Send, {Enter up}
-        Sleep, 10000
-        ZoomOut()
+
+ResetCharacter() {
+    Send, {Esc down}
+    Sleep, 100
+    Send, {Esc up}
+    Sleep, 100
+    Send, {r down}
+    Sleep, 100
+    Send, {r up}
+    Sleep, 100
+    Send, {Enter down}
+    Sleep, 100
+    Send, {Enter up}
+    Sleep, 10000
+    ZoomOut()
+    Send, {w down}
+    Sleep, 3000
+    Send, {w up}
+    Sleep, 50
+    Send, {s down}
+    Sleep, 150
+    Send, {s up}
+    GoToRamp()
+}
+
+GoToRamp() {
+    global current_hive
+    Sleep, 50
+    Send, {d down}
+    Sleep, 1000 * current_hive
+    Send, {d up}
+    Sleep, 500
+    Send, {space down}
+    Send, {d down}
+    Sleep, 200
+    Send, {space up}
+
+}
+
+Vic_Detect(ImagePath) {
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+
+    if RobloxWindowID {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+
+        SendInput, {/}
+        Sleep, 100 
+
+        SendInput, {Enter}
+        Sleep, 100 
+
+        Sleep, 1000
+
+        ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxWidth, RobloxHeight, *32 %ImagePath%
+
+        ; If the image is found 
+        if (ErrorLevel = 0) {
+            AttackVic()
+            return 1
+        } else {
+            return 0
+        }
+    }
+}
+
+
+AttackVic() {
+    while (!CheckIfDefeated()) {
         Send, {w down}
-        Sleep, 3000
+        Sleep, 700
         Send, {w up}
-        Sleep, 50
+        Send, {a down}
+        Sleep, 700
+        Send, {a up}
         Send, {s down}
-        Sleep, 150
+        Sleep, 700
         Send, {s up}
-        GoToRamp()
-    }
-
-    GoToRamp() {
-        Sleep, 50
         Send, {d down}
-        Sleep, 6000
+        Sleep, 700
         Send, {d up}
-        Sleep, 500
-        Send, {w down}
-        Sleep, 2000
-        Send, {w up}
-        Sleep, 100
     }
+}
 
-    Vic_Detect(ImagePath) {
-        ; Find the Roblox window
-        WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+CheckIfDefeated(){
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+    ImagePath := "img/Defeated.png"
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
 
-        ; If the Roblox window is found
-        if RobloxWindowID
-        {
-            ; Get the position and dimensions of the Roblox window
-            WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+        ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
 
-            ; Press "/" key
-            SendInput, {/}
-            Sleep, 100 ; Adjust sleep time as needed
-
-            ; Press "Enter" key
-            SendInput, {Enter}
-            Sleep, 100 ; Adjust sleep time as needed
-
-            ; Wait for search to complete (you may need to adjust this delay)
-            Sleep, 1000
-
-            ; Search for the image within the Roblox window
-            ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxWidth, RobloxHeight, *32 %ImagePath%
-
-            ; If the image is found within the Roblox window, display a message box
-            if (ErrorLevel = 0)
-            {
-                AttackVic()
-                return 1
-            }
-            else
-            {
-                return 0
-            }
+        if (ErrorLevel = 0) {
+            MsgBox, Successfully defeated Vicious Bee
+            return 1
+        } else {
+            return 0
         }
     }
-
-    AttackVic(){
-        Loop 10{
-            Send, {w down}
-            Sleep, 700
-            Send, {w up}
-            Send, {a down}
-            Sleep, 700
-            send, {a up}
-            Send, {s down}
-            Sleep, 700
-            Send, {s up}
-            Send, {d down}
-            Sleep, 700
-            Send, (d up)
-
-        }
-    }
+    return 0
+}
