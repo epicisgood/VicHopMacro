@@ -287,7 +287,7 @@ Cactus(){
 
     loop 2 {
     Send, {s down}
-    Sleep, 1200
+    Sleep, 1100
     Send, {s up}
 
     Send, {d down}
@@ -295,7 +295,7 @@ Cactus(){
     Send, {d up}
 
     Send, {w down}
-    Sleep, 1200
+    Sleep, 1000
     Send, {w up}
 
     Send, {d down}
@@ -304,6 +304,6 @@ Cactus(){
     }
 
     Send, {s down}
-    Sleep, 1200
+    Sleep, 1100
     Send, {s up}
 }

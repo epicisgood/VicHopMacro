@@ -1,7 +1,8 @@
-#NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
-CoordMode, Pixel, Screen ; Set coordinate mode to screen.
+#NoEnv 
+CoordMode, Pixel, Screen 
 
 global current_hive := 1
+
 
 StartServer() {
     global current_hive
@@ -51,10 +52,30 @@ DetectLoading(loadingColor, timeout) {
 }
 
 ZoomOut() {
-    Loop, 10 {
-        Send, {WheelDown}
+    Loop, 5 {
+        Send, {o down}
         Sleep, 100
+        Send, {o up}
     }
+}
+
+CheckUp(){
+    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    SendMode, Event
+    Sleep, 500
+    MouseMove, 100, 100
+    Sleep, 500
+    MouseClickDrag, middle, 300, 302, 300, 300
+    Sleep, 500
+}
+
+CheckForNight() {
+    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+
+    WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    centerX := x + (width // 2)
+    PixelGetColor, color, centerX, 150 
+    return color
 }
 
 FindHiveSlot() {
@@ -130,9 +151,10 @@ ResetCharacter() {
 
 GoToRamp() {
     global current_hive
+    ;; make it so it detects if it spawned at hive or not..
     Sleep, 50
     Send, {d down}
-    Sleep, 1000 * current_hive
+    Sleep, 3000 
     Send, {d up}
     Sleep, 500
     Send, {space down}
@@ -158,7 +180,6 @@ Vic_Detect(ImagePath) {
 
         ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxWidth, RobloxHeight, *32 %ImagePath%
 
-        ; If the image is found 
         if (ErrorLevel = 0) {
             AttackVic()
             return 1
@@ -168,21 +189,27 @@ Vic_Detect(ImagePath) {
     }
 }
 
-
 AttackVic() {
     while (!CheckIfDefeated()) {
         Send, {w down}
-        Sleep, 700
+        Sleep, 400
         Send, {w up}
+        Sleep, 500 
+
         Send, {a down}
-        Sleep, 700
+        Sleep, 400
         Send, {a up}
+        Sleep, 500 
+
         Send, {s down}
-        Sleep, 700
+        Sleep, 400
         Send, {s up}
+        Sleep, 500 
+
         Send, {d down}
-        Sleep, 700
+        Sleep, 400
         Send, {d up}
+        Sleep, 500 
     }
 }
 
@@ -195,7 +222,6 @@ CheckIfDefeated(){
         ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
 
         if (ErrorLevel = 0) {
-            MsgBox, Successfully defeated Vicious Bee
             return 1
         } else {
             return 0
