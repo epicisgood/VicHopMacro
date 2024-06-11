@@ -3,7 +3,6 @@ CoordMode, Pixel, Screen
 
 global current_hive := 1
 
-
 StartServer() {
     global current_hive
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
@@ -71,7 +70,6 @@ CheckUp(){
 
 CheckForNight() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
-
     WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     centerX := x + (width // 2)
     PixelGetColor, color, centerX, 150 
@@ -82,7 +80,7 @@ FindHiveSlot() {
     global current_hive
     Sleep, 300
     Send, {a down}
-    Sleep, 500
+    Sleep, 400
     Send, {a up}
     Sleep, 300
     current_hive := 1
@@ -138,23 +136,41 @@ ResetCharacter() {
     Sleep, 100
     Send, {Enter up}
     Sleep, 10000
-    ZoomOut()
-    Send, {w down}
-    Sleep, 3000
-    Send, {w up}
-    Sleep, 50
-    Send, {s down}
-    Sleep, 150
-    Send, {s up}
-    GoToRamp()
+    Loop, 5 {
+        Send, {i down}
+        Sleep, 100
+        Send, {i up}
+    }
+    if (SearchWhereSpawned() == 0xFFFFFF || SearchWhereSpawned() == 0xF6F6F5 || SearchWhereSpawned() == 0x9F9F9F) {
+        ZoomOut()
+        Send, {w down}
+        Sleep, 500
+        Send, {w up}
+        Sleep, 50
+        Send, {s down}
+        Sleep, 150
+        Send, {s up}
+        GoToRamp()
+    } else {
+        ResetCharacter()
+        return
+
+    }
+}
+
+SearchWhereSpawned() {
+    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    PixelGetColor, color, 1300, 850, RGB
+    MouseMove, 1300, 850
+    MsgBox, %color%
+    return color
 }
 
 GoToRamp() {
     global current_hive
-    ;; make it so it detects if it spawned at hive or not..
     Sleep, 50
     Send, {d down}
-    Sleep, 3000 
+    Sleep, 1000 * current_hive 
     Send, {d up}
     Sleep, 500
     Send, {space down}
@@ -218,6 +234,12 @@ CheckIfDefeated(){
     ImagePath := "img/Defeated.png"
     if (RobloxWindowID) {
         WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+
+        SendInput, {/}
+        Sleep, 100 
+
+        SendInput, {Enter}
+        Sleep, 100 
 
         ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
 

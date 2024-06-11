@@ -30,15 +30,17 @@ PepperPatch(){
     Send, {w down}
     Sleep, 250
     Send, {Space up}
-    Sleep, 3000
+    Sleep, 300
+    Send, {Space down}
+    Sleep, 250
+    Send, {Space up}
+    Sleep, 2750
     Send, {w up}
 
     Send, {Space down}
     Send, {w down}
     Sleep, 250
     Send, {Space up}
-    Send, {Space down}
-
     Send, {Space down}
     Send, {w down}
     Sleep, 250
@@ -93,7 +95,7 @@ PepperPatch(){
     Send, {d up}
 
     Send, {s down}
-    Sleep, 2500
+    Sleep, 2300
     Send, {s up}
     Sleep, 100
 
@@ -103,7 +105,7 @@ PepperPatch(){
     Sleep, 100
 
     Send, {w down}
-    Sleep, 2500
+    Sleep, 2300
     Send, {w up}
     Sleep, 100
 
@@ -113,10 +115,9 @@ PepperPatch(){
     Sleep, 100
 
     Send, {s down}
-    Sleep, 2600
+    Sleep, 2300
     Send, {s up}
     Sleep, 100
-    Vic_Detect("Warning.png")
 
 }
 
@@ -213,7 +214,7 @@ Rose(){
     Send, {d up}
 
     ; Start searching field
-    Sleep, 2050
+    Sleep, 1500
     Loop, 2 {
         Sleep, 100
         Send, {s down}
@@ -224,7 +225,7 @@ Rose(){
         Send, {a up}
 
         Send, {w down}
-        Sleep, 1650
+        Sleep, 1500
         Send, {w up} 
         Send, {a down}
         Sleep, 650
@@ -237,7 +238,6 @@ Rose(){
 
 
 Cactus(){
-    ;; send d for a few second THEN delay then s key a few seconds during red cannon
     SendMode, Input  ; Use SendInput for faster and more reliable key sending
     SetKeyDelay, 0, 50  ; Adjust key delay and press duration
     Send, {Space down}
