@@ -9,11 +9,6 @@ const options = {
     params: { cursor: '', sortOrder: 'Asc', excludeFullGames: 'false' },
     headers: {
         accept: 'application/json, text/plain, */*',
-        'accept-language': 'en-US,en;q=0.9',
-        'cache-control': 'no-cache',
-        origin: 'https://www.roblox.com',
-        pragma: 'no-cache',
-        referer: 'https://www.roblox.com/',
     }
 };
 
@@ -34,6 +29,7 @@ function main() {
             const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
 
             console.log('Opening Roblox URL:', robloxUrl);
+            console.log(response.data)
             open(robloxUrl);
         })
         .catch(function (error) {

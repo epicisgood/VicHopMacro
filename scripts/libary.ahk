@@ -72,6 +72,7 @@ CheckForNight() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     centerX := x + (width // 2)
+    MouseMove, centerX, 150
     PixelGetColor, color, centerX, 150 
     return color
 }
@@ -141,6 +142,8 @@ ResetCharacter() {
         Sleep, 100
         Send, {i up}
     }
+
+    ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
     if (SearchWhereSpawned() == 0xFFFFFF || SearchWhereSpawned() == 0xF6F6F5 || SearchWhereSpawned() == 0x9F9F9F) {
         ZoomOut()
         Send, {w down}

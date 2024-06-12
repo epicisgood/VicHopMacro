@@ -2,7 +2,7 @@
     "name": "vichopscript",
     "version": "1.0.0",
     "description": "Vicious Bee server hopper joins less than 2 people in a server",
-    "main": "serverhop.js",
+    "main": "scripts/index.js",
     "type": "module",
     "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1"
