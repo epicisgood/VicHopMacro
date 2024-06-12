@@ -11,6 +11,10 @@ Before you can use this macro, ensure you have the following software installed 
 
 2. **AutoHotkey**: A scripting language for Windows to create macros and automate tasks.
    - Download and install from [AutoHotkey official website](https://www.autohotkey.com/).
+3. **Roblox Settings**: On roblox click esc and settings tabs
+   - Make sure to put your Camera Sensitivity at 0.68 for night detection.
+
+
 
 ## Installation
 
@@ -35,16 +39,9 @@ To set up the macro on your machine, follow these steps:
 
 Once the macro is activated, it will begin automating specific actions in Bee Swarm Simulator related to vicious bees. Keep in mind that this project is still in development, so some features may not work as expected or may be missing.
 
-## Contributing
-
-As this project is not yet completed, contributions are welcome. If you have suggestions, improvements, or bug fixes, feel free to submit a pull request or open an issue on the project’s repository.
-
-## Disclaimer
-
-Use of this macro is at your own risk. Automation in games can sometimes violate the terms of service, leading to potential penalties or bans. Ensure you understand and accept these risks before using this macro.
 
 ## Contact
 
-If you have any questions or need further assistance, please open an issue in the repository.
+If you have any questions or need further assistance, pleasedm me at _epic. on discord
 
 Thank you for your interest in the Bee Swarm Vicious Macro project!

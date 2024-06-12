@@ -1,25 +1,24 @@
 #SingleInstance, Force
 SetWorkingDir, %A_ScriptDir%
 
-
 PepperPatch(){
-    SendMode, Input  ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 0, 50  ; Adjust key delay and press duration
-
+    SendMode, Input 
+    SetKeyDelay, 0, 50 
+    Sleep, 300
+    Send, {w down}
+    Sleep, 400
+    Send, {w up}
     Send, {Space down}
     Send, {d down} 
     Sleep, 250
     Send, {Space up}
-    Send, {Space down}
-    Sleep, 250
-    Send, {Space up}
-    Send, {w down}
-    Sleep, 250
-    Send, {w up}
     Sleep, 3000
     Send, {d up}
 
     Send, {d down}
+    Send, {w down}
+    Sleep, 300
+    Send, {w up}
     Send, {Space down}
     Sleep, 250
     Send, {Space up}
@@ -122,32 +121,11 @@ PepperPatch(){
 }
 
 MountainTop(){
-    SendMode, Input  ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 0, 50  ; Adjust key delay and press duration
+    SendMode, Input 
+    SetKeyDelay, 0, 50 
     Sleep, 100
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-
-    Send, {d down}
-    Send, {w down}
-    Sleep, 250
-    Send, {w up}
-    Sleep, 500
-    Send, {d up}
-
-    Sleep, 400
-    Send, {e down}
-    Sleep, 100
-    Send, {e up}
-
+    RedCannon()
     Sleep, 6000
-    ; at mtn field
 
     Send, {w down}
     Sleep, 1700
@@ -170,33 +148,10 @@ MountainTop(){
     Send, {w up}
 }
 
-
 Rose(){
-    SendMode, Input  ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 0, 50  ; Adjust key delay and press duration
-
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-
-    Send, {d down}
-    Send, {w down}
-    Sleep, 250
-    Send, {w up}
-    Sleep, 550
-    Send, {d up}
-    
-    ; Launch to cannon
-    Sleep, 450
-    Send, {e down}
-    Sleep, 150
-    Send, {e up}
-
+    SendMode, Input 
+    SetKeyDelay, 50, 50 
+    RedCannon()
     Sleep, 150
     Send, {d down}
     Send, {Space down}
@@ -218,48 +173,27 @@ Rose(){
     Loop, 2 {
         Sleep, 100
         Send, {s down}
-        Sleep, 1650
+        Sleep, 400
         Send, {s up}
         Send, {a down}
-        Sleep, 650
+        Sleep, 2800
         Send, {a up}
-
-        Send, {w down}
-        Sleep, 1500
-        Send, {w up} 
-        Send, {a down}
-        Sleep, 650
-        Send, {a up}
+        Sleep, 100
+        Send, {s down}
+        Sleep, 600
+        Send, {s up}
+        Sleep, 100
+        Send, {d down}
+        Sleep, 2800
+        Send, {d up}
     }
-    Send, {s down}
-    Sleep, 1650
-    Send, {s up}
+
 }
 
-
 Cactus(){
-    SendMode, Input  ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 0, 50  ; Adjust key delay and press duration
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-    Send, {Space down}
-    Send, {d down} 
-    Sleep, 250
-    Send, {Space up}
-
-    Send, {d down}
-    Send, {w down}
-    Sleep, 250
-    Send, {w up}
-    Sleep, 500
-    Send, {d up}
-
-    Sleep, 400
-    Send, {e down}
-    Sleep, 100
-    Send, {e up}
+    SendMode, Input 
+    SetKeyDelay, 0, 50 
+    RedCannon()
 
     ;; glide to cactux 0
 
@@ -286,21 +220,21 @@ Cactus(){
     Sleep, 2000
 
     loop 2 {
-    Send, {s down}
-    Sleep, 1100
-    Send, {s up}
+        Send, {s down}
+        Sleep, 1100
+        Send, {s up}
 
-    Send, {d down}
-    Sleep, 800
-    Send, {d up}
+        Send, {d down}
+        Sleep, 800
+        Send, {d up}
 
-    Send, {w down}
-    Sleep, 1000
-    Send, {w up}
+        Send, {w down}
+        Sleep, 1000
+        Send, {w up}
 
-    Send, {d down}
-    Sleep, 800
-    Send, {d up}
+        Send, {d down}
+        Sleep, 800
+        Send, {d up}
     }
 
     Send, {s down}

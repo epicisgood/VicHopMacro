@@ -10,21 +10,27 @@ return
 
 MainLoop(){
     JoinServer()
-    CheckUp()
+    Send, {PgDn}
+    Send, {PgDn}
     ZoomOut()
     ; Check for night color
     nightColor := CheckForNight()
     if (nightColor == 0x000000 || nightColor == 0x404040) {
         SendMode, Event
-        MouseClickDrag, middle, 300, 300, 300, 302
+        Send, {PgUp}
+        Send, {PgUp}
         StartServer()
+        if (CheckIfDefeated() == 1){
+            MainLoop()
+            return
+        }
     } else {
         MainLoop() 
         return
     }
     KillViciousBees()
     MainLoop()
-    return
+return
 }
 
 KillViciousBees(){

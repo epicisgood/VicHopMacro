@@ -16,7 +16,7 @@ StartServer() {
     Sleep, 4900
     Send, {w up}
     Send, ,
-    Send, {s down}  
+    Send, {s down} 
     Sleep, 500
     Send, {s up}
     current_hive := FindHiveSlot()
@@ -58,22 +58,12 @@ ZoomOut() {
     }
 }
 
-CheckUp(){
-    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
-    SendMode, Event
-    Sleep, 500
-    MouseMove, 100, 100
-    Sleep, 500
-    MouseClickDrag, middle, 300, 302, 300, 300
-    Sleep, 500
-}
-
 CheckForNight() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     centerX := x + (width // 2)
     MouseMove, centerX, 100
-    PixelGetColor, color, centerX, 100 
+    PixelGetColor, color, centerX, 150 
     return color
 }
 
@@ -137,49 +127,93 @@ ResetCharacter() {
     Sleep, 100
     Send, {Enter up}
     Sleep, 10000
-    Loop, 5 {
-        Send, {i down}
-        Sleep, 100
-        Send, {i up}
-    }
+    ZoomOut()
+    Send, {PgDn}
 
     ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
-    if (SearchWhereSpawned() == 0xFFFFFF || SearchWhereSpawned() == 0xF6F6F5 || SearchWhereSpawned() == 0x9F9F9F) {
-        ZoomOut()
-        Send, {w down}
-        Sleep, 500
-        Send, {w up}
-        Sleep, 50
-        Send, {s down}
-        Sleep, 150
-        Send, {s up}
-        GoToRamp()
+    if (SearchWhereSpawned() == 1 || CheckForNight() == 0x000000) {
+        Send, {Pgup}
+        FalseGoToRamp()
     } else {
-        ResetCharacter()
+        Send, {Pgup}
+        GoToRamp()
         return
 
     }
 }
 
-SearchWhereSpawned() {
-    WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
-    PixelGetColor, color, 1300, 850, RGB
-    MouseMove, 1300, 850
-    return color
-}
+SearchWhereSpawned(){
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+    ImagePath := "img/Blue.png"
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
 
+        ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
+
+        if (ErrorLevel = 0) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+    return 0
+}
 GoToRamp() {
     global current_hive
-    Sleep, 50
+    SendMode, Input ; Use SendInput for faster and more reliable key sending
+    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+    Sleep, 300
     Send, {d down}
-    Sleep, 1000 * current_hive 
+    Sleep, 1000 * current_hive
     Send, {d up}
     Sleep, 500
     Send, {space down}
     Send, {d down}
-    Sleep, 200
+    Sleep, 400
+    send, {d up}
+    Sleep, 100
     Send, {space up}
 
+}
+
+FalseGoToRamp(){
+    SendMode, Input ; Use SendInput for faster and more reliable key sending
+    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+    Send, {w down}
+    Sleep, 1800
+    Send, {w up}
+    Send, {d down}
+    Sleep, 3000
+    Send, {d up}
+
+    Send, {space down}
+    Send, {d down}
+    Sleep, 400
+    send, {d up}
+    Sleep, 100
+    Send, {space up}
+}
+
+RedCannon(){
+    SendMode, Input ; Use SendInput for faster and more reliable key sending
+    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+
+    Send, {w down}
+    Sleep, 400
+    Send, {w up}
+    Send, {Space down}
+    Send, {d down} 
+    Sleep, 600
+    Send, {Space up}
+    Send, {d up}
+
+    Sleep, 400
+    Send, {e down}
+    Sleep, 50
+    Send, {e up}
+    Send, {e down}
+    Sleep, 50
+    Send, {e up}
 }
 
 Vic_Detect(ImagePath) {
