@@ -165,7 +165,6 @@ SearchWhereSpawned() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     PixelGetColor, color, 1300, 850, RGB
     MouseMove, 1300, 850
-    MsgBox, %color%
     return color
 }
 
