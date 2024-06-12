@@ -242,7 +242,13 @@ Vic_Detect(ImagePath) {
 }
 
 AttackVic() {
+    StartTime := A_TickCount ; Get the current tick count
+
     while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 90000) {
+            break
+        }
         Send, {w down}
         Sleep, 400
         Send, {w up}
@@ -263,8 +269,11 @@ AttackVic() {
         Send, {d up}
         Sleep, 500 
     }
+    
     Sleep, 3000
+    return
 }
+
 
 CheckIfDefeated(){
     WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
