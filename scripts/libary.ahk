@@ -16,7 +16,7 @@ StartServer() {
     Sleep, 4900
     Send, {w up}
     Send, ,
-    Send, {s down}
+    Send, {s down}  
     Sleep, 500
     Send, {s up}
     current_hive := FindHiveSlot()
@@ -72,8 +72,8 @@ CheckForNight() {
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     WinGetPos, x, y, width, height, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     centerX := x + (width // 2)
-    MouseMove, centerX, 150
-    PixelGetColor, color, centerX, 150 
+    MouseMove, centerX, 100
+    PixelGetColor, color, centerX, 100 
     return color
 }
 

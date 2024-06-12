@@ -29,7 +29,7 @@ function main() {
             const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
 
             console.log('Opening Roblox URL:', robloxUrl);
-            console.log(response.data)
+            // console.log(response.data)
             open(robloxUrl);
         })
         .catch(function (error) {
