@@ -263,6 +263,7 @@ AttackVic() {
         Send, {d up}
         Sleep, 500 
     }
+    Sleep, 3000
 }
 
 CheckIfDefeated(){
