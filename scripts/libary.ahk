@@ -129,9 +129,11 @@ ResetCharacter() {
     Sleep, 10000
     ZoomOut()
     Send, {PgDn}
+    Send, {PgDn}
 
     ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
     if (SearchWhereSpawned() == 1 || CheckForNight() == 0x000000) {
+        Send, {Pgup}
         Send, {Pgup}
         FalseGoToRamp()
     } else {
@@ -246,7 +248,7 @@ AttackVic() {
 
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 90000) {
+        if (ElapsedTime > 150000) {
             break
         }
         Send, {w down}
@@ -269,11 +271,10 @@ AttackVic() {
         Send, {d up}
         Sleep, 500 
     }
-    
+
     Sleep, 3000
     return
 }
-
 
 CheckIfDefeated(){
     WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
