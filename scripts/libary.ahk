@@ -132,11 +132,13 @@ ResetCharacter() {
     Send, {PgDn}
 
     ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
-    if (SearchWhereSpawned() == 1 || CheckForNight() == 0x000000) {
+    CheckColorNight := CheckForNight()
+    if (SearchWhereSpawned() == 1 || CheckColorNight == 0x000000) {
         Send, {Pgup}
         Send, {Pgup}
         FalseGoToRamp()
     } else {
+        Send, {Pgup}
         Send, {Pgup}
         GoToRamp()
         return
