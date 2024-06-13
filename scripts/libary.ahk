@@ -127,18 +127,21 @@ ResetCharacter() {
     Sleep, 100
     Send, {Enter up}
     Sleep, 10000
+    Loop, 5 {
+        Send, {i down}
+        Sleep, 100
+        Send, {i up}
+    }
     ZoomOut()
-    Send, {PgDn}
     Send, {PgDn}
 
     ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
     CheckColorNight := CheckForNight()
-    if (SearchWhereSpawned() == 1 || CheckColorNight == 0x000000) {
-        Send, {Pgup}
+    SearchSpawnPoint := SearchWhereSpawned()
+    if (SearchSpawnPoint == 1 || CheckColorNight == 0x000000) {
         Send, {Pgup}
         FalseGoToRamp()
     } else {
-        Send, {Pgup}
         Send, {Pgup}
         GoToRamp()
         return
@@ -253,29 +256,35 @@ AttackVic() {
         if (ElapsedTime > 150000) {
             break
         }
-        Send, {w down}
-        Sleep, 400
-        Send, {w up}
-        Sleep, 500 
+        Loop, 2{
+            Send, {w down}
+            Sleep, 400
+            Send, {w up}
+            Sleep, 500 
+        }
+        Loop, 2{
 
-        Send, {a down}
-        Sleep, 400
-        Send, {a up}
-        Sleep, 500 
+            Send, {a down}
+            Sleep, 400
+            Send, {a up}
+            Sleep, 500 
+        } 
+        Loop, 2{
+            Send, {s down}
+            Sleep, 400
+            Send, {s up}
+            Sleep, 500 
+        }
+        Loop, 2{
 
-        Send, {s down}
-        Sleep, 400
-        Send, {s up}
-        Sleep, 500 
-
-        Send, {d down}
-        Sleep, 400
-        Send, {d up}
-        Sleep, 500 
+            Send, {d down}
+            Sleep, 400
+            Send, {d up}
+            Sleep, 500 
+        }
+        Sleep, 3000
+        return
     }
-
-    Sleep, 3000
-    return
 }
 
 CheckIfDefeated(){
