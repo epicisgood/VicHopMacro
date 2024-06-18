@@ -1,7 +1,5 @@
-import open, {openApp, apps} from 'open';
-import axios from "axios";
-
-
+import open, { openApp, apps } from 'open';
+import axios from 'axios';
 
 const options = {
     method: 'GET',
@@ -17,27 +15,47 @@ function selectServer(servers) {
     return randomServer;
 }
 
-function main() {
-    axios.request(options)
-        .then(function (response) {
+async function fetchServers(cursor = '', requests = 5) {
+    let allServers = [];
+    let currentCursor = cursor;
+
+    while (requests > 0) {
+        try {
+            const response = await axios.request({
+                ...options,
+                params: { ...options.params, cursor: currentCursor }
+            });
+
             const servers = response.data.data;
+            allServers = allServers.concat(servers);
 
-            const randomServer = selectServer(servers);
-
-            console.log('Selected Server:', randomServer);
-
-            const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
-
-            console.log('Opening Roblox URL:', robloxUrl);
-            // console.log(response.data)
-            open(robloxUrl);
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
+            currentCursor = response.data.nextPageCursor;
+            if (!currentCursor) break; 
+``
+            requests--;
+        } catch (error) {
+            console.error('Error fetching servers:', error);
+            break; 
+        }
+    }
+    return allServers;
 }
 
+async function main() {
+    const allServers = await fetchServers();
 
+    if (allServers.length > 0) {
+        const randomServer = selectServer(allServers);
 
+        // console.log('Selected Server:', randomServer);
+
+        const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
+
+        // console.log('Opening Roblox URL:', robloxUrl);
+        open(robloxUrl);
+    } else {
+        console.log('No servers found.');
+    }
+}
 
 main();
