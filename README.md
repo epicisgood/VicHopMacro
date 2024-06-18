@@ -10,7 +10,7 @@ Before you can use this macro, ensure you have the following software installed 
    - Download and install from [Node.js official website](https://nodejs.org/).
 
 2. **AutoHotkey**: A scripting language for Windows to create macros and automate tasks.
-   - Download and install from [AutoHotkey official website](https://www.autohotkey.com/).
+   - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-install.exe).
 
 
 
@@ -31,11 +31,11 @@ To set up the macro on your machine, follow these steps:
    active.ahk
    ```
 
-4. **Start the macro**: To activate the macro, press the ``` ` ``` key (the backtick key, usually located above the Tab key on most keyboards).
+4. **Start the macro**: To activate the macro, press the ``` F1 ``` key.
 
 
 ## Contact
 
-If you have any questions or need further assistance, pleasedm me at _epic. on discord
+If you have any questions or need further assistance, please dm me at _epic. on discord
 
 Thank you for your interest in the Bee Swarm Vicious Macro project!

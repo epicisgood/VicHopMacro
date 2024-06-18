@@ -4,9 +4,15 @@ CoordMode, Pixel, Screen
 #Include scripts\paths.ahk
 #Include scripts\libary.ahk
 
-`::
+F1::
     MainLoop()
 return
+
+
+F2::
+    ExitApp
+return
+
 
 MainLoop(){
     JoinServer()
