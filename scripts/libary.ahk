@@ -266,6 +266,10 @@ Vic_Detect(ImagePath) {
 
 AttackVic() {
     while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 300000) {
+            break
+        }
         Loop, 2{
             Send, {w down}
             Sleep, 400
@@ -292,8 +296,9 @@ AttackVic() {
             Send, {d up}
             Sleep, 500 
         }
-        Sleep, 1000
     }
+    Sleep, 5000
+    return
 }
 
 CheckIfDefeated(){
