@@ -264,6 +264,39 @@ Vic_Detect(ImagePath) {
     }
 }
 
+PepperAttackVic(){
+    while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 300000) {
+            break
+        }
+        Loop, 2{
+            Send, {w down}
+            Sleep, 400
+            Send, {w up}
+            Sleep, 500 
+        }
+
+        Send, {a down}
+        Sleep, 400
+        Send, {a up}
+        Sleep, 500 
+
+        Send, {s down}
+        Sleep, 400
+        Send, {s up}
+        Sleep, 500 
+        Loop, 2{
+            Send, {d down}
+            Sleep, 400
+            Send, {d up}
+            Sleep, 500 
+        }
+    }
+    Sleep, 5000
+    return
+}
+
 AttackVic() {
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime

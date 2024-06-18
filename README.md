@@ -31,7 +31,7 @@ To set up the macro on your machine, follow these steps:
    active.ahk
    ```
 
-4. **Start the macro**: To activate the macro, press the ``` F1 ``` key.
+4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro.
 
 
 ## Contact

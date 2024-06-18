@@ -42,7 +42,7 @@ return
 KillViciousBees(){
     PepperPatch()
     if (Vic_Detect("img/Warning.png") == 1) {
-        AttackVic()
+        PepperAttackVic()
         return
     }
     ResetCharacter()
