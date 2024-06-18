@@ -6,14 +6,12 @@ global current_hive := 1
 StartServer() {
     global current_hive
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
+    SetKeyDelay, 50 
     Sleep, 200
     Send, .
     Sleep, 300
     Send, {w down}
-    Sleep, 100
-    Send, {w up}
-    Send, {w down}
-    Sleep, 4900
+    Sleep, 5000
     Send, {w up}
     Send, ,
     Send, {s down} 
@@ -136,9 +134,9 @@ ResetCharacter() {
     Send, {PgDn}
 
     ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
-    CheckColorNight := CheckForNight()
+    NightSearchSpawnPoint := NightSearchWhereSpawned()
     SearchSpawnPoint := SearchWhereSpawned()
-    if (SearchSpawnPoint == 1 || CheckColorNight == 0x000000) {
+    if (SearchSpawnPoint == 1 || NightSearchSpawnPoint == 1) {
         Send, {Pgup}
         FalseGoToRamp()
     } else {
@@ -165,10 +163,28 @@ SearchWhereSpawned(){
     }
     return 0
 }
+
+NightSearchWhereSpawned(){
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+    ImagePath := "img/Black.png"
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+
+        ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
+
+        if (ErrorLevel = 0) {
+            return 1
+        } else {
+            return 0
+        }
+    }
+    return 0
+}
+
 GoToRamp() {
     global current_hive
-    SendMode, Input ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+    SendMode, Input 
+    SetKeyDelay, 50, 50
     Sleep, 300
     Send, {d down}
     Sleep, 1000 * current_hive
@@ -184,8 +200,8 @@ GoToRamp() {
 }
 
 FalseGoToRamp(){
-    SendMode, Input ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+    SendMode, Input 
+    SetKeyDelay, 50, 50
     Send, {w down}
     Sleep, 1800
     Send, {w up}
@@ -202,8 +218,8 @@ FalseGoToRamp(){
 }
 
 RedCannon(){
-    SendMode, Input ; Use SendInput for faster and more reliable key sending
-    SetKeyDelay, 50, 50 ; Adjust key delay and press duration
+    SendMode, Input 
+    SetKeyDelay, 50, 50
 
     Send, {w down}
     Sleep, 400
@@ -249,13 +265,7 @@ Vic_Detect(ImagePath) {
 }
 
 AttackVic() {
-    StartTime := A_TickCount ; Get the current tick count
-
     while (!CheckIfDefeated()) {
-        ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 150000) {
-            break
-        }
         Loop, 2{
             Send, {w down}
             Sleep, 400
@@ -282,8 +292,7 @@ AttackVic() {
             Send, {d up}
             Sleep, 500 
         }
-        Sleep, 3000
-        return
+        Sleep, 1000
     }
 }
 
