@@ -150,44 +150,52 @@ MountainTop(){
 
 Rose(){
     SendMode, Input 
-    SetKeyDelay, 50, 50 
+    SetKeyDelay, 50
     RedCannon()
-    Sleep, 150
-    Send, {d down}
-    Send, {Space down}
-    Sleep, 300
-    Send, {Space up}
-    Send, {Space down}
-    Sleep, 300
-    Send, {Space up}
 
-    ; Stop gliding
-    Sleep, 3200
-    Send, {Space down}
-    Sleep, 250
-    Send, {Space up}
+    Sleep, 500
+
+    Send, {d down}
+    Send, {space down}
+    Sleep, 50
+    Send, {space up}
+    Send, {space down}
+    Sleep, 50
+    Send, {space up}
+    Sleep, 500
     Send, {d up}
 
-    ; Start searching field
-    Sleep, 1500
-    Loop, 2 {
-        Sleep, 100
-        Send, {s down}
-        Sleep, 400
-        Send, {s up}
-        Send, {a down}
-        Sleep, 2800
-        Send, {a up}
-        Sleep, 100
-        Send, {s down}
-        Sleep, 600
-        Send, {s up}
-        Sleep, 100
-        Send, {d down}
-        Sleep, 2800
-        Send, {d up}
-    }
+    Sleep, 3000
 
+    Send, {space down}
+    Sleep, 50
+    Send, {space up}
+
+    ;; search for vicious bee
+
+    Send, {w down}
+    Sleep, 700
+    Send, {w up}
+
+    Send, {a down}
+    Sleep, 2750
+    Send, {a up}
+
+    Send, {s down}
+    Sleep, 700
+    Send, {s up}
+
+    Send, {d down}
+    Sleep, 2750
+    Send, {d up}
+
+    Send, {s down}
+    Sleep, 700
+    Send, {s up}
+
+    Send, {a down}
+    Sleep, 2750
+    Send, {a up}
 }
 
 Cactus(){

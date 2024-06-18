@@ -256,7 +256,6 @@ Vic_Detect(ImagePath) {
         ImageSearch, FoundX, FoundY, RobloxX, RobloxY, RobloxWidth, RobloxHeight, *32 %ImagePath%
 
         if (ErrorLevel = 0) {
-            AttackVic()
             return 1
         } else {
             return 0

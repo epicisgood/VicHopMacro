@@ -19,7 +19,6 @@ MainLoop(){
     Send, {PgDn}
     Send, {PgDn}
     ZoomOut()
-    ; Check for night color
     nightColor := CheckForNight()
     if (nightColor == 0x000000 || nightColor == 0x404040) {
         SendMode, Event
