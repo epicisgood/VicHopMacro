@@ -106,30 +106,36 @@ CheckSpawnPos(){
     }
 }
 
-CheckAtHiveSpawn(){
-    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
-    ImagePath := "img/YellowHive.png"
-    if (RobloxWindowID) {
-        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
-        Sleep, 1000
+; CheckAtHiveSpawn(){
+;     WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+;     ImagePath1 := "img/YellowHive.png"
+;     ImagePath2 := "img/test.png"
+;     if (RobloxWindowID) {
+;         WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+;         Sleep, 1000
 
-        ImageSearch, FoundX1, FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
-        if (ErrorLevel = 0){
-            return
-        } else {
-            SetKeyDelay, 100
-            Send, ,
-            Send, ,
-            Send, ,
-            Send, ,
-            Sleep, 1500
-            return 
-        }
+;         ImageSearch, FoundX1, FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath1%
+;         YellowHive := (ErrorLevel = 0)
 
-    } else {
-        return 
-    }
-}
+;         ImageSearch, FoundX1, FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath2%
+;         BrownThing := (ErrorLevel = 0)
+;         if (YellowHive || BrownThing){
+;             MsgBox, detected 
+;         }
+;         else {
+;             SetKeyDelay, 100
+;             Send, ,
+;             Send, ,
+;             Send, ,
+;             Send, ,
+;             Sleep, 1500
+;             return 
+;         }
+
+;     } else {
+;         return 
+;     }
+; }
 
 FindHiveSlot() {
     global current_hive
@@ -203,7 +209,7 @@ ResetCharacter() {
         FalseGoToRamp()
     } else {
         Send, {Pgup}
-        CheckAtHiveSpawn()
+        ; CheckAtHiveSpawn()
         GoToRamp()
         return
 
