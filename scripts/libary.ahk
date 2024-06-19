@@ -144,9 +144,9 @@ FindHiveSlot() {
     }
     Loop, 5 {
         Send, {a down}
-        Sleep, 1000
+        Sleep, 1075
         Send, {a up}
-        Sleep, 1000
+        Sleep, 1050
         current_hive++
         if ClaimHive(current_hive) {
             return current_hive
