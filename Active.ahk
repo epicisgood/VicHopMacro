@@ -5,14 +5,15 @@ CoordMode, Pixel, Screen
 #Include scripts\libary.ahk
 
 F1::
-    MainLoop()
+    loop {
+        MainLoop()
+        Sleep, 200
+    }
 return
-
 
 F2::
-    ExitApp
+ExitApp
 return
-
 
 MainLoop(){
     JoinServer()
@@ -26,16 +27,13 @@ MainLoop(){
         Send, {PgUp}
         StartServer()
         if (CheckIfDefeated() == 1){
-            MainLoop()
             return
         }
     } else {
-        MainLoop() 
         return
     }
     KillViciousBees()
-    MainLoop()
-return
+    return
 }
 
 KillViciousBees(){

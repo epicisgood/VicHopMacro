@@ -7,7 +7,8 @@ StartServer() {
     global current_hive
     WinActivate, ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe
     SetKeyDelay, 50 
-    Sleep, 200
+    Sleep, 3000
+    CheckSpawnPos()
     Send, .
     Sleep, 300
     Send, {w down}
@@ -65,6 +66,71 @@ CheckForNight() {
     return color
 }
 
+CheckSpawnPos(){
+    ImagePath1 := "img/Egg.png"
+    ImagePath2 := "img/NightEgg.png"
+    ImagePath3 := "img/SnowEgg.png"
+    ImagePath4 := "img/LoadingEgg.png"
+
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+        Sleep, 1000
+
+        ImageSearch, FoundX1, FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath1%
+        EggFound := (ErrorLevel = 0)
+
+        ImageSearch, FoundX2, FoundY2, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath2%
+        NightEggFound := (ErrorLevel = 0)
+
+        ImageSearch, FoundX2, FoundY2, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath3%
+        SnowEgg := (ErrorLevel = 0)
+
+        ImageSearch, FoundX2, FoundY2, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath4%
+        LoadingEgg := (ErrorLevel = 0)
+
+        if (EggFound || NightEggFound || SnowEgg || LoadingEgg) {
+            SetKeyDelay, 100
+            Send, ,
+            Send, ,
+            Send, ,
+            Send, ,
+            Sleep, 2000
+            return 
+        } else {
+            return 
+        }
+    } else {
+        return 
+    }
+}
+
+CheckAtHiveSpawn(){
+    WinGet, RobloxWindowID, ID, ahk_class WINDOWSCLIENT
+    ImagePath := "img/YellowHive.png"
+    if (RobloxWindowID) {
+        WinGetPos, RobloxX, RobloxY, RobloxWidth, RobloxHeight, ahk_id %RobloxWindowID%
+        Sleep, 1000
+
+        ImageSearch, FoundX1, FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, *32 %ImagePath%
+        if (ErrorLevel = 0){
+            return
+        } else {
+            SetKeyDelay, 100
+            Send, ,
+            Send, ,
+            Send, ,
+            Send, ,
+            Sleep, 1500
+            return 
+        }
+
+    } else {
+        return 
+    }
+}
+
 FindHiveSlot() {
     global current_hive
     Sleep, 300
@@ -78,9 +144,9 @@ FindHiveSlot() {
     }
     Loop, 5 {
         Send, {a down}
-        Sleep, 1100
+        Sleep, 1000
         Send, {a up}
-        Sleep, 1100
+        Sleep, 1000
         current_hive++
         if ClaimHive(current_hive) {
             return current_hive
@@ -124,16 +190,12 @@ ResetCharacter() {
     Send, {Enter down}
     Sleep, 100
     Send, {Enter up}
+    ;; check if health bar disappears later detection
     Sleep, 10000
-    Loop, 5 {
-        Send, {i down}
-        Sleep, 100
-        Send, {i up}
-    }
     ZoomOut()
+    CheckSpawnPos()
     Send, {PgDn}
-
-    ;; later maybe change this to an image search if we have the little grey thing baseplate platform instead of checking the tiolet seet hive color
+    Sleep, 1000
     NightSearchSpawnPoint := NightSearchWhereSpawned()
     SearchSpawnPoint := SearchWhereSpawned()
     if (SearchSpawnPoint == 1 || NightSearchSpawnPoint == 1) {
@@ -141,6 +203,7 @@ ResetCharacter() {
         FalseGoToRamp()
     } else {
         Send, {Pgup}
+        CheckAtHiveSpawn()
         GoToRamp()
         return
 
@@ -299,7 +362,7 @@ PepperAttackVic(){
 AttackVic() {
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 300000) {
+        if (ElapsedTime > 200000) {
             break
         }
         Loop, 2{
