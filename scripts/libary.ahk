@@ -144,7 +144,7 @@ FindHiveSlot() {
     }
     Loop, 5 {
         Send, {a down}
-        Sleep, 1075
+        Sleep, 1045
         Send, {a up}
         Sleep, 1050
         current_hive++
