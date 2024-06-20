@@ -1,16 +1,16 @@
-# Bee Swarm Vicious Macro
-
-**not completed** yet but will be very soon Im aware of many issues of this macro 
+# information
+Hello! This macro is a public server vicious bee hoppper alone macro at a setspeed of 33.5 movespeed. 
+This macro is only for 33.5 movespeed so if you dont have that then sad. This should be coco clogs or gummy boots 
 
 ## Prerequisites
 
 Before you can use this macro, ensure you have the following software installed on your computer:
 
-1. **Node.js**: A JavaScript runtime built on Chrome's V8 JavaScript engine.
+1. **Node.js**: 
    - Download and install from [Node.js official website](https://nodejs.org/).
 
-2. **AutoHotkey**: A scripting language for Windows to create macros and automate tasks.
-   - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-install.exe).
+2. **AutoHotkey**: you might not need to install this but do it anyways
+   - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-v2.exe).
 
 
 
@@ -18,15 +18,15 @@ Before you can use this macro, ensure you have the following software installed 
 
 To set up the macro on your machine, follow these steps:
 
-1. **Download the repository**: Clone or download the project repository to your local machine.
-   - If you downloaded a ZIP file, extract it to a folder of your choice.
+1. **Download the repository**: Click on releases
+   - Extract the ZIP file, to a folder of your choice.
 
 2. **Run the installation script**: Navigate to the project folder and run the `install.bat` file. This will install the necessary dependencies.
    ```sh
    install.bat
    ```
 
-3. **Activate the macro**: After the installation is complete, run the `active.ahk` script by double-clicking it.
+3. **Activate the macro**: After the installation is complete, run the `start.ahk` script by double-clicking it.
    ```sh
    active.ahk
    ```
@@ -36,6 +36,4 @@ To set up the macro on your machine, follow these steps:
 
 ## Contact
 
-If you have any questions or need further assistance, please dm me at _epic. on discord
-
-Thank you for your interest in the Bee Swarm Vicious Macro project!
+hello! u can dm me on discord at ``` _epic. ```

@@ -1,32 +1,33 @@
-﻿#NoEnv
-CoordMode, Pixel, Screen
+﻿#Requires AutoHotkey v2.0
+#SingleInstance Force
+
+CoordMode "Pixel", "Screen"
+SendMode "Event"
 
 #Include scripts\paths.ahk
 #Include scripts\libary.ahk
 
-F1::
+F1:: {
     loop {
         MainLoop()
-        Sleep, 200
     }
-return
+}
 
-F2::
-ExitApp
-return
+F2:: ExitApp()
 
-MainLoop(){
+
+
+MainLoop() {
     JoinServer()
-    Send, {PgDn}
-    Send, {PgDn}
+    Send("{PgDn}")
+    Send("{PgDn}")
     ZoomOut()
     nightColor := CheckForNight()
     if (nightColor == 0x000000 || nightColor == 0x404040) {
-        SendMode, Event
-        Send, {PgUp}
-        Send, {PgUp}
+        Send("{PgUp}")
+        Send("{PgUp}")
         StartServer()
-        if (CheckIfDefeated() == 1){
+        if (CheckIfDefeated() == 1) {
             return
         }
     } else {
@@ -36,7 +37,7 @@ MainLoop(){
     return
 }
 
-KillViciousBees(){
+KillViciousBees() {
     PepperPatch()
     if (Vic_Detect("img/Warning.png") == 1) {
         PepperAttackVic()
@@ -62,14 +63,14 @@ KillViciousBees(){
     }
 }
 
-JoinServer(){
-    RunWait, taskkill /F /IM RobloxPlayerBeta.exe, , Hide
-    RunWait, node "scripts/index.js"
-    if DetectLoading(0x2257A8, 60000){
-        Sleep, 3000
+JoinServer() {
+    RunWait "taskkill /F /IM RobloxPlayerBeta.exe"
+    RunWait "node scripts/index.js"
+    if (DetectLoading(0x2257A8, 60000)) {
+        Sleep 3000
         return
     } else {
-        RunWait, taskkill /F /IM RobloxPlayerBeta.exe, , Hide
+        RunWait "taskkill /F /IM RobloxPlayerBeta.exe"
         JoinServer()
     }
 }

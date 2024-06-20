@@ -30,12 +30,12 @@ async function fetchServers(cursor = '', requests = 5) {
             allServers = allServers.concat(servers);
 
             currentCursor = response.data.nextPageCursor;
-            if (!currentCursor) break; 
-``
+            if (!currentCursor) break;
+            ``
             requests--;
         } catch (error) {
             console.error('Error fetching servers:', error);
-            break; 
+            break;
         }
     }
     return allServers;
@@ -45,17 +45,21 @@ async function main() {
     const allServers = await fetchServers();
 
     if (allServers.length > 0) {
-        const randomServer = selectServer(allServers);
+        let randomServer = selectServer(allServers);
 
-        // console.log('Selected Server:', randomServer);
+        while (randomServer.ping > 600) {
+            randomServer = selectServer(allServers);
+        }
 
         const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
 
+        // console.log('Selected Server:', randomServer);
         // console.log('Opening Roblox URL:', robloxUrl);
         open(robloxUrl);
     } else {
         console.log('No servers found.');
     }
 }
+
 
 main();
