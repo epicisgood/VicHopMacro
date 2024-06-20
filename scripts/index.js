@@ -51,7 +51,7 @@ async function main() {
             randomServer = selectServer(allServers);
         }
 
-        const robloxUrl = `roblox://placeId=17723449397&launchData=1537690962/${randomServer.id}`;
+        const robloxUrl = `roblox://experiences/start?placeId=1537690962&gameInstanceId=${randomServer.id}`; // (i didnt know you could join a server like this with this from DullSmallmega176)
 
         // console.log('Selected Server:', randomServer);
         // console.log('Opening Roblox URL:', robloxUrl);
