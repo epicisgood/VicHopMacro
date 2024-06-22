@@ -1,11 +1,55 @@
-
 CoordMode "Pixel", "Screen"
+
+
+;; roblox x,y,width,height
+
+
+
+GetRobloxClientPos(hwnd?)
+{
+    global windowX, windowY, windowWidth, windowHeight
+    if !IsSet(hwnd)
+        hwnd := GetRobloxHWND()
+
+    try
+        WinGetClientPos &windowX, &windowY, &windowWidth, &windowHeight, "ahk_id " hwnd
+    catch TargetError
+        return windowX := windowY := windowWidth := windowHeight := 0
+    else
+        return 1
+}
+
+GetRobloxHWND()
+{
+	if (hwnd := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe"))
+		return hwnd
+	else if (WinExist("Roblox ahk_exe ApplicationFrameHost.exe"))
+    {
+        try
+            hwnd := ControlGetHwnd("ApplicationFrameInputSinkWindow1")
+        catch TargetError
+		    hwnd := 0
+        return hwnd
+    }
+	else
+		return 0
+}
+
+ActivateRoblox()
+{
+    try
+        WinActivate "Roblox"
+    catch
+        return 0
+    else
+        return 1
+}
+
 
 global current_hive := 1
 
 StartServer() {
     global current_hive
-    WinActivate "ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe"
     SetKeyDelay 50
     Sleep 3000
     CheckSpawnPos()
@@ -28,25 +72,26 @@ DetectLoading(loadingColor, timeout) {
     startTime := A_TickCount
     loop {
         color := PixelGetColor(458, 151)
+        ActivateRoblox()
         if (color = loadingColor) {
-            break
+            break ;; detected loading color
         }
         if (A_TickCount - startTime >= timeout) {
-            return false ; Timeout reached
+            return false ; Timeout reached for loading color. This means it was not on screen
         }
         Sleep 100
     }
 
-    startTime := A_TickCount
+    
     loop {
         color := PixelGetColor(458, 151)
         if (color != loadingColor) {
-            break
+            break ;; detected loading color going away
         }
         Sleep 100
     }
 
-    return true ; Loading success
+    return true ; Loading succesfully managed
 }
 
 ZoomOut() {
@@ -58,9 +103,9 @@ ZoomOut() {
 }
 
 CheckForNight() {
-    WinActivate "ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe"
-    WinGetPos &x, &y, &width, &height, "ahk_class WINDOWSCLIENT ahk_exe RobloxPlayerBeta.exe"
-    centerX := x + (width // 2)
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    centerX := windowX + (windowWidth // 2)
     MouseMove centerX, 100
     color := PixelGetColor(centerX, 150)
     return color
@@ -72,44 +117,44 @@ CheckSpawnPos() {
     ImagePath3 := "img/SnowEgg.png"
     ImagePath4 := "img/LoadingEgg.png"
 
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
-        Sleep 1000
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
 
-        ; Perform image searches and set flags based on results
-        if ImageSearch(&FoundX1, &FoundY1, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath1) {
-            EggFound := true
-        } else {
-            EggFound := false
-        }
+    Sleep 1000
 
-        if ImageSearch(&FoundX2, &FoundY2, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath2) {
-            NightEggFound := true
-        } else {
-            NightEggFound := false
-        }
-
-        if ImageSearch(&FoundX3, &FoundY3, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath3) {
-            SnowEgg := true
-        } else {
-            SnowEgg := false
-        }
-
-        if ImageSearch(&FoundX4, &FoundY4, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath4) {
-            LoadingEgg := true
-        } else {
-            LoadingEgg := false
-        }
-
-        if (EggFound || NightEggFound || SnowEgg || LoadingEgg) {
-            SetKeyDelay 100
-            Send ",,,,"
-            Sleep 2000
-            return
-        }
+    ; At respawn section detects if camera rotated wrong direction..
+    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath1) {
+        EggFound := true
+    } else {
+        EggFound := false
     }
+
+    if ImageSearch(&FoundX2, &FoundY2, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath2) {
+        NightEggFound := true
+    } else {
+        NightEggFound := false
+    }
+
+    if ImageSearch(&FoundX3, &FoundY3, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath3) {
+        SnowEgg := true
+    } else {
+        SnowEgg := false
+    }
+
+    if ImageSearch(&FoundX4, &FoundY4, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath4) {
+        LoadingEgg := true
+    } else {
+        LoadingEgg := false
+    }
+
+    if (EggFound || NightEggFound || SnowEgg || LoadingEgg) {
+        SetKeyDelay 100
+        Send ",,,,"
+        Sleep 2000
+        return
+    }
+
 }
 
 FindHiveSlot() {
@@ -138,21 +183,19 @@ FindHiveSlot() {
 
 ClaimHive(current_hive) {
     ImagePath := "img/Hive.png"
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
-        Sleep 1000
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    Sleep 1000
 
-        if ImageSearch(&FoundX, &FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath) {
-            Send "{e down}"
-            Sleep 200
-            Send "{e up}"
-            return current_hive
-        }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        Send "{e down}"
+        Sleep 200
+        Send "{e up}"
+        return current_hive
     }
-    return 0
 }
+
 
 ResetCharacter() {
     Send "{Esc down}"
@@ -185,33 +228,27 @@ ResetCharacter() {
 
 SearchWhereSpawned() {
     ImagePath := "img/Blue.png"
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
 
-        if ImageSearch(&FoundX, &FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath) {
-            return 1 
-        }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        return 1
     }
-    return 0 
 }
 
 NightSearchWhereSpawned() {
     ImagePath := "img/Black.png"
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    FoundX := 0
+    FoundY := 0
 
-        FoundX := 0
-        FoundY := 0
-
-        if ImageSearch(&FoundX, &FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath) {
-            return 1
-        }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        return 1
     }
-    return 0 
+    return 0
 }
 
 GoToRamp() {
@@ -263,23 +300,22 @@ RedCannon() {
 }
 
 Vic_Detect(ImagePath) {
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
 
-        Send "{/}"
-        Sleep 100
-        Send "{Enter}"
-        Sleep 100
+    Send "{/}"
+    Sleep 100
+    Send "{Enter}"
+    Sleep 100
 
-        Sleep 1000
+    Sleep 1000
 
-        if ImageSearch(&FoundX, &FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath) {
-            return 1 
-        }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        return 1
     }
-    return 0 
+
+    return 0
 }
 
 PepperAttackVic() {
@@ -353,23 +389,20 @@ AttackVic() {
 }
 
 CheckIfDefeated() {
-    RobloxWindowID := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe")
     ImagePath := "img/Defeated.png"
 
-    if (RobloxWindowID) {
-        WinGetPos &RobloxX, &RobloxY, &RobloxWidth, &RobloxHeight, "ahk_id " . RobloxWindowID
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
 
-        Send "{/}"
-        Sleep 100
-        Send "{Enter}"
-        Sleep 100
+    Send "{/}"
+    Sleep 100
+    Send "{Enter}"
+    Sleep 100
 
-        Sleep 1000
+    Sleep 1000
 
-        if ImageSearch(&FoundX, &FoundY, RobloxX, RobloxY, RobloxX + RobloxWidth, RobloxY + RobloxHeight, "*32 " . ImagePath) {
-            return 1 
-        }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        return 1
     }
-    return 0 
+    return 0
 }
-

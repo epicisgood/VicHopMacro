@@ -5,7 +5,8 @@ CoordMode "Pixel", "Screen"
 SendMode "Event"
 
 #Include scripts\paths.ahk
-#Include scripts\libary.ahk
+#Include scripts\functions.ahk
+#include scripts\joinserver.ahk
 
 F1:: {
     loop {
@@ -65,7 +66,7 @@ KillViciousBees() {
 
 JoinServer() {
     RunWait "taskkill /F /IM RobloxPlayerBeta.exe"
-    RunWait "node scripts/index.js"
+    joinrandomserver()
     if (DetectLoading(0x2257A8, 60000)) {
         Sleep 3000
         return
