@@ -17,7 +17,6 @@ F1:: {
 F2:: ExitApp()
 
 
-
 MainLoop() {
     JoinServer()
     Send("{PgDn}")
@@ -65,13 +64,15 @@ KillViciousBees() {
 }
 
 JoinServer() {
-    RunWait "taskkill /F /IM RobloxPlayerBeta.exe"
+    RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
+    RunWait('taskkill /F /IM ApplicationFrameHost.exe')
     joinrandomserver()
     if (DetectLoading(0x2257A8, 60000)) {
         Sleep 3000
         return
     } else {
-        RunWait "taskkill /F /IM RobloxPlayerBeta.exe"
+        RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
+        RunWait('taskkill /F /IM ApplicationFrameHost.exe')
         JoinServer()
     }
 }

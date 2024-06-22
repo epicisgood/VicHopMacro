@@ -4,7 +4,6 @@ CoordMode "Pixel", "Screen"
 ;; roblox x,y,width,height
 
 
-
 GetRobloxClientPos(hwnd?)
 {
     global windowX, windowY, windowWidth, windowHeight
@@ -21,18 +20,18 @@ GetRobloxClientPos(hwnd?)
 
 GetRobloxHWND()
 {
-	if (hwnd := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe"))
-		return hwnd
-	else if (WinExist("Roblox ahk_exe ApplicationFrameHost.exe"))
+    if (hwnd := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe"))
+        return hwnd
+    else if (WinExist("Roblox ahk_exe ApplicationFrameHost.exe"))
     {
         try
             hwnd := ControlGetHwnd("ApplicationFrameInputSinkWindow1")
         catch TargetError
-		    hwnd := 0
+            hwnd := 0
         return hwnd
     }
-	else
-		return 0
+    else
+        return 0
 }
 
 ActivateRoblox()
@@ -82,7 +81,7 @@ DetectLoading(loadingColor, timeout) {
         Sleep 100
     }
 
-    
+
     loop {
         color := PixelGetColor(458, 151)
         if (color != loadingColor) {
@@ -105,18 +104,16 @@ ZoomOut() {
 CheckForNight() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
-    centerX := windowX + (windowWidth // 2)
+    centerX := windowX + (windowWidth // 2 - 200) 
     MouseMove centerX, 100
     color := PixelGetColor(centerX, 150)
     return color
 }
 
 CheckSpawnPos() {
-    ImagePath1 := "img/Egg.png"
-    ImagePath2 := "img/NightEgg.png"
-    ImagePath3 := "img/SnowEgg.png"
-    ImagePath4 := "img/LoadingEgg.png"
-
+    ImagePath := "img\Leaderboard.png"
+    NightImagePath := "img\nightlb.png"
+    Send "i"
 
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
@@ -124,34 +121,24 @@ CheckSpawnPos() {
     Sleep 1000
 
     ; At respawn section detects if camera rotated wrong direction..
-    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath1) {
-        EggFound := true
-    } else {
-        EggFound := false
+    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        Found := true   
+    } 
+    else {
+        Found := false
+    }
+    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . NightImagePath) {
+        NightFound := true   
+    } 
+    else {
+        NightFound := false
     }
 
-    if ImageSearch(&FoundX2, &FoundY2, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath2) {
-        NightEggFound := true
-    } else {
-        NightEggFound := false
-    }
-
-    if ImageSearch(&FoundX3, &FoundY3, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath3) {
-        SnowEgg := true
-    } else {
-        SnowEgg := false
-    }
-
-    if ImageSearch(&FoundX4, &FoundY4, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath4) {
-        LoadingEgg := true
-    } else {
-        LoadingEgg := false
-    }
-
-    if (EggFound || NightEggFound || SnowEgg || LoadingEgg) {
+    if (Found || NightFound) {
         SetKeyDelay 100
         Send ",,,,"
         Sleep 2000
+        SetKeyDelay 50
         return
     }
 
@@ -222,7 +209,10 @@ ResetCharacter() {
         FalseGoToRamp()
     } else {
         Send "{Pgup}"
+        ZoomOut()   
+        HiveCorrection()
         GoToRamp()
+        ZoomOut()
     }
 }
 
@@ -242,14 +232,32 @@ NightSearchWhereSpawned() {
 
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
-    FoundX := 0
-    FoundY := 0
+
 
     if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
         return 1
     }
     return 0
 }
+
+HiveCorrection() {
+    ImagePath := "img\ground.png"
+    ImagePath2 := "img\nightground.png"
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath) {
+        return 1
+    }
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath2) {
+        return 1
+    }
+    else {
+        SetKeyDelay 100
+        Send ",,,,"
+        return 0
+    }
+}
+
 
 GoToRamp() {
     global current_hive
@@ -270,7 +278,7 @@ GoToRamp() {
 FalseGoToRamp() {
     SetKeyDelay 50, 50
     Send "{w down}"
-    Sleep 1800
+    Sleep 1700
     Send "{w up}"
     Send "{d down}"
     Sleep 3000
@@ -320,17 +328,22 @@ Vic_Detect(ImagePath) {
 
 PepperAttackVic() {
     StartTime := A_TickCount
+
+    send "{w down}"
+    Sleep 2000
+    Send "{w up}"
+    Send "{d down}"
+    Sleep 2000
+    Send "{d up}"
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
         if (ElapsedTime > 300000) {
             break
         }
-        Loop 2 {
-            Send "{w down}"
-            Sleep 400
-            Send "{w up}"
-            Sleep 500
-        }
+        Send "{w down}"
+        Sleep 400
+        Send "{w up}"
+        Sleep 500
 
         Send "{a down}"
         Sleep 400
@@ -341,12 +354,12 @@ PepperAttackVic() {
         Sleep 400
         Send "{s up}"
         Sleep 500
-        Loop 2 {
-            Send "{d down}"
-            Sleep 400
-            Send "{d up}"
-            Sleep 500
-        }
+
+        Send "{d down}"
+        Sleep 400
+        Send "{d up}"
+        Sleep 500
+
     }
     Sleep 5000
     return
