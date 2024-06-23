@@ -46,7 +46,7 @@ KillViciousBees() {
     ResetCharacter()
     MountainTop()
     if (Vic_Detect("img/Warning.png") == 1) {
-        AttackVic()
+        MtnAttackVic()
         return
     }
     ResetCharacter()

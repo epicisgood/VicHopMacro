@@ -12,11 +12,17 @@ PepperPatch() {
     Send "{Space up}"
     Sleep 3000
     Send "{d up}"
+    ;; 35 bee zone still at ground
 
     Send "{w down}"
     Sleep 350
     Send "{w up}"
     Sleep 250
+    Send "{s down}"
+    Sleep 50
+    Send "{s up}"
+    Sleep 100
+
     Send "{d down}"
     Send "{Space down}"
     Sleep 250
@@ -24,6 +30,7 @@ PepperPatch() {
     Sleep 1350
     Send "{d up}"
 
+    
     Send "{Space down}"
     Send "{w down}"
     Sleep 250
@@ -125,7 +132,7 @@ MountainTop() {
     Send "{e down}"
     Sleep 100
     Send "{e up}"
-    Sleep 6000
+    Sleep 4000
 
     Send "{w down}"
     Sleep 1700
@@ -155,7 +162,7 @@ Rose() {
     Sleep 100
     Send "{e up}"
 
-    Sleep 240
+    Sleep 230
 
     Send "{d down}"
     Send "{space down}"
@@ -230,7 +237,7 @@ Cactus() {
         Send "{s up}"
 
         Send "{d down}"
-        Sleep 800
+        Sleep 600
         Send "{d up}"
 
         Send "{w down}"
@@ -238,7 +245,7 @@ Cactus() {
         Send "{w up}"
 
         Send "{d down}"
-        Sleep 800
+        Sleep 600
         Send "{d up}"
     }
 

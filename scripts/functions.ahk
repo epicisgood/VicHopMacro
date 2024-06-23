@@ -94,7 +94,7 @@ DetectLoading(loadingColor, timeout) {
 }
 
 ZoomOut() {
-    Loop 5 {
+    Loop 10 {
         Send "{o down}"
         Sleep 100
         Send "{o up}"
@@ -104,7 +104,7 @@ ZoomOut() {
 CheckForNight() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
-    centerX := windowX + (windowWidth // 2 - 200) 
+    centerX := windowX + (windowWidth // 2 - 200)
     MouseMove centerX, 100
     color := PixelGetColor(centerX, 150)
     return color
@@ -122,14 +122,14 @@ CheckSpawnPos() {
 
     ; At respawn section detects if camera rotated wrong direction..
     if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
-        Found := true   
-    } 
+        Found := true
+    }
     else {
         Found := false
     }
     if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . NightImagePath) {
-        NightFound := true   
-    } 
+        NightFound := true
+    }
     else {
         NightFound := false
     }
@@ -209,7 +209,7 @@ ResetCharacter() {
         FalseGoToRamp()
     } else {
         Send "{Pgup}"
-        ZoomOut()   
+        ZoomOut()
         HiveCorrection()
         GoToRamp()
         ZoomOut()
@@ -278,7 +278,7 @@ GoToRamp() {
 FalseGoToRamp() {
     SetKeyDelay 50, 50
     Send "{w down}"
-    Sleep 1700
+    Sleep 1800
     Send "{w up}"
     Send "{d down}"
     Sleep 3000
@@ -330,10 +330,10 @@ PepperAttackVic() {
     StartTime := A_TickCount
 
     send "{w down}"
-    Sleep 2000
+    Sleep 1500
     Send "{w up}"
     Send "{d down}"
-    Sleep 2000
+    Sleep 1500
     Send "{d up}"
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
@@ -359,6 +359,35 @@ PepperAttackVic() {
         Sleep 400
         Send "{d up}"
         Sleep 500
+
+    }
+    Sleep 5000
+    return
+}
+
+MtnAttackVic() {
+    StartTime := A_TickCount
+    while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 200000) {
+            break
+        }
+        Send "{d down}"
+        Sleep 1500
+        Send "{d up}"
+        loop 5{
+            Send "{s down}"
+            Sleep 400
+            Send "{s up}"
+        }
+        Send "{a down}"
+        Sleep 400
+        Send "{a up}"
+        loop 5{
+            Send "{w down}"
+            Sleep 400
+            Send "{w up}"
+        }
 
     }
     Sleep 5000

@@ -6,7 +6,7 @@ This macro is only for 33.5 movespeed so if you dont have that then sad. This sh
 
 Before you can use this macro, ensure you have the following software installed on your computer:
 
-2. **AutoHotkey**: you might not need to install this but do it anyways
+1. **AutoHotkey**: you might not need to install this if you have natro macro but do it anyways
    - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-v2.exe).
 
 
