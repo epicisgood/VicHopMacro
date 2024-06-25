@@ -62,7 +62,7 @@ JoinServer() {
     RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
     RunWait('taskkill /F /IM ApplicationFrameHost.exe')
     joinrandomserver()
-    if (DetectLoading(0x2257A8, 15000)) {
+    if (DetectLoading(0x2257A8, 25000)) {
         Sleep 750
         return
     } else {
