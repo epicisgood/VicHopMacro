@@ -19,13 +19,8 @@ F2:: ExitApp()
 
 MainLoop() {
     JoinServer()
-    Send("{PgDn}")
-    Send("{PgDn}")
-    ZoomOut()
-    nightColor := CheckForNight()
-    if (nightColor == 0x000000 || nightColor == 0x404040) {
-        Send("{PgUp}")
-        Send("{PgUp}")
+    if (NightDetection() == 1) {
+        ZoomOut()
         StartServer()
         if (CheckIfDefeated() == 1) {
             return
@@ -67,8 +62,8 @@ JoinServer() {
     RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
     RunWait('taskkill /F /IM ApplicationFrameHost.exe')
     joinrandomserver()
-    if (DetectLoading(0x2257A8, 60000)) {
-        Sleep 3000
+    if (DetectLoading(0x2257A8, 15000)) {
+        Sleep 750
         return
     } else {
         RunWait('taskkill /F /IM RobloxPlayerBeta.exe')

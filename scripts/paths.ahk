@@ -80,48 +80,44 @@ PepperPatch() {
     Sleep 2500
     Sleep 100
     Send "{d up}"
-    ; Next to pepper field
-    Send "{a down}"
-    Sleep 200
-    Send "{a up}"
 
-    ; Tries to not glide against wall
-    Send "{w down}"
-    Sleep 1600
-    Send "{w up}"
-    Sleep 150
-
-    ; Search vicious bee at pepper field
-    Send "{Space down}"
+    ;; jump to feild
+    
+    Send "{space down}"
     Send "{d down}"
-    Sleep 250
-    Send "{Space up}"
-    Sleep 2500
+    Sleep 100
+    Send "{space up}"
+    Sleep 900
     Send "{d up}"
-
+    Sleep 200
     Send "{s down}"
-    Sleep 2300
-    Send "{s up}"
-    Sleep 100
-
-    Send "{a down}"
     Sleep 700
-    Send "{a up}"
-    Sleep 100
+    Send "{s up}"
+    ; Search vicious bee at pepper field
 
     Send "{w down}"
     Sleep 2300
     Send "{w up}"
     Sleep 100
 
-    Send "{a down}"
+    Send "{d down}"
     Sleep 700
-    Send "{a up}"
+    Send "{d up}"
     Sleep 100
 
     Send "{s down}"
     Sleep 2300
     Send "{s up}"
+    Sleep 100
+
+    Send "{d down}"
+    Sleep 700
+    Send "{d up}"
+    Sleep 100
+
+    Send "{w down}"
+    Sleep 2300
+    Send "{w up}"
     Sleep 100
 }
 
@@ -181,23 +177,23 @@ Rose() {
     ; Search for vicious bee
     Sleep 500
     Send "{a down}"
-    Sleep 2750
+    Sleep 2850
     Send "{a up}"
 
     Send "{s down}"
-    Sleep 700
+    Sleep 550
     Send "{s up}"
 
     Send "{d down}"
-    Sleep 2750
+    Sleep 2850
     Send "{d up}"
 
     Send "{s down}"
-    Sleep 700
+    Sleep 550
     Send "{s up}"
 
     Send "{a down}"
-    Sleep 2750
+    Sleep 2850
     Send "{a up}"
 }
 
@@ -234,7 +230,7 @@ Cactus() {
         Send "{s up}"
 
         Send "{d down}"
-        Sleep 600
+        Sleep 700
         Send "{d up}"
 
         Send "{w down}"
@@ -242,7 +238,7 @@ Cactus() {
         Send "{w up}"
 
         Send "{d down}"
-        Sleep 600
+        Sleep 700
         Send "{d up}"
     }
 

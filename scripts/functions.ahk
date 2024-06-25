@@ -55,12 +55,14 @@ StartServer() {
     Send "."
     Sleep 300
     Send "{w down}"
-    Sleep 5000
+    Sleep 2500
     Send "{w up}"
+    Sleep 50
     Send ","
-    Send "{s down}"
-    Sleep 500
-    Send "{s up}"
+    Sleep 50
+    Send "{d down}"
+    Sleep 1000
+    Send "{d up}"
     current_hive := FindHiveSlot()
     if (current_hive) {
         ResetCharacter()
@@ -101,13 +103,20 @@ ZoomOut() {
     }
 }
 
-CheckForNight() {
+NightDetection() {
+    ImagePath := "img\NightGroundLoading.png"
+    ImagePath2 := "img\nightground.png"
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
-    centerX := windowX + (windowWidth // 2 - 200)
-    MouseMove centerX, 100
-    color := PixelGetColor(centerX, 150)
-    return color
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath2) {
+        return 1
+    }
+    ; if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath) {
+    ;     return 1
+    ; }
+    else {
+        return 0
+    }
 }
 
 CheckSpawnPos() {
@@ -118,7 +127,7 @@ CheckSpawnPos() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
 
-    Sleep 1000
+    Sleep 1500
 
     ; At respawn section detects if camera rotated wrong direction..
     if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
@@ -265,6 +274,10 @@ HiveCorrection() {
 }
 
 
+
+
+
+
 GoToRamp() {
     global current_hive
     SetKeyDelay 50, 50
@@ -299,7 +312,6 @@ FalseGoToRamp() {
 
 RedCannon() {
     SetKeyDelay 50, 50
-    Sleep 100
     Send "{w down}"
     Sleep 400
     Send "{w up}"
@@ -334,9 +346,7 @@ Vic_Detect(ImagePath) {
     Send "{/}"
     Sleep 100
     Send "{Enter}"
-    Sleep 100
-
-    Sleep 1000
+    Sleep 300
 
     if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
         return 1
@@ -347,16 +357,9 @@ Vic_Detect(ImagePath) {
 
 PepperAttackVic() {
     StartTime := A_TickCount
-
-    send "{w down}"
-    Sleep 1500
-    Send "{w up}"
-    Send "{d down}"
-    Sleep 1500
-    Send "{d up}"
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 300000) {
+        if (ElapsedTime > 90000 ) { ;; 1 minute and 30 seconds to kill vic bee 
             break
         }
         Send "{w down}"
@@ -388,7 +391,7 @@ MtnAttackVic() {
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 200000) {
+        if (ElapsedTime > 60000) { ;; 1m to kill vic bee
             break
         }
         Send "{d down}"
@@ -417,7 +420,7 @@ AttackVic() {
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 200000) {
+        if (ElapsedTime > 60000) { ;; 1m to kill vic bee
             break
         }
         Loop 2 {
@@ -458,10 +461,7 @@ CheckIfDefeated() {
     Send "{/}"
     Sleep 100
     Send "{Enter}"
-    Sleep 100
-
-    Sleep 1000
-
+    Sleep 300
     if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
         return 1
     }
