@@ -94,7 +94,7 @@ DetectLoading(loadingColor, timeout) {
 }
 
 ZoomOut() {
-    Loop 10 {
+    Loop 15 {
         Send "{o down}"
         Sleep 100
         Send "{o up}"
@@ -207,12 +207,18 @@ ResetCharacter() {
     if (SearchSpawnPoint == 1 || NightSearchSpawnPoint == 1) {
         Send "{Pgup}"
         FalseGoToRamp()
+        RedCannon()
     } else {
         Send "{Pgup}"
         ZoomOut()
         HiveCorrection()
         GoToRamp()
         ZoomOut()
+        RedCannon()
+        if (CheckFireButton() == 0){
+            ResetCharacter()
+        }
+
     }
 }
 
@@ -303,8 +309,21 @@ RedCannon() {
     Send "{Space up}"
     Send "{d up}"
 
-    Sleep 1000
+    Sleep 500
 
+}
+
+CheckFireButton(){
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    ImagePath := "img\fire.png"
+
+    Sleep 500
+
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+        return 1
+    }
+    return 0
 }
 
 Vic_Detect(ImagePath) {

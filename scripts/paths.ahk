@@ -3,31 +3,31 @@
 PepperPatch() {
     SetKeyDelay 0, 50
     Sleep 300
-    Send "{w down}"
-    Sleep 400
-    Send "{w up}"
-    Send "{Space down}"
     Send "{d down}"
     Sleep 250
     Send "{Space up}"
-    Sleep 3000
+    Sleep 2300
     Send "{d up}"
     ;; 35 bee zone still at ground
 
     Send "{w down}"
-    Sleep 350
+    Sleep 400
     Send "{w up}"
-    Sleep 250
+    Sleep 100
     Send "{s down}"
-    Sleep 50
+    Sleep 200
     Send "{s up}"
     Sleep 100
 
     Send "{d down}"
     Send "{Space down}"
-    Sleep 250
+    Sleep 100
     Send "{Space up}"
-    Sleep 1350
+    Sleep 100
+    Send "{w down}"
+    Sleep 400
+    Send "{w up}"
+    Sleep 1400
     Send "{d up}"
 
     
@@ -59,7 +59,7 @@ PepperPatch() {
     Send "{w down}"
     Sleep 250
     Send "{Space up}"
-    Sleep 3000
+    Sleep 2000
     Send "{w up}"
     Send "{Space down}"
     Send "{w down}"
@@ -70,7 +70,7 @@ PepperPatch() {
     ; Move to pepper field from next to coconut
     Send "{w down}"
     Send "{d down}"
-    Sleep 4000
+    Sleep 2400
     Send "{w up}"
     Send "{d up}"
     Send "{Space down}"
@@ -128,7 +128,6 @@ PepperPatch() {
 MountainTop() {
     SetKeyDelay 0, 50
     Sleep 100
-    RedCannon()
     Send "{e down}"
     Sleep 100
     Send "{e up}"
@@ -157,7 +156,6 @@ MountainTop() {
 
 Rose() {
     SetKeyDelay 50, 50
-    RedCannon()
     Send "{e down}"
     Sleep 100
     Send "{e up}"
@@ -205,7 +203,6 @@ Rose() {
 
 Cactus() {
     SetKeyDelay 50, 50
-    RedCannon()
     Send "{e down}"
     Sleep 100
     Send "{e up}"
