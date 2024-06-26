@@ -2,7 +2,7 @@ CoordMode "Pixel", "Screen"
 
 
 ;; roblox x,y,width,height
-
+global windowX, windowY, windowWidth, windowHeight
 
 GetRobloxClientPos(hwnd?)
 {
@@ -50,7 +50,7 @@ global current_hive := 1
 StartServer() {
     global current_hive
     SetKeyDelay 50
-    Sleep 3000
+    Sleep 6000
     CheckSpawnPos()
     Send "."
     Sleep 300
@@ -98,22 +98,18 @@ DetectLoading(loadingColor, timeout) {
 ZoomOut() {
     Loop 15 {
         Send "{o down}"
-        Sleep 100
+        Sleep 10
         Send "{o up}"
     }
 }
 
 NightDetection() {
-    ImagePath := "img\NightGroundLoading.png"
     ImagePath2 := "img\nightground.png"
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
     if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath2) {
         return 1
     }
-    ; if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath) {
-    ;     return 1
-    ; }
     else {
         return 0
     }
@@ -127,7 +123,7 @@ CheckSpawnPos() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
 
-    Sleep 1500
+    Sleep 500
 
     ; At respawn section detects if camera rotated wrong direction..
     if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
@@ -194,23 +190,13 @@ ClaimHive(current_hive) {
 
 
 ResetCharacter() {
-    Send "{Esc down}"
-    Sleep 100
-    Send "{Esc up}"
-    Sleep 100
-    Send "{r down}"
-    Sleep 100
-    Send "{r up}"
-    Sleep 100
-    Send "{Enter down}"
-    Sleep 100
-    Send "{Enter up}"
-    ;; check if health bar disappears later detection
-    Sleep 10000
+    Send "{Esc}{r}{Enter}"
+    Sleep 500
+    HealthDetection()
     ZoomOut()
     CheckSpawnPos()
     Send "{PgDn}"
-    Sleep 1000
+    Sleep 250
     NightSearchSpawnPoint := NightSearchWhereSpawned()
     SearchSpawnPoint := SearchWhereSpawned()
     if (SearchSpawnPoint == 1 || NightSearchSpawnPoint == 1) {
@@ -224,13 +210,26 @@ ResetCharacter() {
         GoToRamp()
         ZoomOut()
         RedCannon()
-        if (CheckFireButton() == 0){
+        if (CheckFireButton() == 0) {
             ResetCharacter()
         }
 
     }
 }
 
+
+HealthDetection() {
+    ImagePath := "img\Health.png"
+
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    while (ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath)) {
+        Sleep 100
+    }
+    Sleep 500
+    return 1
+
+}
 SearchWhereSpawned() {
     ImagePath := "img/Blue.png"
 
@@ -272,10 +271,6 @@ HiveCorrection() {
         return 0
     }
 }
-
-
-
-
 
 
 GoToRamp() {
@@ -325,7 +320,7 @@ RedCannon() {
 
 }
 
-CheckFireButton(){
+CheckFireButton() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
     ImagePath := "img\fire.png"
@@ -356,71 +351,11 @@ Vic_Detect(ImagePath) {
 }
 
 PepperAttackVic() {
+    PlayerStatus("Starting Pepper Kill Cycle", 15105570, true)
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 90000 ) { ;; 1 minute and 30 seconds to kill vic bee 
-            break
-        }
-        Send "{w down}"
-        Sleep 400
-        Send "{w up}"
-        Sleep 500
-
-        Send "{a down}"
-        Sleep 400
-        Send "{a up}"
-        Sleep 500
-
-        Send "{s down}"
-        Sleep 400
-        Send "{s up}"
-        Sleep 500
-
-        Send "{d down}"
-        Sleep 400
-        Send "{d up}"
-        Sleep 500
-
-    }
-    Sleep 5000
-    return
-}
-
-MtnAttackVic() {
-    StartTime := A_TickCount
-    while (!CheckIfDefeated()) {
-        ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 60000) { ;; 1m to kill vic bee
-            break
-        }
-        Send "{d down}"
-        Sleep 1500
-        Send "{d up}"
-        loop 5{
-            Send "{s down}"
-            Sleep 400
-            Send "{s up}"
-        }
-        Send "{a down}"
-        Sleep 400
-        Send "{a up}"
-        loop 5{
-            Send "{w down}"
-            Sleep 400
-            Send "{w up}"
-        }
-
-    }
-    Sleep 5000
-    return
-}
-
-AttackVic() {
-    StartTime := A_TickCount
-    while (!CheckIfDefeated()) {
-        ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 60000) { ;; 1m to kill vic bee
+        if (ElapsedTime > 90000) { ;; 1 minute and 30 seconds to kill vic bee
             break
         }
         Loop 2 {
@@ -447,8 +382,83 @@ AttackVic() {
             Send "{d up}"
             Sleep 500
         }
+        PlayerStatus("Looped finished", 15105570, false)
+
     }
+    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 5000
+    return
+}
+
+MtnAttackVic() {
+    PlayerStatus("Starting Mtn Kill Cycle", 11027200, true)
+    StartTime := A_TickCount
+    while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 90000) { ;; 1m 30s to kill vic bee
+            break
+        }
+        Send "{d down}"
+        Sleep 1500
+        Send "{d up}"
+        loop 5 {
+            Send "{s down}"
+            Sleep 400
+            Send "{s up}"
+        }
+        Send "{a down}"
+        Sleep 400
+        Send "{a up}"
+        loop 5 {
+            Send "{w down}"
+            Sleep 400
+            Send "{w up}"
+        }
+        PlayerStatus("Looped finished", 11027200, false)
+
+    }
+    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
+    Sleep 5000
+    return
+}
+
+AttackVic() {
+    PlayerStatus("Starting Vicious Kill Cycle", 15844367, true)
+    StartTime := A_TickCount
+    while (!CheckIfDefeated()) {
+        ElapsedTime := A_TickCount - StartTime
+        if (ElapsedTime > 90000) { ;; 1m 30s to kill vic bee
+            break
+        }
+        Loop 2 {
+            Send "{w down}"
+            Sleep 400
+            Send "{w up}"
+            Sleep 500
+        }
+        Loop 2 {
+            Send "{a down}"
+            Sleep 400
+            Send "{a up}"
+            Sleep 500
+        }
+        Loop 2 {
+            Send "{s down}"
+            Sleep 400
+            Send "{s up}"
+            Sleep 500
+        }
+        Loop 2 {
+            Send "{d down}"
+            Sleep 400
+            Send "{d up}"
+            Sleep 500
+        }
+        PlayerStatus("Looped finished", 15844367, false)
+    }
+    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
+    Sleep 5000
+
     return
 }
 
