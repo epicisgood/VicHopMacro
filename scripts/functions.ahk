@@ -355,7 +355,7 @@ PepperAttackVic() {
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 90000) { ;; 1 minute and 30 seconds to kill vic bee
+        if (ElapsedTime > 150000 ) { ;; 1 minute and 30 seconds to kill vic bee
             break
         }
         Loop 2 {
@@ -395,7 +395,7 @@ MtnAttackVic() {
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 90000) { ;; 1m 30s to kill vic bee
+        if (ElapsedTime > 150000 ) { ;; 2m 30s to kill vic bee
             break
         }
         Send "{d down}"
