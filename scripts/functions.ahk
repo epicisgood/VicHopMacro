@@ -427,7 +427,7 @@ AttackVic() {
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 90000) { ;; 1m 30s to kill vic bee
+        if (ElapsedTime > 120000 ) { ;; 1m 30s to kill vic bee
             break
         }
         Loop 2 {
