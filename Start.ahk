@@ -123,11 +123,11 @@ KillViciousBees() {
         return
     }
     ResetCharacter()
-    NoIMGPlayerStatus("Going to Mountain Top Feild.", 2067276)
     if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
+    NoIMGPlayerStatus("Going to Mountain Top Feild.", 2067276)
     MountainTop()
     PlayerStatus("Finished Checking Mountain Top Feild.", 5763719, false)
     if (Vic_Detect("img/Warning.png") == 1) {
@@ -135,11 +135,11 @@ KillViciousBees() {
         return
     }
     ResetCharacter()
-    NoIMGPlayerStatus("Going to Rose Feild.", 2067276)
     if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
+    NoIMGPlayerStatus("Going to Rose Feild.", 2067276)
     Rose()
     PlayerStatus("Finished Checking Rose Feild.", 5763719, false)
     if (Vic_Detect("img/Warning.png") == 1) {
@@ -148,11 +148,11 @@ KillViciousBees() {
     }
     ResetCharacter()
     NoIMGPlayerStatus("Going to Cactus Feild.", 2067276)
-    Cactus()
     if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
+    Cactus()
     PlayerStatus("Finished Checking Cactus feild.", 5763719, false)
     if (Vic_Detect("img/Warning.png") == 1) {
         AttackVic()
