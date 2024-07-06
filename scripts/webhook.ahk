@@ -15,30 +15,34 @@ global Attempts := 0
 
 
 PlayerStatus(statusTitle, statusColor, Mentions) {
-    url := IniRead("settings.ini", "Settings", "url")
+    try {
+        FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
+    } catch Error as e {
+        return 0
+    }
+    
     DiscordUserId := IniRead("settings.ini", "Settings", "discordID")
 
     pToken := Gdip_Startup()
-
     hwnd := GetRobloxHWND()
-
     GetRobloxClientPos(hwnd)
+
 
     pBitmap := Gdip_BitmapFromScreen((windowWidth > 0) ? (windowX "|" windowY "|" windowWidth "|" windowHeight) : 0)
 
     Gdip_SaveBitmapToFile(pBitmap, "ss.jpg")
-
     gdip_disposeimage(pBitmap)
 
 
     if (Mentions == true) {
         payload_json := '{"content": "<@' DiscordUserId '>", "embeds":[{"title":"' statusTitle '", "color":"' statusColor + 0 '", "image":{"url":"attachment://ss.jpg"}}]}'
+        objParam := Map("payload_json", payload_json, "file", ["ss.jpg"])
     }
     else {
         payload_json := '{"embeds":[{"title":"' statusTitle '", "color":"' statusColor + 0 '", "image":{"url":"attachment://ss.jpg"}}]}'
+        objParam := Map("payload_json", payload_json, "file", ["ss.jpg"])
     }
 
-    objParam := Map("payload_json", payload_json, "file", ["ss.jpg"])
     
     try {
         CreateFormDataClass(&postdata, &hdr_ContentType, objParam)
@@ -48,11 +52,11 @@ PlayerStatus(statusTitle, statusColor, Mentions) {
         webhook.SetRequestHeader("Content-Type", hdr_ContentType)
         webhook.Send(postdata)
         webhook.WaitForResponse()
-
+        
+        FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
     } catch Error as e {
         return
     } finally {
-        FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
         Gdip_Shutdown(pToken)
         global Attempts := 0
     }
@@ -65,7 +69,6 @@ NoIMGPlayerStatus(StatusTitle, statusColor) {
     try {
         Attempts += 1
         AttemptCount := Attempts
-        url := IniRead("settings.ini", "Settings", "url")
         payload_json := '{"embeds":[{"title":"' statusTitle " " AttemptCount "x" '", "color":"' statusColor + 0 '"}]}'
     
         WebRequest := ComObject("WinHttp.WinHttpRequest.5.1")

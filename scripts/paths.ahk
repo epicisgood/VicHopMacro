@@ -1,4 +1,17 @@
-#Requires AutoHotkey v2
+glider(){
+    Sleep 500
+
+    Send "{space down}"
+    Sleep 50
+    Send "{space up}"
+    Sleep 210
+
+    Send "{space down}"
+    Sleep 50
+    Send "{space up}"
+
+    Sleep 250
+}
 
 PepperPatch() {
     SetKeyDelay 0, 50
@@ -19,52 +32,42 @@ PepperPatch() {
     Send "{s up}"
     Sleep 100
 
-    Send "{d down}"
-    Send "{Space down}"
-    Sleep 100
-    Send "{Space up}"
-    Sleep 100
+    ;;jumping into it
+    Send "{d down}{space down}"
+    Sleep 300
     Send "{w down}"
-    Sleep 400
+    Send "{space up}"
+    Sleep 300
     Send "{w up}"
-    Sleep 1400
+    Sleep 500
     Send "{d up}"
 
-    
-    Send "{Space down}"
-    Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
-    Sleep 300
-    Send "{Space down}"
-    Sleep 250
-    Send "{Space up}"
-    Sleep 2750
-    Send "{w up}"
+    Send "{w down}{d down}"
+    Sleep 600
+    Send "{w up}{d up}"
 
-    Send "{Space down}"
+    ;;second plateform
+    Send "{w down} {Space down}"
+    Sleep 500
+    Send "{Space up} {w up}"
+    ;; correction to not bug out
     Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
-    Send "{Space down}"
-    Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
-    Send "{Space down}"
-    Send "{Space down}"
-    Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
-    Send "{Space down}"
-    Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
-    Sleep 2000
+    Send "{a down}"
+    Sleep 300
+    Send "{a up}"
+    Sleep 1900
     Send "{w up}"
-    Send "{Space down}"
-    Send "{w down}"
-    Sleep 250
-    Send "{Space up}"
+    Send "{d down}"
+    Sleep 400
+    Send "{d up}"
+    Sleep 50
+    Send "{w down}{space down}"
+    Sleep 1200
+    Send "{space up}"
+    Sleep 1200
+    Send "{space down}"
+    Sleep 200
+    Send "{space up}"
     Send "{w up}"
 
     ; Move to pepper field from next to coconut
@@ -77,12 +80,11 @@ PepperPatch() {
     Send "{d down}"
     Sleep 250
     Send "{Space up}"
-    Sleep 2500
-    Sleep 100
+    Sleep 2000
     Send "{d up}"
 
     ;; jump to feild
-    
+
     Send "{space down}"
     Send "{d down}"
     Sleep 100
@@ -96,29 +98,30 @@ PepperPatch() {
     ; Search vicious bee at pepper field
 
     Send "{w down}"
-    Sleep 2300
+    glider()
+    Sleep 650
     Send "{w up}"
-    Sleep 100
 
     Send "{d down}"
     Sleep 700
     Send "{d up}"
-    Sleep 100
 
+    ;; pollen detection here or smth
     Send "{s down}"
-    Sleep 2300
+    glider()
+    Sleep 650
     Send "{s up}"
-    Sleep 100
+
 
     Send "{d down}"
     Sleep 700
     Send "{d up}"
-    Sleep 100
 
     Send "{w down}"
-    Sleep 2300
+    glider()
+    Sleep 650
     Send "{w up}"
-    Sleep 100
+
 }
 
 MountainTop() {
@@ -127,10 +130,11 @@ MountainTop() {
     Send "{e down}"
     Sleep 100
     Send "{e up}"
-    Sleep 4000
+    Sleep 3500
 
     Send "{w down}"
-    Sleep 1700
+    glider()
+    Sleep 200
     Send "{w up}"
 
     Send "{a down}"
@@ -138,15 +142,18 @@ MountainTop() {
     Send "{a up}"
 
     Send "{s down}"
-    Sleep 2300
+    glider()
+    Sleep 750
     Send "{s up}"
 
     Send "{d down}"
-    Sleep 1500
+    glider()
+    Sleep 50
     Send "{d up}"
 
     Send "{w down}"
-    Sleep 2600
+    glider()
+    Sleep 750
     Send "{w up}"
 }
 
@@ -175,9 +182,11 @@ Rose() {
     Send "{space up}"
 
     ; Search for vicious bee
+
     Sleep 500
     Send "{a down}"
-    Sleep 2850
+    glider()
+    Sleep 1100
     Send "{a up}"
 
     Send "{s down}"
@@ -185,7 +194,8 @@ Rose() {
     Send "{s up}"
 
     Send "{d down}"
-    Sleep 2850
+    glider()
+    Sleep 1100
     Send "{d up}"
 
     Send "{s down}"
@@ -193,7 +203,8 @@ Rose() {
     Send "{s up}"
 
     Send "{a down}"
-    Sleep 2850
+    glider()
+    Sleep 1100
     Send "{a up}"
 }
 
@@ -202,7 +213,7 @@ Cactus() {
     Send "{e down}"
     Sleep 100
     Send "{e up}"
-    ; Glide to cactus 
+    ; Glide to cactus
     Sleep 750
     Send "{d down}"
     Send "{Space down}"
@@ -224,25 +235,30 @@ Cactus() {
     ; Landed at cactus field
     Sleep 2000
 
-    loop 2 {
-        Send "{s down}"
-        Sleep 1100
-        Send "{s up}"
-
-        Send "{d down}"
-        Sleep 700
-        Send "{d up}"
-
-        Send "{w down}"
-        Sleep 1000
-        Send "{w up}"
-
-        Send "{d down}"
-        Sleep 700
-        Send "{d up}"
-    }
+    Send "{d down}"
+    glider()
+    Sleep 1000
+    Send "{d up}"
 
     Send "{s down}"
-    Sleep 1100
+    Sleep 500
     Send "{s up}"
+
+    Send "{a down}"
+    glider()
+    Sleep 1000
+    Send "{a up}"
+
+    Send "{s down}"
+    Sleep 500
+    Send "{s up}"
+
+    Send "{d down}"
+    glider()
+    Sleep 1000
+    Send "{d up}"
+
+
+
+
 }

@@ -1,6 +1,10 @@
 # information
-Hello! This macro is a public server vicious bee hoppper alone macro at a setspeed of 33.5 movespeed. 
-This macro is only for 33.5 movespeed so if you dont have that then sad. This should be coco clogs or gummy boots 
+Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at a setspeed of 33.5 movespeed. 
+
+This macro should be ran with the lowest roblox graphic settings for the best experience.
+
+**performance stats** settings should also be turned **OFF** if you have it enabled
+
 
 ## Prerequisites
 
@@ -28,4 +32,4 @@ To set up the macro on your machine, follow these steps:
 
 ## Contact
 
-hello! u can dm me on discord at ``` _epic. ```
+hello! u can dm me on discord at ``` _epic. ``` 

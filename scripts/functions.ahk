@@ -45,13 +45,23 @@ ActivateRoblox()
 }
 
 
+PictureImageSearch(ImagePath, Strength) {
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    SearchOptions := "*" Strength " " . ImagePath
+    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, SearchOptions) {
+        return 1
+    } else {
+        return 0
+    }
+}
+
+
 global current_hive := 1
 
 StartServer() {
     global current_hive
     SetKeyDelay 50
-    Sleep 6000
-    CheckSpawnPos()
     Send "."
     Sleep 300
     Send "{w down}"
@@ -64,10 +74,34 @@ StartServer() {
     Sleep 1000
     Send "{d up}"
     current_hive := FindHiveSlot()
-    if (current_hive) {
-        ResetCharacter()
+    if (current_hive = 0) {
+        SetKeyDelay 100
+        Send "{Esc}{r}{Enter}"
+        Sleep 500
+        HealthDetection()
+        ZoomOut()
+        return 3
+    }
+    resetcharattempts := 0
+    ResetVar := ResetCharacter()
+    while (ResetVar == 2) {
+        resetcharattempts++
+        if resetcharattempts > 4 {
+            return 4
+        }
+        ResetVar := ResetCharacter()
+    }
+
+}
+
+ZoomOut() {
+    Loop 15 {
+        Send "{o down}"
+        Sleep 10
+        Send "{o up}"
     }
 }
+
 
 DetectLoading(loadingColor, timeout) {
     startTime := A_TickCount
@@ -95,19 +129,9 @@ DetectLoading(loadingColor, timeout) {
     return true ; Loading succesfully managed
 }
 
-ZoomOut() {
-    Loop 15 {
-        Send "{o down}"
-        Sleep 10
-        Send "{o up}"
-    }
-}
 
 NightDetection() {
-    ImagePath2 := "img\nightground.png"
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath2) {
+    if PictureImageSearch("img\nightground.png", 16) {
         return 1
     }
     else {
@@ -116,30 +140,10 @@ NightDetection() {
 }
 
 CheckSpawnPos() {
-    ImagePath := "img\Leaderboard.png"
-    NightImagePath := "img\nightlb.png"
     Send "i"
-
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-
     Sleep 500
 
-    ; At respawn section detects if camera rotated wrong direction..
-    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
-        Found := true
-    }
-    else {
-        Found := false
-    }
-    if ImageSearch(&FoundX1, &FoundY1, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . NightImagePath) {
-        NightFound := true
-    }
-    else {
-        NightFound := false
-    }
-
-    if (Found || NightFound) {
+    if (PictureImageSearch("img\Leaderboard.png", 32) || PictureImageSearch("img\nightlb.png", 32)) {
         SetKeyDelay 100
         Send ",,,,"
         Sleep 2000
@@ -176,11 +180,9 @@ FindHiveSlot() {
 ClaimHive(current_hive) {
     ImagePath := "img/Hive.png"
 
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    Sleep 1000
+    Sleep 500
 
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+    if PictureImageSearch("img/Hive.png", 32) {
         Send "{e down}"
         Sleep 200
         Send "{e up}"
@@ -197,12 +199,11 @@ ResetCharacter() {
     CheckSpawnPos()
     Send "{PgDn}"
     Sleep 250
-    NightSearchSpawnPoint := NightSearchWhereSpawned()
-    SearchSpawnPoint := SearchWhereSpawned()
-    if (SearchSpawnPoint == 1 || NightSearchSpawnPoint == 1) {
+    if (CheckCocoSpawn() == 1) {
         Send "{Pgup}"
         FalseGoToRamp()
         RedCannon()
+        return 1
     } else {
         Send "{Pgup}"
         ZoomOut()
@@ -211,58 +212,37 @@ ResetCharacter() {
         ZoomOut()
         RedCannon()
         if (CheckFireButton() == 0) {
-            ResetCharacter()
+            return 2
         }
-
     }
+    return 1
 }
 
 
 HealthDetection() {
-    ImagePath := "img\Health.png"
-
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    while (ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath)) {
+    while (PictureImageSearch("img\Health.png", 32)) {
         Sleep 100
     }
     Sleep 500
     return 1
 
 }
-SearchWhereSpawned() {
-    ImagePath := "img/Blue.png"
 
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
+CheckCocoSpawn() {
 
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+    if (PictureImageSearch("img\Blue.png", 32)) {
         return 1
+    } else if (PictureImageSearch("img/Black.png", 32)) {
+        return 1
+    }
+    else {
+        return 0
     }
 }
 
-NightSearchWhereSpawned() {
-    ImagePath := "img/Black.png"
-
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-
-
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
-        return 1
-    }
-    return 0
-}
 
 HiveCorrection() {
-    ImagePath := "img\ground.png"
-    ImagePath2 := "img\nightground.png"
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath) {
-        return 1
-    }
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*16 " . ImagePath2) {
+    if (PictureImageSearch("img\ground.png", 25) || PictureImageSearch("img\nightground.png", 25)) {
         return 1
     }
     else {
@@ -316,34 +296,22 @@ RedCannon() {
     Send "{Space up}"
     Send "{d up}"
 
-    Sleep 500
+    Sleep 200
 
 }
 
 CheckFireButton() {
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    ImagePath := "img\fire.png"
-
-    Sleep 500
-
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+    Sleep 250
+    if PictureImageSearch("img\fire.png", 32) {
         return 1
     }
     return 0
 }
 
-Vic_Detect(ImagePath) {
+VicActivated() {
 
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-
-    Send "{/}"
-    Sleep 100
-    Send "{Enter}"
-    Sleep 300
-
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+    Send "{/}{Enter}"
+    if PictureImageSearch("img\Warning.png", 32) {
         return 1
     }
 
@@ -351,11 +319,11 @@ Vic_Detect(ImagePath) {
 }
 
 PepperAttackVic() {
-    PlayerStatus("Starting Pepper Kill Cycle", 15105570, true)
+    PlayerStatus("Starting Pepper Kill Cycle", 15105570, false)
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 150000 ) { ;; 1 minute and 30 seconds to kill vic bee
+        if (ElapsedTime > 150000) { ;; 1 minute and 30 seconds to kill vic bee
             break
         }
         Loop 2 {
@@ -386,16 +354,16 @@ PepperAttackVic() {
 
     }
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    Sleep 5000
+    Sleep 7500
     return
 }
 
 MtnAttackVic() {
-    PlayerStatus("Starting Mtn Kill Cycle", 11027200, true)
+    PlayerStatus("Starting Mtn Kill Cycle", 11027200, false)
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 150000 ) { ;; 2m 30s to kill vic bee
+        if (ElapsedTime > 150000) { ;; 2m 30s to kill vic bee
             break
         }
         Send "{d down}"
@@ -418,16 +386,16 @@ MtnAttackVic() {
 
     }
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    Sleep 5000
+    Sleep 7500
     return
 }
 
 AttackVic() {
-    PlayerStatus("Starting Vicious Kill Cycle", 15844367, true)
+    PlayerStatus("Starting Vicious Kill Cycle", 15844367, false)
     StartTime := A_TickCount
     while (!CheckIfDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 120000 ) { ;; 1m 30s to kill vic bee
+        if (ElapsedTime > 120000) { ;; 1m 30s to kill vic bee
             break
         }
         Loop 2 {
@@ -457,22 +425,14 @@ AttackVic() {
         PlayerStatus("Looped finished", 15844367, false)
     }
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    Sleep 5000
+    Sleep 7500
 
     return
 }
 
 CheckIfDefeated() {
-    ImagePath := "img/Defeated.png"
-
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-
-    Send "{/}"
-    Sleep 100
-    Send "{Enter}"
-    Sleep 300
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, "*32 " . ImagePath) {
+    Send "{/}{Enter}"
+    if PictureImageSearch("img\Defeated.png", 32) {
         return 1
     }
     return 0

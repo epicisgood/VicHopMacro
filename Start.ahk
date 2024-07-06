@@ -15,7 +15,6 @@ SendMode "Event"
 #Include webhook.ahk
 
 
-
 if (!FileExist("settings.ini")) {
     IniWrite("Insert Url", "settings.ini", "Settings", "url")
     IniWrite("Insert UserId", "settings.ini", "Settings", "discordID")
@@ -70,19 +69,19 @@ SaveSettings(*) {
 }
 
 
-Start(*){
-    loop{
+Start(*) {
+    loop {
         MainLoop()
     }
 }
 
-StopMacro(*){
+StopMacro(*) {
     ExitApp()
 }
 
 
-
 F1:: {
+    OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
     }
@@ -92,18 +91,37 @@ F2:: ExitApp()
 
 
 
+
 MainLoop() {
-    JoinServer()
+    while (JoinServer() == 2){
+        Sleep 100
+    }
     if (NightDetection() == 1) {
-        PlayerStatus("Night Detected!!", 0, true)
+        PlayerStatus("Night Detected!!", 0, false)
         ZoomOut()
-        StartServer()
-        if (CheckIfDefeated() == 1) {
-            PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
-            return
+
+        StartServerAttempts := 0
+        ServerVar := StartServer()
+        while (ServerVar == 3 || ServerVar == 4) {
+            StartServerAttempts++
+            if StartServerAttempts == 3 {
+                PlayerStatus("leaving server could not claim hive current_hive = 0", 8359053, true)
+                return ;; starts mainloop again
+            }
+
+            if ServerVar == 4 {
+                PlayerStatus("leaving server reset count went over 4...", 8359053, true)
+                return ;; starts mainloop again
+            }
+            ServerVar := StartServer() 
         }
     } else {
         NoIMGPlayerStatus("Searching For Night Servers.", 1752220)
+        return
+    }
+
+    if (CheckIfDefeated() == 1 || VicActivated() == 1) {
+        PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
     KillViciousBees()
@@ -111,50 +129,76 @@ MainLoop() {
 }
 
 KillViciousBees() {
-    if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
+    if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
     NoIMGPlayerStatus("Going to Pepper Patch.", 2067276)
     PepperPatch()
     PlayerStatus("Finished Checking Pepper Patch.", 5763719, false)
-    if (Vic_Detect("img/Warning.png") == 1) {
+    if (VicActivated() == 1) {
         PepperAttackVic()
         return
     }
-    ResetCharacter()
-    if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
+    resetcharattempts := 0
+    ResetVar := ResetCharacter()
+    while (ResetVar == 2) {
+        resetcharattempts++
+        if resetcharattempts > 3 {
+            return 4
+        }
+        ResetVar := ResetCharacter()
+    }
+    if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
     NoIMGPlayerStatus("Going to Mountain Top Feild.", 2067276)
     MountainTop()
     PlayerStatus("Finished Checking Mountain Top Feild.", 5763719, false)
-    if (Vic_Detect("img/Warning.png") == 1) {
+    if (VicActivated() == 1) {
         MtnAttackVic()
         return
     }
-    ResetCharacter()
-    if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
+    resetcharattempts := 0
+    ResetVar := ResetCharacter()
+    while (ResetVar == 2) {
+        resetcharattempts++
+        if resetcharattempts > 3 {
+            PlayerStatus("leaving server recoonecting count went over 3...", 8359053, true)
+            return 4
+        }
+        ResetVar := ResetCharacter()
+    }
+    if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
     NoIMGPlayerStatus("Going to Rose Feild.", 2067276)
     Rose()
     PlayerStatus("Finished Checking Rose Feild.", 5763719, false)
-    if (Vic_Detect("img/Warning.png") == 1) {
+    if (VicActivated() == 1) {
         AttackVic()
         return
     }
-    ResetCharacter()
+    resetcharattempts := 0
+    ResetVar := ResetCharacter()
+    while (ResetVar == 2) {
+        resetcharattempts++
+        if resetcharattempts > 3 {
+            PlayerStatus("leaving server recoonecting count went over 3...", 8359053, true)
+            return 4
+        }
+        ResetVar := ResetCharacter()
+    }
     NoIMGPlayerStatus("Going to Cactus Feild.", 2067276)
-    if (CheckIfDefeated() == 1 || Vic_Detect("img/Warning.png") == 1) {
+    if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
     Cactus()
     PlayerStatus("Finished Checking Cactus feild.", 5763719, false)
-    if (Vic_Detect("img/Warning.png") == 1) {
+    if (VicActivated() == 1) {
         AttackVic()
         return
     }
@@ -162,15 +206,23 @@ KillViciousBees() {
 }
 
 JoinServer() {
-    RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
-    RunWait('taskkill /F /IM ApplicationFrameHost.exe')
+    ActivateRoblox()
+    RobloxStuff()
     joinrandomserver()
     if (DetectLoading(0x2257A8, 25000)) {
         Sleep 750
-        return
+        return 1
     } else {
-        RunWait('taskkill /F /IM RobloxPlayerBeta.exe')
-        RunWait('taskkill /F /IM ApplicationFrameHost.exe')
-        JoinServer()
+        return 2
     }
+}
+
+
+
+RobloxStuff(){
+    SetKeyDelay 100
+    send "{esc}{l}{Enter}"
+    Sleep 250
+
+    
 }
