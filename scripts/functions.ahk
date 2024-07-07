@@ -353,6 +353,7 @@ PepperAttackVic() {
         PlayerStatus("Looped finished", 15105570, false)
 
     }
+    Sleep 2500
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
     return
@@ -385,6 +386,7 @@ MtnAttackVic() {
         PlayerStatus("Looped finished", 11027200, false)
 
     }
+    Sleep 2500
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
     return
@@ -424,6 +426,7 @@ AttackVic() {
         }
         PlayerStatus("Looped finished", 15844367, false)
     }
+    Sleep 2500
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
 
