@@ -70,6 +70,7 @@ SaveSettings(*) {
 
 
 Start(*) {
+    NoIMGPlayerStatus("Starting Public VicHop Macro by _epic. :)", 16776960)
     loop {
         MainLoop()
     }
@@ -79,8 +80,10 @@ StopMacro(*) {
     ExitApp()
 }
 
+NoIMGPlayerStatus("Connected to discord!", 3426654)
 
 F1:: {
+    NoIMGPlayerStatus("Starting Public VicHop Macro by epic 🙂", 16776960)
     OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
@@ -94,8 +97,10 @@ F2:: ExitApp()
 
 MainLoop() {
     while (JoinServer() == 2){
-        Sleep 100
+        Sleep 350
     }
+
+
     if (NightDetection() == 1) {
         PlayerStatus("Night Detected!!", 0, false)
         ZoomOut()
@@ -106,12 +111,12 @@ MainLoop() {
             StartServerAttempts++
             if StartServerAttempts == 3 {
                 PlayerStatus("leaving server could not claim hive current_hive = 0", 8359053, true)
-                return ;; starts mainloop again
+                return
             }
 
             if ServerVar == 4 {
                 PlayerStatus("leaving server reset count went over 4...", 8359053, true)
-                return ;; starts mainloop again
+                return
             }
             ServerVar := StartServer() 
         }
@@ -129,6 +134,7 @@ MainLoop() {
 }
 
 KillViciousBees() {
+
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
@@ -153,6 +159,9 @@ KillViciousBees() {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
+
+
+
     NoIMGPlayerStatus("Going to Mountain Top Feild.", 2067276)
     MountainTop()
     PlayerStatus("Finished Checking Mountain Top Feild.", 5763719, false)
@@ -174,6 +183,9 @@ KillViciousBees() {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
     }
+
+
+
     NoIMGPlayerStatus("Going to Rose Feild.", 2067276)
     Rose()
     PlayerStatus("Finished Checking Rose Feild.", 5763719, false)
@@ -181,6 +193,7 @@ KillViciousBees() {
         AttackVic()
         return
     }
+    
     resetcharattempts := 0
     ResetVar := ResetCharacter()
     while (ResetVar == 2) {
@@ -191,6 +204,9 @@ KillViciousBees() {
         }
         ResetVar := ResetCharacter()
     }
+
+
+
     NoIMGPlayerStatus("Going to Cactus Feild.", 2067276)
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)

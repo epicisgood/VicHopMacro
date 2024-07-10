@@ -28,16 +28,16 @@ PepperPatch() {
     Send "{w up}"
     Sleep 100
     Send "{s down}"
-    Sleep 200
+    Sleep 350
     Send "{s up}"
     Sleep 100
 
     ;;jumping into it
     Send "{d down}{space down}"
     Sleep 300
-    Send "{w down}"
     Send "{space up}"
-    Sleep 300
+    Send "{w down}"
+    Sleep 450
     Send "{w up}"
     Sleep 500
     Send "{d up}"
@@ -60,14 +60,33 @@ PepperPatch() {
     Send "{d down}"
     Sleep 400
     Send "{d up}"
-    Sleep 50
-    Send "{w down}{space down}"
-    Sleep 1200
-    Send "{space up}"
-    Sleep 1200
+
+    ;; STUPID JUMP TO FIX BROOO
+    Send "{space down}{w down}"
+    Sleep 300
+    Send "{space up}{w up}"
+    Sleep 500
+    Send "{space down}{a down}"
+    Sleep 300
+    Send "{space up}{a up}"
+    Sleep 500
+
+    Send "{space down}{w down}"
+    Sleep 300
+    Send "{space up}{w up}"
+    Sleep 500
+    Send "{space down}{w down}"
+    Sleep 300
+    Send "{space up}{w up}"
+    Sleep 500
+
+    PlayerStatus("Debugging pepper patch lmk if this breaks", 7419530, false)
+    Send "{w down}"
+    Sleep 2000    
     Send "{space down}"
     Sleep 200
     Send "{space up}"
+    Sleep 300
     Send "{w up}"
 
     ; Move to pepper field from next to coconut

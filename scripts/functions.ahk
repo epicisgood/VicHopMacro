@@ -75,6 +75,7 @@ StartServer() {
     Send "{d up}"
     current_hive := FindHiveSlot()
     if (current_hive = 0) {
+        PlayerStatus("Could Not Claim hive retrying..", 15277667, false)
         SetKeyDelay 100
         Send "{Esc}{r}{Enter}"
         Sleep 500
@@ -112,6 +113,14 @@ DetectLoading(loadingColor, timeout) {
             break ;; detected loading color
         }
         if (A_TickCount - startTime >= timeout) {
+            try {
+                PlayerStatus("Closing roblox place restricted error", 15548997, false)
+                HWND := GetRobloxHWND()
+                WinClose(HWND)
+                WinClose(HWND)
+            } catch Error as e {
+                PlayerStatus('Something went horribly wrong! Erorr:' e.Message '', 15548997, false)
+            }
             return false ; Timeout reached for loading color. This means it was not on screen
         }
         Sleep 100
@@ -180,12 +189,14 @@ FindHiveSlot() {
 ClaimHive(current_hive) {
     ImagePath := "img/Hive.png"
 
-    Sleep 500
+    Sleep 750
 
     if PictureImageSearch("img/Hive.png", 32) {
         Send "{e down}"
         Sleep 200
         Send "{e up}"
+
+        PlayerStatus("Claimed hiveslot " current_hive, 10181046, false)
         return current_hive
     }
 }
@@ -301,7 +312,7 @@ RedCannon() {
 }
 
 CheckFireButton() {
-    Sleep 250
+    Sleep 400
     if PictureImageSearch("img\fire.png", 32) {
         return 1
     }
@@ -311,6 +322,7 @@ CheckFireButton() {
 VicActivated() {
 
     Send "{/}{Enter}"
+    Sleep 100
     if PictureImageSearch("img\Warning.png", 32) {
         return 1
     }
@@ -353,7 +365,7 @@ PepperAttackVic() {
         PlayerStatus("Looped finished", 15105570, false)
 
     }
-    Sleep 2500
+    Sleep 5000
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
     return
@@ -386,7 +398,7 @@ MtnAttackVic() {
         PlayerStatus("Looped finished", 11027200, false)
 
     }
-    Sleep 2500
+    Sleep 5000
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
     return
@@ -426,7 +438,7 @@ AttackVic() {
         }
         PlayerStatus("Looped finished", 15844367, false)
     }
-    Sleep 2500
+    Sleep 5000
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
     Sleep 7500
 

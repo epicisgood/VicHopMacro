@@ -66,11 +66,14 @@ PlayerStatus(statusTitle, statusColor, Mentions) {
 
 NoIMGPlayerStatus(StatusTitle, statusColor) {
     global Attempts
-    try {
+    if (StatusTitle == 'Searching For Night Servers.'){
         Attempts += 1
         AttemptCount := Attempts
         payload_json := '{"embeds":[{"title":"' statusTitle " " AttemptCount "x" '", "color":"' statusColor + 0 '"}]}'
-    
+    } else {
+        payload_json := '{"embeds":[{"title":"' statusTitle '", "color":"' statusColor + 0 '"}]}'
+    }
+    try {
         WebRequest := ComObject("WinHttp.WinHttpRequest.5.1")
         WebRequest.Open("POST", url, false)
         WebRequest.SetRequestHeader("Content-Type", "application/json")
