@@ -1,5 +1,5 @@
 # information
-Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at a setspeed of 33.5 movespeed. 
+Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at a setspeed of 33.35 movespeed. 
 
 This macro should be ran with the lowest roblox graphic settings for the best experience.
 
