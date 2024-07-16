@@ -1,26 +1,34 @@
 #Requires AutoHotkey v2
-
 #Include ..\lib\json.ahk
-#Include ..\lib\WinHTTPRequest.ahk
-
 
 joinrandomserver() {
     try {
-        req := WinHTTPRequest("Get", "https://games.roblox.com/v1/games/1537690962/servers/0?sortOrder=1&excludeFullGames=true&limit=100")
-        
-            req.Send()
+        req := ComObject("WinHTTP.WinHTTPRequest.5.1")
+        serverIds := []
+        cursor := ""
+
+        Loop 10 {
+            url := "https://games.roblox.com/v1/games/1537690962/servers/0?sortOrder=1&excludeFullGames=true&limit=100" (cursor ? "&cursor=" cursor : "")
+            req.open("GET", url, true)
+            req.send()
             req.WaitForResponse()
-            response := req.ParseResponse()
-        
-            RandomServer := response.data[Random(1,100)].id
-        
-            run "roblox://placeId=1537690962&gameInstanceId=" RandomServer
+
+            response := JSON.parse(req.responsetext, true, false)
+
+            for server in response.data {
+                serverIds.push(server.id)
+            }
+
+            cursor := response.nextPageCursor
+            if !cursor
+                break ;; this is never gonna happen fr
+        }
+
+        RandomServer := serverIds[Random(1, 1000)]
+
+        run "roblox://placeId=1537690962&gameInstanceId=" RandomServer
+
     } catch Error as e {
         return
     }
-
 }
-
-
-
-

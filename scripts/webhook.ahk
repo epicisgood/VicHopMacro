@@ -4,10 +4,8 @@ SetWorkingDir A_ScriptDir
 
 #Include "..\lib"
 #Include json.ahk
-#Include WinHTTPRequest.ahk
 #Include Gdip_All.ahk
 #Include FormData.ahk
-
 
 
 
