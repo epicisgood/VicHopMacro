@@ -72,20 +72,24 @@ SaveSettings(*) {
 
 
 Start(*) {
-    NoIMGPlayerStatus("Starting Public VicHop Macro by _epic. :)", 16776960)
+    NoIMGPlayerStatus("Starting v1.0.5 VicHopMacro by epic", 16776960)
+    GetServerIds()
+    OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
     }
 }
 
 StopMacro(*) {
+    Send "{" WKey " up}{" AKey " up}{" SKey " up}{" Dkey " up}"
     ExitApp()
 }
 
 NoIMGPlayerStatus("Connected to discord!", 3426654)
 
 F1:: {
-    NoIMGPlayerStatus("Starting Public VicHop Macro by epic 🙂", 16776960)
+    NoIMGPlayerStatus("Starting v1.0.5 VicHopMacro by epic", 16776960)
+    GetServerIds()
     OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
@@ -117,11 +121,10 @@ Lkey := "sc002" ; 1
 SlashKey := "sc035" ; /
 
 
-
-
 MainLoop() {
+    
     while (JoinServer() == 2) {
-        Sleep 500
+        Sleep(350)
     }
 
 
@@ -139,28 +142,34 @@ MainLoop() {
 }
 
 
-
 KillViciousBees() {
 
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
+    } else if (PictureImageSearch("img\stickbug.png", 16)) {
+        PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
     }
     NoIMGPlayerStatus("Going to Pepper Patch.", 2067276)
     PepperPatch()
     PlayerStatus("Finished Checking Pepper Patch.", 5763719, false)
 
     loopresult := VIciousAttackLoop(3)
-    if (loopresult == 4) {
-        return
-    } else if (loopresult == 2) {
+    if (loopresult == 3) {
+        if (ResetMainCharacter() == false) {
+            return
+        }
         PepperPatch()
         VIciousAttackLoop(3)
+        return
+    } else if (loopresult == 1) {
+        Sleep 1
+    } else {
         return
     }
 
 
-    if (ResetMainCharacter() == false){
+    if (ResetMainCharacter() == false) {
         return
     }
 
@@ -168,6 +177,8 @@ KillViciousBees() {
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
+    } else if (PictureImageSearch("img\stickbug.png", 16)) {
+        PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
     }
 
 
@@ -175,21 +186,28 @@ KillViciousBees() {
     MountainTop()
     PlayerStatus("Finished Checking Mountain Top Feild.", 5763719, false)
     loopresult := VIciousAttackLoop(2)
-    if (loopresult == 4) {
-        return
-    } else if (loopresult == 2) {
+    if (loopresult == 3) {
+        if (ResetMainCharacter() == false) {
+            return
+        }
         MountainTop()
         VIciousAttackLoop(2)
+        return
+    } else if (loopresult == 1) {
+        Sleep 1
+    } else {
         return
     }
 
 
-    if (ResetMainCharacter() == false){
+    if (ResetMainCharacter() == false) {
         return
     }
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
+    } else if (PictureImageSearch("img\stickbug.png", 16)) {
+        PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
     }
 
 
@@ -197,14 +215,21 @@ KillViciousBees() {
     Rose()
     PlayerStatus("Finished Checking Rose Feild.", 5763719, false)
     loopresult := VIciousAttackLoop()
-    if (loopresult == 4) {
-        return
-    } else if (loopresult == 2) {
+    if (loopresult == 3) {
+        if (ResetMainCharacter() == false) {
+            return
+        }
         Rose()
-        VIciousAttackLoop(1)
+        VIciousAttackLoop()
+        return
+    } else if (loopresult == 1) {
+        Sleep 1
+    } else {
         return
     }
-    if (ResetMainCharacter() == false){
+
+
+    if (ResetMainCharacter() == false) {
         return
     }
 
@@ -212,17 +237,25 @@ KillViciousBees() {
     if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
+    } else if (PictureImageSearch("img\stickbug.png", 16)) {
+        PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
     }
     Cactus()
     PlayerStatus("Finished Checking Cactus feild.", 5763719, false)
     loopresult := VIciousAttackLoop()
-    if (loopresult == 4) {
-        return
-    } else if (loopresult == 2) {
+    if (loopresult == 3) {
+        if (ResetMainCharacter() == false) {
+            return
+        }
         Cactus()
-        VIciousAttackLoop(1)
+        VIciousAttackLoop()
+        return
+    } else if (loopresult == 1) {
+        Sleep 1
+    } else {
         return
     }
+    GetServerIds()
     NoIMGPlayerStatus("No Vicious bees found...", 8359053)
 }
 
@@ -230,7 +263,6 @@ JoinServer() {
     ActivateRoblox()
     SetKeyDelay 100
     send "{esc}{l}{Enter}"
-    Sleep 500
     joinrandomserver()
     if (DetectLoading(0x2257A8, 25000)) {
         Sleep 750
@@ -239,4 +271,3 @@ JoinServer() {
         return 2
     }
 }
-

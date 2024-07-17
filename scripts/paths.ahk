@@ -1,3 +1,6 @@
+
+
+
 PepperPatch() {
     SetKeyDelay 0, 50
     HyperSleep(300)
@@ -17,42 +20,46 @@ PepperPatch() {
     Send "{" SKey " up}"
     HyperSleep(100)
 
-    ;; jumping into it
+    ;;jumping into it
     Send "{" DKey " down}{" SpaceKey " down}"
-    HyperSleep(300)
+    HyperSleep(200)
     Send "{" SpaceKey " up}"
     Send "{" WKey " down}"
-    HyperSleep(300)
+    HyperSleep(450)
     Send "{" WKey " up}"
-    HyperSleep(200)
+    HyperSleep(500)
     Send "{" DKey " up}"
 
-    ;; second platform
-    Send "{" WKey " down}"
-    HyperSleep(600)
-    Send "{" SpaceKey " down}"
-    HyperSleep(100)
-    Send "{" WKey " up}{" SpaceKey " up}"
+    Send "{" WKey " down}{" DKey " down}"
+    HyperSleep(200)
+    Send "{" DKey " up}"
+    HyperSleep(300)
+    Send "{" WKey " up}"
+
+    ;;second platform
+    Send "{" WKey " down} {" SpaceKey " down}"
+    HyperSleep(500)
+    Send "{" SpaceKey " up} {" WKey " up}"
     ;; correction to not bug out
     Send "{" WKey " down}"
     Send "{" AKey " down}"
-    HyperSleep(500)
+    HyperSleep(300)
     Send "{" AKey " up}"
-    HyperSleep(1700)
+    HyperSleep(1900)
     Send "{" WKey " up}"
     Send "{" DKey " down}"
-    HyperSleep(500)
+    HyperSleep(200)
     Send "{" DKey " up}"
 
     ;; STUPID JUMP TO FIX BROOO
     Send "{" SpaceKey " down}{" WKey " down}"
     HyperSleep(300)
     Send "{" SpaceKey " up}{" WKey " up}"
-    HyperSleep(300)
+    HyperSleep(500)
     Send "{" SpaceKey " down}{" AKey " down}"
     HyperSleep(300)
     Send "{" SpaceKey " up}{" AKey " up}"
-    HyperSleep(300)
+    HyperSleep(500)
 
     Send "{" SpaceKey " down}{" WKey " down}"
     HyperSleep(300)
@@ -61,38 +68,42 @@ PepperPatch() {
     Send "{" SpaceKey " down}{" WKey " down}"
     HyperSleep(300)
     Send "{" SpaceKey " up}{" WKey " up}"
-    PlayerStatus("Debugging pepper patch lmk if this breaks", 7419530, false)
+    HyperSleep(500)
 
+    PlayerStatus("Debugging pepper patch lmk if this breaks", 7419530, false)
     Send "{" WKey " down}"
-    HyperSleep(1300)
+    HyperSleep(1600)
     Send "{" SpaceKey " down}"
     HyperSleep(200)
     Send "{" SpaceKey " up}"
     HyperSleep(300)
     Send "{" WKey " up}"
-    ;; Move to pepper field from next to coconut
+
+    ; Move to pepper field from next to coconut
     Send "{" WKey " down}"
     Send "{" DKey " down}"
-    HyperSleep(1600)
+    HyperSleep(2000)
     Send "{" WKey " up}"
     Send "{" DKey " up}"
-    Send "{" DKey " down}"
-    HyperSleep(1200)
     Send "{" SpaceKey " down}"
-    HyperSleep(100)
+    Send "{" DKey " down}"
+    HyperSleep(250)
     Send "{" SpaceKey " up}"
-    HyperSleep 1300
+    HyperSleep(2000)
     Send "{" DKey " up}"
 
     ;; jump to field
+
     Send "{" SpaceKey " down}"
-    Send "{" DKey " down}{" Skey " down}"
+    Send "{" DKey " down}"
     HyperSleep(100)
     Send "{" SpaceKey " up}"
-    HyperSleep(300)
-    Send "{" Skey " up}"
-    HyperSleep(500)
+    HyperSleep(1100)
     Send "{" DKey " up}"
+    HyperSleep(200)
+    Send "{" SKey " down}"
+    HyperSleep(700)
+    Send "{" SKey " up}"
     ;; Search vicious bee at pepper field
 
     Send "{" WKey " down}"
@@ -111,7 +122,7 @@ PepperPatch() {
     Send "{" SKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(700)
+    HyperSleep(600)
     Send "{" DKey " up}"
 
     Send "{" WKey " down}"
@@ -119,6 +130,7 @@ PepperPatch() {
     HyperSleep(650)
     Send "{" WKey " up}"
 }
+
 
 MountainTop() {
     SetKeyDelay 0, 50

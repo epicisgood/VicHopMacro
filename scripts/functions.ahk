@@ -42,6 +42,7 @@ ActivateRoblox()
 }
 
 
+
 PictureImageSearch(ImagePath, Strength) {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
@@ -77,23 +78,24 @@ StartServer() {
     global current_hive
     SetKeyDelay 50
     send "{" RotRight " 1}"
-    HyperSleep(300)
+    Sleep(300)
     Send "{" WKey " down}"
+    Sleep(550)
     glider()
-    HyperSleep(1100)
+    Sleep(550)
     Send "{" WKey " up}"
-    HyperSleep(50)
+    Sleep(50)
     send "{" RotLeft " 1}"
-    HyperSleep(50)
+    Sleep(50)
     Send "{" Dkey " down}"
-    HyperSleep(1000)
+    Sleep(1000)
     Send "{" Dkey " up}"
     current_hive := FindHiveSlot()
     if (current_hive = 0) {
         PlayerStatus("Could Not Claim hive retrying..", 15277667, false)
         SetKeyDelay 100
         send "{" EscKey "}{" Rkey "}{" EnterKey "}"
-        HyperSleep(500)
+        Sleep(500)
         HealthDetection()
         ZoomOut()
         return 3
@@ -105,6 +107,7 @@ StartServer() {
 
 
 StartServerLoop() {
+    GetServerIds()
     StartServerAttempts := 0
     ServerVar := StartServer()
     while (ServerVar == 3 || ServerVar == 4) {
@@ -125,7 +128,7 @@ StartServerLoop() {
 ZoomOut() {
     Loop 15 {
         Send "{" ZoomOuter " down}"
-        HyperSleep(10)
+        Sleep(10)
         Send "{" ZoomOuter " up}"
     }
 }
@@ -150,7 +153,7 @@ DetectLoading(loadingColor, timeout) {
             }
             return false ; Timeout reached for loading color. This means it was not on screen
         }
-        HyperSleep(100)
+        Sleep(100)
     }
 
 
@@ -159,7 +162,7 @@ DetectLoading(loadingColor, timeout) {
         if (color != loadingColor) {
             break ;; detected loading color going away
         }
-        HyperSleep(100)
+        Sleep(100)
     }
 
     return true ; Loading succesfully managed
@@ -177,12 +180,12 @@ NightDetection() {
 
 CheckSpawnPos() {
     send "{" ZoomIn " 1}"
-    HyperSleep(500)
+    Sleep(500)
 
     if (PictureImageSearch("img\Leaderboard.png", 32) || PictureImageSearch("img\nightlb.png", 32)) {
         SetKeyDelay 100
         send "{" RotRight " 4}"
-        HyperSleep(2000)
+        Sleep(2000)
         SetKeyDelay 50
         return
     }
@@ -193,7 +196,7 @@ FindHiveSlot() {
     global current_hive
     HyperSleep(300)
     Send "{" AKey " down}"
-    HyperSleep(400)
+    HyperSleep(500)
     Send "{" AKey " up}"
     HyperSleep(1500)
     current_hive := 1
@@ -216,11 +219,11 @@ FindHiveSlot() {
 ClaimHive(current_hive) {
     ImagePath := "img/Hive.png"
 
-    HyperSleep(750)
+    Sleep(750)
 
     if PictureImageSearch("img/Hive.png", 32) {
         Send "{" Ekey " down}"
-        HyperSleep(200)
+        Sleep(200)
         Send "{" Ekey " up}"
 
         PlayerStatus("Claimed hiveslot " current_hive, 10181046, false)
@@ -245,12 +248,12 @@ ResetMainCharacter() {
 
 ResetCharacter() {
     send "{" EscKey "}{" Rkey "}{" EnterKey "}"
-    HyperSleep(500)
+    Sleep(500)
     HealthDetection()
     ZoomOut()
     CheckSpawnPos()
     Send "{" RotDown " 1}"
-    HyperSleep(250)
+    Sleep(250)
     if (CheckCocoSpawn() == 1) {
         Send "{" RotUp " 1}"
         FalseGoToRamp()
@@ -273,9 +276,9 @@ ResetCharacter() {
 
 HealthDetection() {
     while (PictureImageSearch("img\Health.png", 32)) {
-        HyperSleep(100)
+        Sleep(100)
     }
-    HyperSleep(500)
+    Sleep(500)
     return 1
 
 }
@@ -308,61 +311,61 @@ HiveCorrection() {
 GoToRamp() {
     global current_hive
     SetKeyDelay 50, 50
-    HyperSleep(300)
+    Sleep(300)
     Send "{" Dkey " down}"
-    HyperSleep(1000) * current_hive
+    Sleep(1000 * current_hive)
     Send "{" Dkey " up}"
-    HyperSleep(500)
+    Sleep(500)
     Send "{" SpaceKey " down}"
     Send "{" Dkey " down}"
-    HyperSleep(100)
+    Sleep(100)
     Send "{" SpaceKey " up}"
-    HyperSleep(200)
+    Sleep(200)
     Send "{" Dkey " up}"
 }
 
 FalseGoToRamp() {
     SetKeyDelay 50, 50
     Send "{" WKey " down}"
-    HyperSleep(1800)
+    Sleep(1800)
     Send "{" WKey " up}"
     Send "{" Dkey " down}"
-    HyperSleep(3000)
+    Sleep(3000)
     Send "{" Dkey " up}"
     Send "{" SpaceKey " down}"
     Send "{" Dkey " down}"
-    HyperSleep(100)
+    Sleep(100)
     Send "{" SpaceKey " up}"
-    HyperSleep(200)
+    Sleep(200)
     Send "{" Dkey " up}"
 }
 
 RedCannon() {
     SetKeyDelay 50, 50
     Send "{" WKey " down}"
-    HyperSleep(400)
+    Sleep(400)
     Send "{" WKey " up}"
     Send "{" SpaceKey " down}"
     Send "{" Dkey " down}"
-    HyperSleep(600)
+    Sleep(600)
     Send "{" SpaceKey " up}"
     Send "{" Dkey " up}"
 
-    HyperSleep(200)
+    Sleep(200)
 
 }
 
 glider() {
     loop 2 {
         Send "{" SpaceKey " down}"
-        HyperSleep(250)
+        Sleep(250)
         Send "{" SpaceKey " up}"
     }
 }
 
 
 CheckFireButton() {
-    HyperSleep(400)
+    Sleep(400)
     if PictureImageSearch("img\fire.png", 32) {
         return 1
     }
@@ -372,7 +375,7 @@ CheckFireButton() {
 VicActivated() {
 
     Send "{" SlashKey "}" "{" EnterKey "}"
-    HyperSleep(100)
+    Sleep(100)
     if PictureImageSearch("img\Warning.png", 32) {
         return 1
     }
@@ -401,37 +404,37 @@ PepperAttackVic() {
         Loop 2 {
             PlayerDied()
             Send "{" WKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" WKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" AKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" AKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" SKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" SKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" Dkey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" Dkey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         PlayerStatus("Looped finished", 15105570, false)
 
     }
-    HyperSleep(5000)
+    Sleep(5000)
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    HyperSleep(7500)
+    Sleep(7500)
     return 2
 }
 
@@ -454,30 +457,30 @@ MtnAttackVic() {
         }
         PlayerDied()
         Send "{" Dkey " down}"
-        HyperSleep(1500)
+        Sleep(1500)
         Send "{" Dkey " up}"
         PlayerDied()
         loop 5 {
             PlayerDied()
             Send "{" SKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" SKey " up}"
         }
         Send "{" AKey " down}"
-        HyperSleep(400)
+        Sleep(400)
         Send "{" AKey " up}"
         PlayerDied()
         loop 5 {
             Send "{" WKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" WKey " up}"
         }
         PlayerStatus("Looped finished", 11027200, false)
 
     }
-    HyperSleep(5000)
+    Sleep(5000)
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    HyperSleep(7500)
+    Sleep(7500)
     return 2
 }
 
@@ -501,44 +504,45 @@ AttackVic() {
         Loop 2 {
             PlayerDied()
             Send "{" WKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" WKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" AKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" AKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" SKey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" SKey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         Loop 2 {
             PlayerDied()
             Send "{" Dkey " down}"
-            HyperSleep(400)
+            Sleep(400)
             Send "{" Dkey " up}"
-            HyperSleep(500)
+            Sleep(500)
         }
         PlayerStatus("Looped finished", 15844367, false)
     }
-    HyperSleep(5000)
+    Sleep(5000)
     PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-    HyperSleep(7500)
+    Sleep(7500)
 
     return 2
 }
 
 PlayerDied() {
     global Dead
-    if PictureImageSearch("img\Health.png", 32) {
+    if PictureImageSearch("img\died.png", 32) {
         Dead := true
+        PlayerStatus("Bro Died To vicious bee during battle... What an embarrassment", 2899536, false)
         return 1
     } else {
         return 0
@@ -560,53 +564,49 @@ CheckIfDefeated() {
 
 
 ; Main Function to call only
+
+; 3 = died
+; 2 = Succesfully defeated / timeout reached
 VIciousAttackLoop(CurrentFeild := 1) {
     if (VicActivated() == 1) {
         result := ViciousBattle(CurrentFeild)
-        while (result) {
-            if (result == 2) {
-                PlayerStatus("Bro Died To vicious bee during battle... What an embarrassment", 2899536, false)
-                if (ResetMainCharacter() == false) {
-                    return 4
-                }
-                return 2
-            } else {
-                return 4
-            }
+        if (result == 3) {
+            return 3
+        } else {
+            return
         }
+
     }
+    return 1
 }
 
 ; From Vicious Attack Loop Function to call only
 ViciousBattle(State) {
     if (state == 1) {
         result := AttackVic()
-        while (result) {
-            if (result == 2) {
-                return
-            } else if (result == 3) {
-                return 2
-            }
+
+        if (result == 2) {
+            return
+        } else {
+            return 3
         }
     }
     if (state == 2) {
         result := MtnAttackVic()
-        while (result) {
-            if (result == 2) {
-                return
-            } else if (result == 3) {
-                return 2
-            }
+
+        if (result == 2) {
+            return
+        } else {
+            return 3
         }
     }
     if (state == 3) {
         result := PepperAttackVic()
-        while (result) {
-            if (result == 2) {
-                return
-            } else if (result == 3) {
-                return 2
-            }
+
+        if (result == 2) {
+            return
+        } else {
+            return 3
         }
     }
     return
