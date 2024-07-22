@@ -1,10 +1,9 @@
 # information
-Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at a setspeed of 33.35 movespeed. 
+Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at any speed
 
 This macro should be ran with the **lowest** roblox graphic settings for the best experience.
 
 **performance stats** settings should also be turned **OFF** if you have it enabled
-
 
 ## Prerequisites
 
@@ -27,9 +26,14 @@ To set up the macro on your machine, follow these steps:
    start.ahk
    ```
 
-3. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro.
+3. **Configure Movespeed and Discord**: If you need help with adding discord integration into the macro, you can read these pages for more information. [UserId](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID#h_01HRSTXPS5H5D7JBY2QKKPVKNA) [Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
+
+
+4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro.
 
 
 ## Contact
 
 hello! u can dm me on discord at ``` _epic. ``` 
+
+[Github Link](https://github.com/epicisgood/VicHopMacro)

@@ -2,167 +2,163 @@
 
 
 PepperPatch() {
-    SetKeyDelay 0, 50
-    HyperSleep(300)
     Send "{" DKey " down}"
-    HyperSleep(250)
+    Movespeed(250)
     Send "{" SpaceKey " up}"
-    HyperSleep(2300)
+    Movespeed(2300)
     Send "{" DKey " up}"
     ;; 35 bee zone still at ground
 
     Send "{" WKey " down}"
-    HyperSleep(400)
+    Movespeed(400)
     Send "{" WKey " up}"
-    HyperSleep(100)
+    Movespeed(100)
     Send "{" SKey " down}"
-    HyperSleep(350)
+    Movespeed(350)
     Send "{" SKey " up}"
-    HyperSleep(100)
+    Movespeed(100)
 
     ;;jumping into it
     Send "{" DKey " down}{" SpaceKey " down}"
-    HyperSleep(200)
+    Movespeed(200)
     Send "{" SpaceKey " up}"
     Send "{" WKey " down}"
-    HyperSleep(450)
+    Movespeed(450)
     Send "{" WKey " up}"
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" DKey " up}"
 
     Send "{" WKey " down}{" DKey " down}"
-    HyperSleep(200)
+    Movespeed(200)
     Send "{" DKey " up}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" WKey " up}"
 
     ;;second platform
     Send "{" WKey " down} {" SpaceKey " down}"
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" SpaceKey " up} {" WKey " up}"
     ;; correction to not bug out
     Send "{" WKey " down}"
     Send "{" AKey " down}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" AKey " up}"
-    HyperSleep(1900)
+    Movespeed(1900)
     Send "{" WKey " up}"
     Send "{" DKey " down}"
-    HyperSleep(200)
+    Movespeed(600)
     Send "{" DKey " up}"
 
     ;; STUPID JUMP TO FIX BROOO
     Send "{" SpaceKey " down}{" WKey " down}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" SpaceKey " up}{" WKey " up}"
-    HyperSleep(500)
-    Send "{" SpaceKey " down}{" AKey " down}"
-    HyperSleep(300)
-    Send "{" SpaceKey " up}{" AKey " up}"
-    HyperSleep(500)
+    Movespeed(500)
+    Send "{" SpaceKey " down}{" WKey " down}"
+    Movespeed(300)
+    Send "{" SpaceKey " up}{" WKey " up}"
+    Movespeed(500)
 
     Send "{" SpaceKey " down}{" WKey " down}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" SpaceKey " up}{" WKey " up}"
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" SpaceKey " down}{" WKey " down}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" SpaceKey " up}{" WKey " up}"
-    HyperSleep(500)
+    Movespeed(500)
 
     PlayerStatus("Debugging pepper patch lmk if this breaks", 7419530, false)
     Send "{" WKey " down}"
-    HyperSleep(1600)
+    Movespeed(1600)
     Send "{" SpaceKey " down}"
-    HyperSleep(200)
+    Movespeed(200)
     Send "{" SpaceKey " up}"
-    HyperSleep(300)
+    Movespeed(300)
     Send "{" WKey " up}"
 
     ; Move to pepper field from next to coconut
     Send "{" WKey " down}"
     Send "{" DKey " down}"
-    HyperSleep(2000)
+    Movespeed(2000)
     Send "{" WKey " up}"
     Send "{" DKey " up}"
     Send "{" SpaceKey " down}"
     Send "{" DKey " down}"
-    HyperSleep(250)
+    Movespeed(250)
     Send "{" SpaceKey " up}"
-    HyperSleep(2000)
+    Movespeed(2000)
     Send "{" DKey " up}"
 
     ;; jump to field
 
     Send "{" SpaceKey " down}"
     Send "{" DKey " down}"
-    HyperSleep(100)
+    Movespeed(100)
     Send "{" SpaceKey " up}"
-    HyperSleep(1100)
+    Movespeed(900)
     Send "{" DKey " up}"
-    HyperSleep(200)
+    Movespeed(200)
     Send "{" SKey " down}"
-    HyperSleep(700)
+    Movespeed(700)
     Send "{" SKey " up}"
     ;; Search vicious bee at pepper field
 
     Send "{" WKey " down}"
-    HyperSleep(1600)
-    HyperSleep(650)
+    Movespeed(1600)
+    Movespeed(650)
     Send "{" WKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(700)
+    Movespeed(700)
     Send "{" DKey " up}"
 
     ;; pollen detection here or smth
     Send "{" SKey " down}"
-    HyperSleep(1600)
-    HyperSleep(650)
+    Movespeed(1600)
+    Movespeed(650)
     Send "{" SKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(600)
+    Movespeed(600)
     Send "{" DKey " up}"
 
     Send "{" WKey " down}"
-    HyperSleep(1600)
-    HyperSleep(650)
+    Movespeed(1600)
+    Movespeed(650)
     Send "{" WKey " up}"
 }
 
 
 MountainTop() {
-    SetKeyDelay 0, 50
-    HyperSleep(100)
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
     HyperSleep(3500)
 
     Send "{" WKey " down}"
-    HyperSleep(1700)
+    Movespeed(1700)
     Send "{" WKey " up}"
 
     Send "{" AKey " down}"
-    HyperSleep(750)
+    Movespeed(750)
     Send "{" AKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(2300)
+    Movespeed(2300)
     Send "{" SKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(1500)
+    Movespeed(1500)
     Send "{" DKey " up}"
 
     Send "{" WKey " down}"
-    HyperSleep(1500)
-    HyperSleep(750)
+    Movespeed(1500)
+    Movespeed(750)
     Send "{" WKey " up}"
 }
 
-Rose() {
+Rose(){
     SetKeyDelay 50, 50
     Send "{" EKey " down}"
     HyperSleep(100)
@@ -183,37 +179,38 @@ Rose() {
     HyperSleep(3000)
 
     Send "{" SpaceKey " down}"
-    HyperSleep(50)
+    Movespeed(50)
     Send "{" SpaceKey " up}"
 
     ;; Search for vicious bee
 
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" AKey " down}"
-    HyperSleep(1700)
-    HyperSleep(1100)
+    Movespeed(1700)
+    Movespeed(1100)
     Send "{" AKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(600)
+    Movespeed(600)
     Send "{" SKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(1700)
-    HyperSleep(1100)
+    Movespeed(1700)
+    Movespeed(1100)
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(600)
+    Movespeed(600)
     Send "{" SKey " up}"
 
     Send "{" AKey " down}"
-    HyperSleep(1700)
-    HyperSleep(1100)
+    Movespeed(1700)
+    Movespeed(1100)
     Send "{" AKey " up}"
+    SetKeyDelay 50
 }
 
-Cactus() {
+Cactus() {   
     SetKeyDelay 50, 50
     Send "{" EKey " down}"
     HyperSleep(100)
@@ -241,22 +238,188 @@ Cactus() {
     HyperSleep(2000)
 
     Send "{" DKey " down}"
-    HyperSleep(2600)
+    Movespeed(2600)
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" SKey " up}"
 
     Send "{" AKey " down}"
-    HyperSleep(2600)
+    Movespeed(2600)
     Send "{" AKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(500)
+    Movespeed(500)
     Send "{" SKey " up}"
 
     Send "{" DKey " down}"
-    HyperSleep(2600)
+    Movespeed(2600)
     Send "{" DKey " up}"
+    SetKeyDelay 50
 }
+
+
+
+
+somavoar(){
+    HyperSleep(100)
+    Send "{" EKey " down}"
+    HyperSleep(100)
+    Send "{" EKey " up}"
+    Send "{" AKey " down}"
+    HyperSleep(1300)
+    HyperSleep(500)
+    glider()
+    HyperSleep(4500)
+    Send "{" AKey " up}"
+    Send "{" SpaceKey " 1}"
+    HyperSleep(2000)
+
+
+    Send "{" SKey " down}"
+    Movespeed(4000)
+    Send "{" SKey " up}"
+
+    
+    Send "{" SpaceKey " down}{" SKey " down}"
+    Movespeed(25)
+    Send "{" SpaceKey " up}"
+    Movespeed(2000)
+    Send "{" AKey " down}"
+    Movespeed(1000)
+    Send "{" SKey " up}{" AKey " up}"
+
+    Send "{" SpaceKey " down}{" SKey " down}"
+    Movespeed(750)
+    Send "{" SpaceKey " up}"
+    Movespeed(500)
+    Send "{" SKey " up}"
+
+    Send "{" AKey " down}"
+    Movespeed(500)
+    Send "{" AKey " up}"
+
+    Send "{" EKey " down}"
+    HyperSleep(50)
+    Send "{" EKey " up}"
+
+    HyperSleep(5000)
+    Send "{" RotLeft " 1}"  ; <--- , key (turn left)
+
+    Send "{" WKey " down}"
+    movespeed(300)
+    Send "{" WKey " up}"
+
+    Send "{" Dkey " down}"
+    movespeed(300)
+    Send "{" Dkey " up}"
+
+    Send "{" SKey " down}"
+    movespeed(500)
+    Send "{" SKey " up}"
+
+    Send "{" AKey " down}"
+    movespeed(300)
+    Send "{" AKey " up}"
+
+    Send "{" WKey " down}"
+    movespeed(300)
+    Send "{" WKey " up}"
+}
+
+
+feast(){
+    HyperSleep(100)
+    Send "{" EKey " down}"
+    HyperSleep(100)
+    Send "{" EKey " up}"
+    Send "{" DKey " down}"
+    HyperSleep(1175)
+    glider()
+    HyperSleep(1100)
+    Send "{" DKey " up}"
+    Send "{" SKey " down}"
+    HyperSleep(500)
+    Send "{" SKey " up}"
+    Send "{" SpaceKey " 1}"
+    HyperSleep(1000)
+    Send "{" AKey " down}"
+    movespeed(1000)
+    Send "{" AKey " up}"
+
+    Send "{" WKey " down}"
+    movespeed(1500)
+    Send "{" WKey " up}"
+
+    Send "{" SKey " down}"
+    movespeed(1200)
+    Send "{" SKey " up}"
+
+    Send "{" Dkey " down}"
+    movespeed(500)
+    Send "{" SpaceKey " down}"
+    HyperSleep(200)
+    Send "{" SpaceKey " up}"
+    movespeed(500)
+    Send "{" Dkey " up}"
+
+    ;; Claim Feist
+    Send "{" EKey " 1}"
+    HyperSleep(6000)
+    Send "{" RotRight " 3}"
+    ;; landed
+    Send "{" WKey " down}"
+    movespeed(1000)
+    Send "{" WKey " up}"
+
+    Send "{" Dkey " down}"
+    movespeed(600)
+    Send "{" Dkey " up}"
+
+
+    Send "{" SKey " down}"
+    movespeed(400)
+    glider()
+    movespeed(400)
+    Send "{" SKey " up}"
+    
+    Send "{" AKey " down}"
+    movespeed(600)
+    Send "{" AKey " up}"
+
+
+    Send "{" WKey " down}"
+    movespeed(400)
+    Send "{" WKey " up}"
+
+
+    Send "{" Dkey " down}"
+    movespeed(500)
+    Send "{" Dkey " up}"
+
+    Send "{" SKey " down}"
+    movespeed(400)
+    Send "{" SKey " up}"
+}
+
+stockings(){
+    HyperSleep(100)
+    Send "{" EKey " down}"
+    HyperSleep(100)
+    Send "{" EKey " up}"
+    Send "{" AKey " down}"
+    HyperSleep(600)
+    glider()
+    HyperSleep(4000)
+    Send "{" AKey " up}"
+    Send "{" WKey " down}"
+    HyperSleep(4000)
+    Send "{" WKey " up}"
+    Send "{" SKey " down}"
+    movespeed(600) ;<-- Need to replace with movespeed when its fixed
+    Send "{" SKey " up}"
+    ; still needs claim and collect items 
+
+}
+

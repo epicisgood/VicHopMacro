@@ -3,14 +3,19 @@
 
 
 global serverIds := []
-
-
 joinrandomserver() {
 
-    if (serverIds.Length > 0) {
+    if (serverIds.Length > 1) {
+        
         RandomServer := serverIds[Random(1, serverIds.Length)]
-        run "roblox://placeId=1537690962&gameInstanceId=" RandomServer
+        ; NoIMGPlayerStatus("Picked this server " RandomServer, 0)
+
+        run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'
+    } else {
+        GetServerIds()
+        PlayerStatus("An error happend in fetching roblox servers", 0, false)
     }
+
 }
 
 
