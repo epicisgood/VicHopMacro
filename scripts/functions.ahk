@@ -90,9 +90,7 @@ StartServer() {
     send "{" RotRight " 1}"
     Movespeed(300)
     Send "{" WKey " down}"
-    Movespeed(550)
-    glider()
-    Movespeed(550)
+    Movespeed(2300)
     Send "{" WKey " up}"
     Movespeed(50)
     send "{" RotLeft " 1}"
@@ -119,19 +117,18 @@ StartServer() {
 
 
 StartServerLoop() {
-    GetServerIds()
     StartServerAttempts := 0
     ServerVar := StartServer()
     while (ServerVar == 3 || ServerVar == 4) {
         StartServerAttempts++
         if StartServerAttempts == 3 {
             PlayerStatus("leaving server could not claim hive current_hive = 0", 8359053, true)
-            return
+            return 1
         }
 
         if ServerVar == 4 {
             PlayerStatus("leaving server reset count went over 4...", 8359053, true)
-            return
+            return 1 
         }
         ServerVar := StartServer()
     }

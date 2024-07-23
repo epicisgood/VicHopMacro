@@ -127,7 +127,6 @@ SlashKey := "sc035" ; /
 
 
 MainLoop() {
-    
     while (JoinServer() == 2) {
         HyperSleep(350)
     }
@@ -136,7 +135,9 @@ MainLoop() {
     if (NightDetection() == 1) {
         PlayerStatus("Night Detected!!", 0, false)
         ZoomOut()
-        StartServerLoop()
+        if (StartServerLoop() == 1){
+            return
+        }
     } else {
         NoIMGPlayerStatus("Searching For Night Servers.", 1752220)
         return
@@ -257,7 +258,6 @@ KillViciousBees() {
     } else {
         return
     }
-    GetServerIds()
     NoIMGPlayerStatus("No Vicious bees found...", 8359053)
 }
 
