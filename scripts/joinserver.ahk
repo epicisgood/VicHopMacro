@@ -7,7 +7,6 @@ global JoinAttempts := 0
 joinrandomserver() {
     global JoinAttempts, serverIds
     if (serverIds.Length > 1) {
-        
         RandomServer := serverIds[Random(1, serverIds.Length)]
         ; NoIMGPlayerStatus("Picked this server " RandomServer, 0)
 
@@ -18,14 +17,13 @@ joinrandomserver() {
         PlayerStatus("An error happend in fetching roblox servers", 0, false)
     }
 
-    if (JoinAttempts == 15){
+    if (JoinAttempts == 15) {
+        NoIMGPlayerStatus("Fetching more servers...", 0)
         GetServerIds()
         JoinAttempts := 0
     }
 
 }
-
-
 
 
 GetServerIds() {
@@ -51,7 +49,6 @@ GetServerIds() {
             if !cursor
                 break
         }
-
 
     } catch Error as e {
         return

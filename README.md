@@ -29,7 +29,7 @@ To set up the macro on your machine, follow these steps:
 3. **Configure Movespeed and Discord**: If you need help with adding discord integration into the macro, you can read these pages for more information. [UserId](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID#h_01HRSTXPS5H5D7JBY2QKKPVKNA) [Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 
-4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro.
+4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro. Make sure the / key is worked as intended for the macro to work correctly
 
 
 ## Contact

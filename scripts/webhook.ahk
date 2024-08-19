@@ -1,13 +1,4 @@
 #Requires AutoHotkey v2.0
-SetWorkingDir A_ScriptDir
-
-
-#Include "..\lib"
-#Include json.ahk
-#Include Gdip_All.ahk
-#Include FormData.ahk
-
-
 
 global Attempts := 0
 
@@ -29,9 +20,8 @@ PlayerStatus(statusTitle, statusColor, Mentions) {
     pBitmap := Gdip_BitmapFromScreen((windowWidth > 0) ? (windowX "|" windowY "|" windowWidth "|" windowHeight) : 0)
 
     Gdip_SaveBitmapToFile(pBitmap, "ss.jpg")
-    gdip_disposeimage(pBitmap)
-
-
+    
+    
     if (Mentions == true) {
         payload_json := '{"content": "<@' DiscordUserId '>", "embeds":[{"title":"' statusTitle '", "color":"' statusColor + 0 '", "image":{"url":"attachment://ss.jpg"}}]}'
         objParam := Map("payload_json", payload_json, "file", ["ss.jpg"])
@@ -40,7 +30,8 @@ PlayerStatus(statusTitle, statusColor, Mentions) {
         payload_json := '{"embeds":[{"title":"' statusTitle '", "color":"' statusColor + 0 '", "image":{"url":"attachment://ss.jpg"}}]}'
         objParam := Map("payload_json", payload_json, "file", ["ss.jpg"])
     }
-
+    
+    Gdip_DisposeImage(pBitmap)
     
     try {
         CreateFormDataClass(&postdata, &hdr_ContentType, objParam)
@@ -54,10 +45,7 @@ PlayerStatus(statusTitle, statusColor, Mentions) {
         FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
     } catch Error as e {
         return
-    } finally {
-        Gdip_Shutdown(pToken)
-        global Attempts := 0
-    }
+    } 
 
 }
 
