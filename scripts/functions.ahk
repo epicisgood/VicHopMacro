@@ -125,21 +125,19 @@ DetectLoading(loadingColor, timeout) {
         if (color != loadingColor) {
             break
         }
-        HyperSleep(100)
+        HyperSleep(500)
     }
 
     return true
 }
 
 CloseRoblox(hwnd, pBMScreen) {
-    try {
-        WinClose(hwnd)
-        WinClose(hwnd)
-    } catch Error as e {
-        Sleep 1
-    } finally {
-        Gdip_DisposeImage(pBMScreen)
-    }
+    try WinClose "Roblox"
+    for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
+        ProcessClose p.ProcessID
+
+    Gdip_DisposeImage(pBMScreen)
+
 }
 
 
@@ -287,7 +285,7 @@ CheckCocoSpawn() {
     offsetY := GetYOffset()
     pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + offsetY "|" windowWidth "|" windowHeight)
 
-    search := Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut2"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut3"], , , , , , 10) = 1 
+    search := Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut2"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut3"], , , , , , 10) = 1
 
     if (search) {
         ;  || Gdip_ImageSearch(pBMScreen, bitmaps["NightCoconut2"], , , , , , 10) = 1) {
@@ -303,7 +301,7 @@ HiveCorrection() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
     offsetY := GetYOffset()
-    pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|" 400 "|" windowHeight)    
+    pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|" 400 "|" windowHeight)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["nightground"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["nightground2"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightTransitionGround"], , , , , , 6) = 1) {
         Gdip_DisposeImage(pBMScreen)
         return 1

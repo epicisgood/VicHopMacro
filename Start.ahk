@@ -216,6 +216,7 @@ MainLoop() {
 KillViciousBees() {
     if (PictureImageSearch("img\stickbug.png", 26)) {
         PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
+        return
     } else if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
@@ -244,6 +245,7 @@ KillViciousBees() {
     }
     if (PictureImageSearch("img\stickbug.png", 26)) {
         PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
+        return
     } else if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
@@ -271,6 +273,7 @@ KillViciousBees() {
     }
     if (PictureImageSearch("img\stickbug.png", 26)) {
         PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
+        return
     } else if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
@@ -302,6 +305,7 @@ KillViciousBees() {
     NoIMGPlayerStatus("Going to Cactus Field.", 2067276)
     if (PictureImageSearch("img\stickbug.png", 26)) {
         PlayerStatus("Leaving server because StickBug confuses VicHopMacro", 2123412, false)
+        return
     } else if (CheckIfDefeated() == 1 || VicActivated() == 1) {
         PlayerStatus("Vicious bee has already been defeated...", 2123412, false)
         return
@@ -331,6 +335,7 @@ F10:: {
     ; Send "{" RotDown " 1}"
     ; CheckCocoSpawn()
 }
+
 JoinServer() {
     ActivateRoblox()
     SetKeyDelay 100
@@ -338,9 +343,10 @@ JoinServer() {
     SetKeyDelay KeyDelay
     joinrandomserver()
     if (DetectLoading(0x2257A8, 30000)) {
-        Sleep 850
+        HyperSleep(850)
         return 1
     } else {
         return 2
     }
 }
+

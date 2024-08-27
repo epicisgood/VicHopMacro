@@ -1,7 +1,7 @@
 # information
-Hello! This macro is a 1 account NO searches or passive alts VicHopMacro at any speed
+Bee swarm macro without searchers or passive alts. Only the main account server hops to find vicious bees.
 
-This macro should be ran with the **lowest** roblox graphic settings for the best experience.
+This macro should be ran with the **lowest** roblox graphic settings.
 
 **performance stats** settings should also be turned **OFF** if you have it enabled
 
@@ -34,6 +34,8 @@ To set up the macro on your machine, follow these steps:
 
 ## Contact
 
-hello! u can dm me on discord at ``` _epic. ``` 
+discord: ``` _epic. ``` 
 
 [Github Link](https://github.com/epicisgood/VicHopMacro)
+
+Hope the macro is a W for real pay me 1 bee cub right now!! 🤑
