@@ -348,7 +348,7 @@ feast() {
     HyperSleep(500)
 
     Send "{" SKey " down}"
-    Walk(5)
+    Walk(3)
     Send "{" SKey " up}"
 
     Send "{" AKey " down}"
@@ -365,25 +365,25 @@ feast() {
 
     Send "{" SKey " down}"
     Send "{" DKey " down}"
-    Walk(4)
+    Walk(2)
     Send "{" SKey " up}"
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
     Send "{" AKey " down}"
-    Walk(3)
+    Walk(2)
     Send "{" SKey " up}"
     Send "{" AKey " up}"
 
     Send "{" AKey " down}"
     Send "{" WKey " down}"
-    Walk(3)
+    Walk(2)
     Send "{" AKey " up}"
     Send "{" WKey " up}"
 
     Send "{" WKey " down}"
     Send "{" DKey " down}"
-    Walk(3)
+    Walk(2)
     Send "{" WKey " up}"
     Send "{" DKey " up}"
     HyperSleep(1000)
@@ -435,6 +435,11 @@ stockings() {
     Send "{" Dkey " down}"
     Walk(6)
     Send "{" Dkey " up}"
+
+    Send "{" SKey " down}"
+    Walk(2)
+    Send "{" SKey " up}"
+
     HyperSleep(500)
     Send "{" SpaceKey " down}"
     HyperSleep(100)
@@ -474,12 +479,12 @@ Candles() {
     Send "{" WKey " down}"
     Walk(1)
     glider()
-    walk(11)
+    walk(9)
     Send "{" WKey " up}"
 
     Send "{" RotLeft " 2}"
     Send "{" WKey " down}"
-    Walk(17)
+    Walk(16)
     Send "{" WKey " up}"
 
     Send "{" EKey " down}"
@@ -534,7 +539,7 @@ LidArt() {
     Send "{" WKey " up}"
 
     Send "{" SKey " down}"
-    Walk(6.8)
+    Walk(7)
     Send "{" SKey " up}"
 
     Send "{" EKey " down}"
@@ -545,13 +550,13 @@ LidArt() {
 
     Send "{" SKey " down}"
     Send "{" DKey " down}"
-    Walk(2)
+    Walk(1.7)
     Send "{" SKey " up}"
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
     Send "{" AKey " down}"
-    Walk(2)
+    Walk(1.7)
     Send "{" SKey " up}"
     Send "{" AKey " up}"
 
@@ -598,4 +603,3 @@ LidArt() {
     Send "{" Dkey " up}"
 
 }
-

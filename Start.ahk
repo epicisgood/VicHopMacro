@@ -199,6 +199,7 @@ MainLoop() {
     if (NightDetection() == 1) {
         PlayerStatus("Night Detected!!", 0, false)
         global Attempts := 0
+        global counter := 0
         ZoomOut()
         if (StartServerLoop() == 1) {
             return
@@ -336,10 +337,18 @@ F10:: {
     ; CheckCocoSpawn()
 }
 
+global counter := 0
 JoinServer() {
     ActivateRoblox()
     SetKeyDelay 100
-    send "{esc}{l}{Enter}"
+    if (counter == 30){
+        global counter := 0
+        try WinClose "Roblox"
+        for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
+            ProcessClose p.ProcessID    
+    } else {
+        send "{esc}{l}{Enter}"
+    }
     SetKeyDelay KeyDelay
     joinrandomserver()
     if (DetectLoading(0x2257A8, 30000)) {
@@ -349,4 +358,5 @@ JoinServer() {
         return 2
     }
 }
+
 

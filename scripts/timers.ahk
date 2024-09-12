@@ -51,14 +51,12 @@ BeesmasChecker() {
     return arraytable
 }
 
-
 BeesmasChecked(value) {
     if (IniRead("settings.ini", "Settings", value) == 1) {
         return true
     }
     return false
 }
-
 
 ; Calls BeesmasChecker -> BeesmasChecked functions to see if we are able to run those things
 BeesmasInterupt() {

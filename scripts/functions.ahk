@@ -140,7 +140,6 @@ CloseRoblox(hwnd, pBMScreen) {
 
 }
 
-
 NightDetection() {
     hwnd := GetRobloxHWND()
     GetRobloxClientPos(hwnd)
