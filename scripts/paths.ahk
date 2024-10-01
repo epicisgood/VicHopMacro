@@ -1,117 +1,82 @@
 PepperPatch() {
-    Send "{" DKey " down}"
-    Walk(25)
-    Send "{" DKey " up}"
-
+    nm_Walk(25, DKey)
     Send "{" DKey " down}{" SpaceKey " down}"
     Walk(2)
     Send "{" SpaceKey " up}"
-    Send "{" WKey " down}"
-    Walk(4)
-    Send "{" WKey " up}"
+    nm_Walk(4, WKey)
     Walk(5)
     Send "{" DKey " up}"
 
-    Send "{" WKey " down}{" DKey " down}"
-    Walk(2)
-    Send "{" DKey " up}"
+    nm_Walk(2, WKey, DKey)
     Walk(3)
     Send "{" WKey " up}"
 
     Send "{" WKey " down}{" SpaceKey " down}"
     Walk(2)
     Send "{" SpaceKey " up}"
-    Walk(3)
-    Send "{" WKey " up}"
-    ;; correction to not bug out
-    Send "{" WKey " down}"
+
+    ;; Correction to not bug out
     Send "{" AKey " down}"
     Walk(3)
     Send "{" AKey " up}"
     Walk(19)
     Send "{" WKey " up}"
-    Send "{" DKey " down}"
-    Walk(6)
-    Send "{" DKey " up}"
+    nm_Walk(6, DKey)
 
     ;; Jump part
-    Send "{" SpaceKey " down}{" WKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}{" WKey " up}"
+    nm_Walk(2, WKey, SpaceKey)
     Hypersleep(600)
-    Send "{" SpaceKey " down}{" WKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}{" WKey " up}"
+    nm_Walk(2, WKey, SpaceKey)
     Hypersleep(600)
 
-    Send "{" SpaceKey " down}{" WKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}{" WKey " up}"
+    nm_Walk(2, WKey, SpaceKey)
     Hypersleep(600)
-    Send "{" SpaceKey " down}{" WKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}{" WKey " up}"
+    nm_Walk(2, WKey, SpaceKey)
     Hypersleep(600)
 
-    ; PlayerStatus("Debugging pepper patch lmk if this breaks", 7419530, false)
     Send "{" WKey " down}"
-    Walk(16)
-    Send "{" SpaceKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
+    Walk(10)
+    nm_Walk(2, SpaceKey)
     Walk(3)
     Send "{" WKey " up}"
 
-    ; Move to pepper field from next to coconut
-    Send "{" WKey " down}"
-    Send "{" DKey " down}"
-    Walk(20)
-    Send "{" WKey " up}"
-    Send "{" DKey " up}"
-    Send "{" SpaceKey " down}"
-    Send "{" DKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
-    Walk(20)
-    Send "{" DKey " up}"
+    ;; Move to pepper field from next to coconut
+    nm_Walk(30, Dkey)
+    PressSpace()
+    nm_Walk(6, WKey)
 
-    ;; jump to field
+    PressSpace()
+    nm_Walk(9, Dkey)
 
-    Send "{" SpaceKey " down}"
-    Send "{" DKey " down}"
-    Walk(1)
-    Send "{" SpaceKey " up}"
-    Walk(8)
-    Send "{" DKey " up}"
-    Walk(2)
-    Send "{" SKey " down}"
-    Walk(7)
-    Send "{" SKey " up}"
-    ;; at feild
-    Send "{" WKey " down}"
-    Walk(16)
-    Walk(5)
-    Send "{" WKey " up}"
+    ;; At field
+    nm_Walk(19, WKey)
+    nm_Walk(5, DKey)
+    nm_Walk(19, SKey)
+    nm_Walk(5, DKey)
+    nm_Walk(19, WKey)
 
-    Send "{" DKey " down}"
-    Walk(5)
-    Send "{" DKey " up}"
-
-    Send "{" SKey " down}"
-    Walk(16)
-    Walk(6)
-    Send "{" SKey " up}"
-
-    Send "{" DKey " down}"
-    Walk(5)
-    Send "{" DKey " up}"
-
-    Send "{" WKey " down}"
-    Walk(16)
-    Walk(6)
-    Send "{" WKey " up}"
 }
 
+PepperToCannon() {
+    Send "{" RotLeft " 4}"
+    nm_Walk(29, WKey)
+    nm_Walk(10, AKey)
+    nm_Walk(20, Dkey)
+    nm_Walk(3, SKey)
+
+    nm_Walk(3, Dkey)
+    glider()
+
+    Send "{" Dkey " down}{" WKey " down}"
+    HyperSleep(2500)
+    Send "{" WKey " up}"
+    HyperSleep(500)
+    Send "{" Dkey " up}"
+
+    PressSpace()
+    Send "{" RotRight " 4}"
+
+}
 
 MountainTop() {
     Send "{" EKey " down}"
@@ -119,35 +84,42 @@ MountainTop() {
     Send "{" EKey " up}"
     HyperSleep(3500)
 
-    Send "{" WKey " down}"
-    Walk(15)
-    Send "{" WKey " up}"
+    nm_Walk(15, WKey)
+    nm_Walk(5, AKey)
+    nm_Walk(20, SKey)
+    nm_Walk(11, DKey)
+    nm_Walk(18, WKey)
+}
 
-    Send "{" AKey " down}"
-    Walk(6)
-    Send "{" AKey " up}"
-
-    Send "{" SKey " down}"
-    Walk(20)
-    Send "{" SKey " up}"
-
+MountainToCactus() {
+    nm_Walk(7, WKey)
+    nm_Walk(10, Dkey)
+    nm_Walk(3, WKey)
+    glider()
+    HyperSleep(200)
     Send "{" DKey " down}"
-    Walk(12)
+    HyperSleep(1900)
     Send "{" DKey " up}"
 
-    Send "{" WKey " down}"
-    Walk(18)
-    Send "{" WKey " up}"
+    Send "{" SKey " down}"
+    HyperSleep(300)
+    Send "{" SKey " up}"
+
+    PressSpace()
+
+    nm_Walk(24, DKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, AKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, DKey)
 }
 
 Rose() {
-    SetKeyDelay 50, 50
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
 
     HyperSleep(230)
-
     Send "{" DKey " down}"
     Send "{" SpaceKey " down}"
     HyperSleep(25)
@@ -167,33 +139,14 @@ Rose() {
     ;; Search for vicious bee
 
     HyperSleep(500)
-    Send "{" AKey " down}"
-    Walk(17)
-    Walk(9)
-    Send "{" AKey " up}"
-
-    Send "{" SKey " down}"
-    Walk(5)
-    Send "{" SKey " up}"
-
-    Send "{" DKey " down}"
-    Walk(17)
-    Walk(9)
-    Send "{" DKey " up}"
-
-    Send "{" SKey " down}"
-    Walk(5)
-    Send "{" SKey " up}"
-
-    Send "{" AKey " down}"
-    Walk(17)
-    Walk(9)
-    Send "{" AKey " up}"
-    SetKeyDelay 50
+    nm_Walk(26, AKey)
+    nm_Walk(5, SKey)
+    nm_Walk(26, DKey)
+    nm_Walk(5, SKey)
+    nm_Walk(26, AKey)
 }
 
 Cactus() {
-    SetKeyDelay 50, 50
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
@@ -219,28 +172,39 @@ Cactus() {
     ;; Landed at cactus field
     HyperSleep(2000)
 
-    Send "{" DKey " down}"
-    Walk(24)
-    Send "{" DKey " up}"
+    nm_Walk(24, DKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, AKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, DKey)
 
-    Send "{" SKey " down}"
-    Walk(4)
-    Send "{" SKey " up}"
-
-    Send "{" AKey " down}"
-    Walk(24)
-    Send "{" AKey " up}"
-
-    Send "{" SKey " down}"
-    Walk(4)
-    Send "{" SKey " up}"
-
-    Send "{" DKey " down}"
-    Walk(24)
-    Send "{" DKey " up}"
-    SetKeyDelay 50
 }
 
+CactusToRose() {
+    nm_Walk(3, SKey)
+    loop 3 {
+        nm_Walk(5, Dkey)
+        glider()
+    }
+
+    nm_Walk(10, AKey)
+
+    nm_Walk(10, WKey)
+    glider()
+    Send "{" WKey " down}"
+    HyperSleep(6000)
+    Send "{" WKey " up}"
+
+    nm_Walk(7, Dkey)
+    nm_Walk(5, SKey)
+
+    ; rose pathing
+    nm_Walk(23, AKey)
+    nm_Walk(5, SKey)
+    nm_Walk(26, DKey)
+    nm_Walk(5, SKey)
+    nm_Walk(26, AKey)
+}
 
 Samovar() {
     HyperSleep(100)
@@ -255,11 +219,9 @@ Samovar() {
     Send "{" SpaceKey " 1}"
     HyperSleep(2000)
 
-
     Send "{" SKey " down}"
     Walk(40)
     Send "{" SKey " up}"
-
 
     Send "{" SpaceKey " down}{" SKey " down}"
     HyperSleep(50)
@@ -310,7 +272,6 @@ Samovar() {
     Send "{" AKey " up}"
     Send "{" WKey " up}"
 }
-
 
 feast() {
     HyperSleep(100)
@@ -406,11 +367,9 @@ stockings() {
     Walk(26)
     Send "{" Dkey " up}"
 
-
     Send "{" SKey " down}"
     Walk(5)
     Send "{" SKey " up}"
-
 
     Send "{" Dkey " down}"
     Walk(5.5)
@@ -507,7 +466,6 @@ Candles() {
     HyperSleep(2000)
 }
 
-
 LidArt() {
     Send "{" EKey " down}"
     HyperSleep(100)
@@ -523,7 +481,6 @@ LidArt() {
     Send "{" AKey " down}"
     Walk(16)
     Send "{" AKey " up}"
-
 
     Send "{" Dkey " down}"
     Walk(5)

@@ -1,4 +1,5 @@
 #Requires AutoHotkey v2.0
+; This is all for beesmas 2024 will remain here incase this macro will be used again in "next" beesmas if it ever happens lol!
 
 nowUnix() {
     return DateDiff(A_NowUTC, "19700101000000", "Seconds")
@@ -13,7 +14,7 @@ global LastLidArt := nowUnix()
 BeesmasChecker() {
     global LastStockings, LastFeast, LastCandles, LastSamovar, LastLidArt
 
-    arraytable := []
+    Beesmaslist := []
     ; 1 = 1s
     StockingsTimer := 3600   ; 1 hour 3600
     FeastTimer := 5400        ; 1.5 hours 5400
@@ -26,29 +27,29 @@ BeesmasChecker() {
     if (currentTime - LastStockings >= StockingsTimer && BeesmasChecked("Stockings")) {
         ; MsgBox("1 hour has passed since LastStockings")
         LastStockings := currentTime
-        arraytable.Push("Stockings")
+        Beesmaslist.Push("Stockings")
     }
     if (currentTime - LastFeast >= FeastTimer && BeesmasChecked("Feast")) {
         ; MsgBox("1.5 hours have passed since LastFeast")
         LastFeast := currentTime
-        arraytable.Push("Feast")
+        Beesmaslist.Push("Feast")
     }
     if (currentTime - LastCandles >= CandlesTimer && BeesmasChecked("Candles")) {
         ; MsgBox("4 hours have passed since LastCandles")
         LastCandles := currentTime
-        arraytable.Push("Candles")
+        Beesmaslist.Push("Candles")
     }
     if (currentTime - LastSamovar >= SamovarTimer && BeesmasChecked("Samovar")) {
         ; MsgBox("6 hours have passed since LastSamovar")
         LastSamovar := currentTime
-        arraytable.Push("Samovar")
+        Beesmaslist.Push("Samovar")
     }
     if (currentTime - LastLidArt >= LidArtTimer && BeesmasChecked("LidArt")) {
         ; MsgBox("8 hours have passed since LastLidArt")
         LastLidArt := currentTime
-        arraytable.Push("LidArt")
+        Beesmaslist.Push("LidArt")
     }
-    return arraytable
+    return Beesmaslist
 }
 
 BeesmasChecked(value) {
@@ -64,34 +65,39 @@ BeesmasInterupt() {
 
     for (k, v in variable) {
         if (v == "Stockings") {
-            NoIMGPlayerStatus("Going to collect stockings!", 2067276)
-            ResetMainCharacter()
+            PlayerStatus("Going to collect stockings!", "0x1F8B4C", , false, , false)
+            ResetCharacterLoop()
             stockings()
-            PlayerStatus("Finished checking stockings!", 5763719, false)
+            PlayerStatus("Finished collecting stockings!", "0x57F287", , false)
+
         }
         if (v == "Feast") {
-            NoIMGPlayerStatus("Going to collect feast!", 2067276)
-            ResetMainCharacter()
+            PlayerStatus("Going to collect feast!", "0x1F8B4C", , false, , false)
+            ResetCharacterLoop()
             feast()
-            PlayerStatus("Finished checking feast!", 5763719, false)
+            PlayerStatus("Finished collecting feast!", "0x57F287", , false)
+
         }
         if (v == "Candles") {
-            NoIMGPlayerStatus("Going to collect Candles!", 2067276)
-            ResetMainCharacter()
+            PlayerStatus("Going to collect Candles!", "0x1F8B4C", , false, , false)
+            ResetCharacterLoop()
             Candles()
-            PlayerStatus("Finished checking candles!", 5763719, false)
+            PlayerStatus("Finished collecting candles!", "0x57F287", , false)
+
         }
         if (v == "Samovar") {
-            NoIMGPlayerStatus("Going to collect Samovar!", 2067276)
-            ResetMainCharacter()
+            PlayerStatus("Going to collect Samovar!", "0x1F8B4C", , false, , false)
+            ResetCharacterLoop()
             Samovar()
-            PlayerStatus("Finished checking samovar!", 5763719, false)
+            PlayerStatus("Finished collecting samovar!", "0x57F287", , false)
+
         }
         if (v == "LidArt") {
-            NoIMGPlayerStatus("Going to collect lidart!", 2067276)
-            ResetMainCharacter()
+            PlayerStatus("Going to collect lidart!", "0x1F8B4C", , false, , false)
+            ResetCharacterLoop()
             LidArt()
-            PlayerStatus("Finished checking lidart!", 5763719, false)
+            PlayerStatus("Finished collecting lidart!", "0x57F287", , false)
+
         }
     }
 }

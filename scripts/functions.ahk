@@ -1,24 +1,14 @@
-PictureImageSearch(ImagePath, Strength) {
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    SearchOptions := "*" Strength " " . ImagePath
-    if ImageSearch(&FoundX, &FoundY, windowX, windowY, windowX + windowWidth, windowY + windowHeight, SearchOptions) {
-        return 1
-    } else {
-        return 0
-    }
-}
+; nm_gotoRamp() {
+;     nm_Walk(5, Wkey)
+;     nm_Walk(9.2*HiveSlot-4, RightKey)
+; }
 
-
-HyperSleep(ms)
-{
+HyperSleep(ms) {
     static freq := (DllCall("QueryPerformanceFrequency", "Int64*", &f := 0), f)
     DllCall("QueryPerformanceCounter", "Int64*", &begin := 0)
     current := 0, finish := begin + ms * freq / 1000
-    while (current < finish)
-    {
-        if ((finish - current) > 30000)
-        {
+    while (current < finish) {
+        if ((finish - current) > 30000) {
             DllCall("Winmm.dll\timeBeginPeriod", "UInt", 1)
             DllCall("Sleep", "UInt", 1)
             DllCall("Winmm.dll\timeEndPeriod", "UInt", 1)
@@ -27,98 +17,64 @@ HyperSleep(ms)
     }
 }
 
-
-global current_hive := 1
-global KeyDelay
-
-StartServer() {
-    global KeyDelay
-    global current_hive
-    send "{" RotRight " 1}"
-    Walk(3)
-    Send "{" Dkey " down}"
-    Walk(2)
-    Send "{" Dkey " up}"
-    Send "{" WKey " down}"
-    Walk(23)
-    Send "{" WKey " up}"
-    HyperSleep(50)
-    send "{" RotLeft " 1}"
-    current_hive := FindHiveSlot()
-    if (current_hive = 0) {
-        PlayerStatus("Could Not Claim hive retrying..", 15277667, false)
-        KeyDelay := 100
-        SetKeyDelay 100
-        send "{" EscKey "}{" Rkey "}{" EnterKey "}"
-        SetKeyDelay KeyDelay
-        HyperSleep(500)
-        HealthDetection()
-        ZoomOut()
-        return 3
-    }
-    if (ResetMainCharacter() == false) {
-        return 4
-    }
+nm_Walk(tiles, MoveKey1, MoveKey2 := 0) { ; string form of the function which holds MoveKey1 (and optionally MoveKey2) down for 'tiles' tiles
+    Send("{" MoveKey1 " down}")
+    MoveKey2 ? Send("{" MoveKey2 " down}") : ""
+    Walk(tiles)
+    Send("{" MoveKey1 " up}")
+    MoveKey2 ? Send("{" MoveKey2 " up}") : ""
 }
 
+GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    offsetY := GetYOffset()
 
-StartServerLoop() {
-    StartServerAttempts := 0
-    ServerVar := StartServer()
-    while (ServerVar == 3 || ServerVar == 4) {
-        StartServerAttempts++
-        if StartServerAttempts == 3 {
-            PlayerStatus("leaving server could not claim hive current_hive = 0", 8359053, true)
-            return 1
-        }
+    ; Use global variables if the parameters are not provided (i.e., are 0)
+    global windowX, windowY, windowWidth, windowHeight
+    x := (pX != 0) ? pX : windowX
+    y := (pY != 0) ? pY : windowY
+    width := (pWidth != 0) ? pWidth : windowWidth
+    height := (pHeight != 0) ? pHeight : windowHeight
 
-        if ServerVar == 4 {
-            PlayerStatus("leaving server reset count went over 4...", 8359053, true)
-            return 1
-        }
-        ServerVar := StartServer()
-    }
+    return Gdip_BitmapFromScreen(x "|" y + offsetY "|" width "|" height)
 }
 
-ZoomOut() {
-    Send "{" ZoomOuter " 15}"
-}
-
-
-DetectLoading(loadingColor, timeout) {
+GameLoaded() {
+    loadingColor := 0x2257A8
     startTime := A_TickCount
+    ActivateRoblox()
+    ; every 300ms all of this happens no way!
     loop {
-        hwnd := GetRobloxHWND()
-        GetRobloxClientPos(hwnd)
-        offsetY := GetYOffset()
-        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + offsetY "|" windowWidth "|" windowHeight)
-
+        if (A_TickCount - startTime >= 14000 || A_TickCount - startTime >= 20000) {
+            pBMScreen := GetpBMScreen()
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["GameLoadingBee"], , , , , , 15) = 1 || A_TickCount - startTime >= 27000) {
+                CloseRoblox()
+                Gdip_DisposeImage(pBMScreen)
+                return 0
+            }
+            Gdip_DisposeImage(pBMScreen)
+        }
+        
         color := PixelGetColor(458, 151)
-        ActivateRoblox()
-
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 10) = 1) {
-            CloseRoblox(hwnd, pBMScreen)
-            return false
-        }
-
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GamePermission"], , , , , , 10) = 1) {
-            CloseRoblox(hwnd, pBMScreen)
-            return false
-        }
-
         if (color = loadingColor) {
             break
         }
-
-        if (A_TickCount - startTime >= timeout) {
-            CloseRoblox(hwnd, pBMScreen)
-            return false
+        
+        if (Mod(A_TickCount - startTime, 300) = 0) {
+            pBMScreen := GetpBMScreen()
+            for i, k in ["GameRestricted", "GamePermission"] {
+                if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 10) = 1) {
+                    CloseRoblox()
+                    Gdip_DisposeImage(pBMScreen)
+                    return 0
+                }
+            }
+            Gdip_DisposeImage(pBMScreen)
         }
-        Gdip_DisposeImage(pBMScreen)
-        HyperSleep(250)
-    }
 
-    Gdip_DisposeImage(pBMScreen)
+        HyperSleep(300)  
+    }
 
     loop {
         color := PixelGetColor(458, 151)
@@ -128,64 +84,109 @@ DetectLoading(loadingColor, timeout) {
         HyperSleep(500)
     }
 
-    return true
+    return 1
 }
 
-CloseRoblox(hwnd, pBMScreen) {
-    try WinClose "Roblox"
-    for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
-        ProcessClose p.ProcessID
+global current_hive := 1
 
-    Gdip_DisposeImage(pBMScreen)
+StartServerLoop() {
+    ; 2 means player could not reset character correctly
+    ; 0 means failure at claiming hive
+    ; 1 means success at hive
+    StartServer() {
+        global current_hive
+        send "{" RotRight " 1}"
+        Walk(3)
+        nm_Walk(2, Dkey)
+        nm_Walk(23, WKey)
+        send "{" RotLeft " 1}"
 
+        current_hive := FindHiveSlot()
+        if (current_hive == 0) {
+            PlayerStatus("Hive not found, retrying.", "0xE91E63", , false)
+            send "{" EscKey "}{" Rkey "}{" EnterKey "}"
+            HyperSleep(500)
+            HealthDetection()
+            send "{" Zoomout " 15}"
+            return 0
+        }
+
+        if (!ResetCharacterLoop()) {
+            return 2
+        }
+        return 1
+    }
+
+    attempts := 0
+    result := StartServer()
+    while (result == 0) {
+        attempts++
+        if (attempts == 2) {
+            PlayerStatus("Leaving server: Failed claiming hive after 4 attempts.", "0x7F8C8D", , true)
+            return 0
+        } else if (result == 2) {
+            return 0
+        }
+        result := StartServer()
+    }
+    return 1
 }
 
 NightDetection() {
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    offsetY := GetYOffset()
-    pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|" 400 "|" windowHeight)
-
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["nightground"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["nightground2"], , , , , , 6) = 1) {
-        Gdip_DisposeImage(pBMScreen)
-        return 1
-    } else {
-        Gdip_DisposeImage(pBMScreen)
-        return 0
-    }
-}
-
-CheckSpawnPos() {
-    ZoomOut()
-    send "{" ZoomIn " 1}"
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    offsetY := GetYOffset()
-    pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + offsetY "|" windowWidth "|" windowHeight)
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["DayLeaderboard"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightLeaderboard"], , , , , , 10) = 1) {
-        Gdip_DisposeImage(pBMScreen)
-        PlayerStatus("Leaderboard Detected, Rotating..", 9807270, false)
-        SetKeyDelay 100
-        send "{" RotRight " 4}"
-        Sleep(1000)
-        send "{" ZoomOuter " 1}"
-        SetKeyDelay KeyDelay
-        return
+    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
+    for i, k in ["nightground", "nightground2"
+    ] {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+            Gdip_DisposeImage(pBMScreen)
+            return 1 ; returns 1
+        }
     }
     Gdip_DisposeImage(pBMScreen)
+    return 0
 
 }
 
+; returns the current hive which is 1-6 or fails with a return 0 if no hives found
 FindHiveSlot() {
+
+    ClaimHive(current_hive) {
+
+        GetBitmap() {
+            hwnd := GetRobloxHWND()
+            GetRobloxClientPos(hwnd)
+            offsetY := GetYOffset()
+            pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|400|125")
+            while ((A_Index <= 20) && (Gdip_ImageSearch(pBMScreen, bitmaps["FriendJoin"], , , , , , 6) = 1)) {
+                Gdip_DisposeImage(pBMScreen)
+                MouseMove windowX + windowWidth // 2 - 3, windowY + 24
+                Click
+                MouseMove windowX + 350, windowY + offsetY + 100
+                Sleep 500
+                pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|400|125")
+            }
+            return pBMScreen
+        }
+
+        Sleep(500)
+        pBMScreen := GetBitmap()
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["claimhive"], , , , , , 2, , 6) = 1) {
+            Send "{" Ekey " down}"
+            Sleep(200)
+            Send "{" Ekey " up}"
+            PlayerStatus("Claimed hiveslot: " current_hive, "0x9B59B6", , false)
+            Gdip_DisposeImage(pBMScreen)
+            return current_hive
+        }
+        Gdip_DisposeImage(pBMScreen)
+    }
+
     global current_hive
     current_hive := 1
     if (ClaimHive(current_hive)) {
         return current_hive
     }
-    Loop 5 {
-        Send "{" AKey " down}"
-        Walk(9)
-        Send "{" AKey " up}"
+    loop 5 {
+        nm_Walk(9, AKey)
         HyperSleep(500)
         current_hive++
         if (ClaimHive(current_hive)) {
@@ -195,150 +196,114 @@ FindHiveSlot() {
     return 0
 }
 
-ClaimHive(current_hive) {
+; returns 1 if character successfuly reseted and currently is at red cannon
+; returns 0 if failed
+ResetCharacterLoop() {
 
-    GetBitmap() {
-        hwnd := GetRobloxHWND()
-        GetRobloxClientPos(hwnd)
-        offsetY := GetYOffset()
-        pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|400|125")
-        while ((A_Index <= 20) && (Gdip_ImageSearch(pBMScreen, bitmaps["FriendJoin"], , , , , , 6) = 1)) {
-            Gdip_DisposeImage(pBMScreen)
-            MouseMove windowX + windowWidth // 2 - 3, windowY + 24
-            Click
-            MouseMove windowX + 350, windowY + offsetY + 100
-            Sleep 500
-            pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|400|125")
+    ResetCharacter() {
+        send "{" EscKey "}{" Rkey "}{" EnterKey "}"
+        Sleep(500)
+        HealthDetection()
+        Send "{" Zoomout " 15}"
+        Send "{" RotDown " 1}"
+        if (CheckNotHiveSpawn() == 1) {
+            Send "{" RotUp " 1}"
+            GoToRamp2()
+            RedCannon()
+            if (!CheckFireButton()) {
+                return 0
+            }
+        } else {
+            Send "{" RotUp " 1}"
+            RotateHiveCorrection()
+            GoToRamp()
+            RedCannon()
+            if (!CheckFireButton()) {
+                return 0
+            }
         }
-        return pBMScreen
+        return 1
     }
 
-    Sleep(500)
-    pBMScreen := GetBitmap()
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["claimhive"], , , , , , 2, , 6) = 1) {
-        Send "{" Ekey " down}"
-        Sleep(200)
-        Send "{" Ekey " up}"
-        PlayerStatus("Claimed hiveslot " current_hive, 10181046, false)
-        Gdip_DisposeImage(pBMScreen)
-        return current_hive
+    Attempts := 0
+    loop {
+        Result := ResetCharacter()
+        if (Result == 1) {
+            break
+        }
+        Attempts++
+        if (Attempts > 6) {
+            PlayerStatus("Leaving server: Too many reset attempts.", "0x7F8C8D", , true)
+            return 0
+        }
     }
-    Gdip_DisposeImage(pBMScreen)
-}
 
-; Function to call ResetCharacter loop use this one
-ResetMainCharacter() {
-    resetcharattempts := 0
-    ResetVar := ResetCharacter()
-    while (ResetVar == 2) {
-        resetcharattempts++
-        if resetcharattempts > 6 {
-            PlayerStatus("Failed 6 times going to cannon, leaving server...", 8359053, true)
-            return false
-        }
-        ResetVar := ResetCharacter()
-    }
-    return true
-}
-
-ResetCharacter() {
-    send "{" EscKey "}{" Rkey "}{" EnterKey "}"
-    Sleep(500)
-    HealthDetection()
-    CheckSpawnPos()
-    Send "{" RotDown " 1}"
-    if (CheckCocoSpawn() == 1) {
-        Send "{" RotUp " 1}"
-        GoToRamp2()
-        RedCannon()
-        if (CheckFireButton() == 0) {
-            return 2
-        }
-    } else {
-        Send "{" RotUp " 1}"
-        ZoomOut()
-        HiveCorrection()
-        GoToRamp()
-        RedCannon()
-        if (CheckFireButton() == 0) {
-            return 2
-        }
-    }
     return 1
 }
-
 
 HealthDetection() {
-    while (PictureImageSearch("img\Health.png", 32)) {
-        Sleep(100)
+    ; Natro Macro reset thingy
+    n := 0
+    while ((n < 2) && (A_Index <= 200)) {
+        Sleep 100
+        pBMScreen := GetpBMScreen(windowX "|" windowY "|" windowWidth "|50")
+        n += (Gdip_ImageSearch(pBMScreen, bitmaps["emptyhealth"], , , , , , 10) = (n = 0))
+        Gdip_DisposeImage(pBMScreen)
     }
-    Sleep(500)
+    Sleep 1000
+
     return 1
 
 }
 
-CheckCocoSpawn() {
+; Checks if the player did NOT spawn at hive
+CheckNotHiveSpawn() {
     HyperSleep(300)
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    offsetY := GetYOffset()
-    pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + offsetY "|" windowWidth "|" windowHeight)
+    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + windowHeight - 125, 400, 125)
+    ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
 
-    search := Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightCoconut"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut2"], , , , , , 10) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["DayCoconut3"], , , , , , 10) = 1
-
-    if (search) {
-        ;  || Gdip_ImageSearch(pBMScreen, bitmaps["NightCoconut2"], , , , , , 10) = 1) {
-        Gdip_DisposeImage(pBMScreen)
-        return 1
-    } else {
-        Gdip_DisposeImage(pBMScreen)
-        return 0
+    for i, k in ["NotHiveSpawn", "NotHiveSpawnNight"
+    ] {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 15) = 1) {
+            Gdip_DisposeImage(pBMScreen)
+            return 1
+        }
     }
+
+    Gdip_DisposeImage(pBMScreen)
+    return 0
+
 }
 
-HiveCorrection() {
-    hwnd := GetRobloxHWND()
-    GetRobloxClientPos(hwnd)
-    offsetY := GetYOffset()
-    pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|" 400 "|" windowHeight)
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["nightground"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["nightground2"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["NightTransitionGround"], , , , , , 6) = 1) {
-        Gdip_DisposeImage(pBMScreen)
-        return 1
-    }
-    else {
-        Gdip_DisposeImage(pBMScreen)
-        PlayerStatus("Ground Not Detected Rotating..", 9807270, false)
-        SetKeyDelay 100
-        send "{" RotLeft " 4}"
-        Setkeydelay KeyDelay
-        return 0
-    }
-}
+RotateHiveCorrection() {
+    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
 
+    for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"
+    ] {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+            Gdip_DisposeImage(pBMScreen)
+            return 1
+        }
+    }
+
+    Gdip_DisposeImage(pBMScreen)
+    send "{" RotLeft " 4}"
+    return 0
+
+}
 
 GoToRamp() {
     global current_hive
-    Send "{" WKey " down}"
-    Walk(5)
-    Send "{" WKey " up}"
-
-    Send "{" Dkey " down}"
-    Walk(9 * current_hive)
-    Send "{" Dkey " up}"
-    Walk(5)
-    Send "{" SpaceKey " down}"
-    Send "{" Dkey " down}"
-    Walk(1)
-    Send "{" SpaceKey " up}"
-    Walk(1)
-    Send "{" Dkey " up}"
+    nm_Walk(5, Wkey)
+    nm_Walk(9.2 * current_hive - 4, Dkey)
+    PressSpace()
+    nm_Walk(3, Dkey)
     HyperSleep(1000)
 
 }
 GoToRamp2() {
-    Send "{" WKey " down}{" Dkey " down}"
-    Walk(24.5)
-    Send "{" WKey " up}"
+    Send "{" Dkey " down}"
+    nm_Walk(24.5, WKey)
     Walk(10)
     Send "{" Dkey " up}"
     Send "{" SpaceKey " down}"
@@ -359,7 +324,6 @@ RedCannon() {
     Walk(5)
     Send "{" Dkey " up}"
 
-
 }
 
 glider() {
@@ -370,12 +334,15 @@ glider() {
     }
 }
 
+PressSpace() {
+    Send "{" SpaceKey " down}"
+    HyperSleep(100)
+    Send "{" SpaceKey " up}"
+}
 
 CheckFireButton() {
     HyperSleep(400)
-    hwnd := GetRobloxHWND()
-    offsetY := GetYOffset(hwnd)
-    pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth // 2 - 200 "|" windowY + offsetY "|400|125")
+    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, 125)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["redcannon"], , , , , , 2, , 2) = 1) {
         Gdip_DisposeImage(pBMScreen)
         return 1
@@ -384,148 +351,76 @@ CheckFireButton() {
     return 0
 }
 
-VicActivated() {
+; Checks the ⚠️ emoji to see if vicious bee is summoned
+ActiveVicious() {
 
     Send "{" SlashKey "}" "{" EnterKey "}"
     Sleep(100)
-    if PictureImageSearch("img\Warning.png", 32) {
+
+    pBMScreen := GetpBMScreen()
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 10)) {
+        Gdip_DisposeImage(pBMScreen)
         return 1
     }
-
+    Gdip_DisposeImage(pBMScreen)
     return 0
 }
 
+; Feild is where player where go to fight vicious bee again
+AttackVicLoop(feild) {
+    if !ActiveVicious()
+        return 0
+    if (AttackVic() == 0) {
+        switch feild {
+            case "pepper":
+                if !ResetCharacterLoop()
+                    return 1
+                PepperPatch()
+                AttackVic()
+            case "mountain":
+                if !ResetCharacterLoop()
+                    return 1
+                MountainTop()
+                Send "{" RotLeft " 2}"
+                AttackVic()
+            case "cactus":
+                if !ResetCharacterLoop()
+                    return 1
+                Cactus()
+                AttackVic()
+            case "rose":
+                if !ResetCharacterLoop()
+                    return 1
+                Rose()
+                Send "{" RotRight " 4}"
+                AttackVic()
+        }
+    }
+    return 1
+}
 Dead := false
 
-PepperAttackVic() {
-    PlayerStatus("Attacking Vicious Bee...", 15105570, false)
+; returns 2 if timeout reached
+; returns 1 if vicious bee killed
+; returns 0 if player died
+AttackVic() {
+    PlayerStatus("Attacking: Vicious Bee!", "0xe67e22", , false, , false)
+    StartTime := 0
+    StartTime := A_TickCount
+
     global Dead
     Dead := false
 
-    StartTime := 0
-    StartTime := A_TickCount
-    while (!CheckIfDefeated()) {
+    while (!TadaViciousDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 150000) { ;; 1 minute and 30 seconds to kill vic bee
-            Playerstatus("Timeout exceeded, took to long to kill vicious bee", 0, false)
+        if (ElapsedTime > 240000) { ;; 3 minutes to kill vicious bee
+            PlayerStatus("Timeout exceeded: Too long to kill vicious bee", "0x000000", , false)
             return 2
         }
         if (Dead == true) {
-            return 3
+            return 0
         }
-
-        Loop 2 {
-            PlayerDied()
-            Send "{" WKey " down}"
-            Walk(4)
-            PlayerDied()
-            Send "{" WKey " up}"
-            PlayerDied()
-            Walk(5)
-        }
-        Loop 2 {
-            PlayerDied()
-            Send "{" AKey " down}"
-            Walk(4)
-            PlayerDied()
-            Send "{" AKey " up}"
-            Walk(5)
-            PlayerDied()
-        }
-        Loop 2 {
-            PlayerDied()
-            Send "{" SKey " down}"
-            Walk(4)
-            PlayerDied()
-            Send "{" SKey " up}"
-            Walk(5)
-            PlayerDied()
-        }
-        Loop 2 {
-            PlayerDied()
-            Send "{" Dkey " down}"
-            Walk(4)
-            PlayerDied()
-            Send "{" Dkey " up}"
-            Walk(5)
-            PlayerDied()
-        }
-
-    }
-    Sleep(5000)
-    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-
-    return 2
-}
-
-MtnAttackVic() {
-    PlayerStatus("Attacking Vicious Bee...", 11027200, false)
-    StartTime := 0
-    StartTime := A_TickCount
-
-    global Dead
-    Dead := false
-
-
-    while (!CheckIfDefeated()) {
-        ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 150000) { ;; 2m 30s to kill vic bee
-            Playerstatus("Timeout exceeded, took to long to kill vicious bee", 0, false)
-            break
-        }
-        if (Dead == true) {
-            return 3
-        }
-        PlayerDied()
-        Send "{" Dkey " down}"
-        Walk(15)
-        Send "{" Dkey " up}"
-        PlayerDied()
-        loop 5 {
-            PlayerDied()
-            Send "{" SKey " down}"
-            Walk(4)
-            PlayerDied()
-            Send "{" SKey " up}"
-        }
-        Send "{" AKey " down}"
-        Walk(4)
-        PlayerDied()
-        Send "{" AKey " up}"
-        PlayerDied()
-        loop 5 {
-            Send "{" WKey " down}"
-            PlayerDied()
-            Walk(4)
-            Send "{" WKey " up}"
-        }
-
-    }
-    Sleep(5000)
-    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
-
-    return 2
-}
-
-AttackVic() {
-    PlayerStatus("Attacking Vicious Bee...", 15844367, false)
-    StartTime := 0
-    StartTime := A_TickCount
-
-    global Dead
-    Dead := false
-
-
-    while (!CheckIfDefeated()) {
-        ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 120000) { ;; 1m 30s to kill vic bee
-            Playerstatus("Timeout exceeded, took to long to kill vicious bee", 0, false)
-            break
-        }
-        if (Dead == true) {
-            return 3
-        }
-        Loop 2 {
+        loop 2 {
             PlayerDied()
             Send "{" WKey " down}"
             Walk(4)
@@ -533,7 +428,7 @@ AttackVic() {
             Send "{" WKey " up}"
             Walk(5)
         }
-        Loop 2 {
+        loop 2 {
             PlayerDied()
             Send "{" AKey " down}"
             Walk(4)
@@ -541,7 +436,7 @@ AttackVic() {
             Send "{" AKey " up}"
             Walk(5)
         }
-        Loop 2 {
+        loop 2 {
             PlayerDied()
             Send "{" SKey " down}"
             Walk(4)
@@ -549,7 +444,7 @@ AttackVic() {
             Send "{" SKey " up}"
             Walk(5)
         }
-        Loop 2 {
+        loop 2 {
             PlayerDied()
             Send "{" Dkey " down}"
             Walk(4)
@@ -559,81 +454,45 @@ AttackVic() {
         }
     }
     Sleep(5000)
-    PlayerStatus("Vicious bee has been defeated!", 7419530, true)
 
+    PlayerStatus("Vicious bee has been defeated!", "0x71368A", , true)
 
-    return 2
+    return 1
 }
 
 PlayerDied() {
     global Dead
-    if PictureImageSearch("img\died.png", 32) {
+    pBMScreen := GetpBMScreen()
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["YouDied"], , , , , , 2)) {
         Dead := true
-        PlayerStatus("Bro Died To vicious bee during battle... What an embarrassment", 2899536, false)
-        return 1
-    } else {
-        return 0
-    }
-}
-
-
-CheckIfDefeated() {
-    Send "{" SlashKey "}" "{" EnterKey "}"
-    if PictureImageSearch("img\Party_ballon.png", 16) {
-        PlayerStatus("Bouyant Party Balloon succesfully detected!!", 3447003, false)
-        return 0
-    } else if PictureImageSearch("img\Defeated.png", 32) {
+        PlayerStatus("Died during battle: What an embarrassment", "0x2C3E50", , false)
+        Gdip_DisposeImage(pBMScreen)
         return 1
     }
+    Gdip_DisposeImage(pBMScreen)
     return 0
 }
 
+; Returns 1 if vicious bee was detected
+; Returns 0 if no vicious bee was found
+; Checks the 🎉 emoji to see if vicious bee is defeated
+TadaViciousDefeated() {
+    Send "{" SlashKey "}" "{" EnterKey "}"
+    global Dead
+    pBMScreen := GetpBMScreen(windowX + windowWidth * 0.70, windowY, windowWidth * 0.30, windowHeight * 0.30)
 
-; Main Function to call only
-
-; 3 = died
-; 2 = Succesfully defeated / timeout reached
-VIciousAttackLoop(CurrentFeild := 1) {
-    if (VicActivated() == 1) {
-        result := ViciousBattle(CurrentFeild)
-        if (result == 3) {
-            return 3
-        } else {
-            return
-        }
-
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 5)) {
+        Gdip_DisposeImage(pBMScreen)
+        return 1
     }
-    return 1
+    Gdip_DisposeImage(pBMScreen)
+    return 0
+
 }
 
-; From Vicious Attack Loop Function to call only
-ViciousBattle(State) {
-    if (state == 1) {
-        result := AttackVic()
-
-        if (result == 2) {
-            return
-        } else {
-            return 3
-        }
+LeaveServerEarly() {
+    if (TadaViciousDefeated() || ActiveVicious()) {
+        PlayerStatus("Leaving server: Vicious bee Defeated Already", "0x206694", , false)
+        return 1
     }
-    if (state == 2) {
-        result := MtnAttackVic()
-
-        if (result == 2) {
-            return
-        } else {
-            return 3
-        }
-    }
-    if (state == 3) {
-        result := PepperAttackVic()
-
-        if (result == 2) {
-            return
-        } else {
-            return 3
-        }
-    }
-    return
 }
