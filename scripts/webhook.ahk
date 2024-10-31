@@ -1,8 +1,8 @@
-   /**
-    * @param {string Boolean} statusImage Pbitmap or Boolean
-    * @param {string} statusColor RGB color codes. Example: 0xe67e22
-    */
-PlayerStatus(statusTitle, statusColor, statusDescription := "", Mentions := True, content := "", statusImage := True) {
+/**
+ * @param {string Boolean} statusImage Pbitmap or Boolean
+ * @param {string} statusColor RGB color codes. Example: 0xe67e22
+ */
+PlayerStatus(statusTitle, statusColor, statusDescription := "", Mentions := True, content := "", statusImage := True, statusTimestamp := True) {
     try {
         FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
     } catch Error as e {
@@ -12,7 +12,15 @@ PlayerStatus(statusTitle, statusColor, statusDescription := "", Mentions := True
     DiscordUserId := IniRead("settings.ini", "Settings", "discordID")
     mentionStr := Mentions ? "<@" DiscordUserId ">" : ""
 
-    payload_json := '{"content": "' content ' ' mentionStr '", "embeds": [{"title": "' statusTitle '", "description": "' statusDescription '", "color": "' statusColor + 0 '"'
+    ; Create a timestamp in the proper ISO 8601 format
+    timestamp := FormatTime(A_NowUTC, "yyyy-MM-ddTHH:mm:ssZ")
+
+    ; Build the JSON payload with the timestamp
+    payload_json := '{"content": "' content ' ' mentionStr '", "embeds": [{"title": "' statusTitle '", "description": "' statusDescription '", "color": ' statusColor + 0
+
+    if (statusTimestamp == true){
+        payload_json .= ', "timestamp": "' timestamp '"'
+}
 
     if (statusImage == True) {
         pToken := Gdip_Startup()

@@ -41,12 +41,12 @@ PepperPatch() {
     Send "{" WKey " up}"
 
     ;; Move to pepper field from next to coconut
-    nm_Walk(30, Dkey)
+    nm_Walk(30, DKey)
     PressSpace()
     nm_Walk(6, WKey)
 
     PressSpace()
-    nm_Walk(9, Dkey)
+    nm_Walk(9, DKey)
 
     ;; At field
     nm_Walk(19, WKey)
@@ -54,7 +54,6 @@ PepperPatch() {
     nm_Walk(19, SKey)
     nm_Walk(5, DKey)
     nm_Walk(19, WKey)
-
 }
 
 PepperToCannon() {
@@ -78,6 +77,7 @@ PepperToCannon() {
 
 }
 
+; we should probably check if the player died during searching
 MountainTop() {
     Send "{" EKey " down}"
     HyperSleep(100)
@@ -92,8 +92,8 @@ MountainTop() {
 }
 
 MountainToCactus() {
-    nm_Walk(7, WKey)
-    nm_Walk(10, Dkey)
+    nm_Walk(15, WKey)
+    nm_Walk(15, Dkey)
     nm_Walk(3, WKey)
     glider()
     HyperSleep(200)
@@ -107,6 +107,11 @@ MountainToCactus() {
 
     PressSpace()
 
+    nm_Walk(10,AKey)
+    nm_Walk(7,SKey)
+    nm_Walk(3,WKey)
+    nm_Walk(5,Dkey)
+
     nm_Walk(24, DKey)
     nm_Walk(4, SKey)
     nm_Walk(24, AKey)
@@ -114,6 +119,29 @@ MountainToCactus() {
     nm_Walk(24, DKey)
 }
 
+CactusToRose() {
+	nm_Walk(7, WKey)
+	nm_Walk(8, Dkey)
+	nm_Walk(10, WKey)
+	nm_Walk(13, AKey)
+
+	nm_Walk(17,Dkey)
+    Send "{" WKey " down}"
+	HyperSleep(1000)
+    glider()
+    HyperSleep(4000)
+    Send "{" WKey " up}"
+
+    nm_Walk(16, Dkey)
+    nm_Walk(5, SKey)
+
+    ; rose pathing
+    nm_Walk(25, AKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, DKey)
+    nm_Walk(4, SKey)
+    nm_Walk(24, AKey)
+}
 Rose() {
     Send "{" EKey " down}"
     HyperSleep(100)
@@ -163,7 +191,7 @@ Cactus() {
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
-    HyperSleep(400)
+    HyperSleep(550)
     Send "{" SpaceKey " down}"
     HyperSleep(300)
     Send "{" SpaceKey " up}"
@@ -178,32 +206,6 @@ Cactus() {
     nm_Walk(4, SKey)
     nm_Walk(24, DKey)
 
-}
-
-CactusToRose() {
-    nm_Walk(3, SKey)
-    loop 3 {
-        nm_Walk(5, Dkey)
-        glider()
-    }
-
-    nm_Walk(10, AKey)
-
-    nm_Walk(10, WKey)
-    glider()
-    Send "{" WKey " down}"
-    HyperSleep(6000)
-    Send "{" WKey " up}"
-
-    nm_Walk(7, Dkey)
-    nm_Walk(5, SKey)
-
-    ; rose pathing
-    nm_Walk(23, AKey)
-    nm_Walk(5, SKey)
-    nm_Walk(26, DKey)
-    nm_Walk(5, SKey)
-    nm_Walk(26, AKey)
 }
 
 Samovar() {
