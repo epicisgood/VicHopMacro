@@ -1,8 +1,6 @@
 # information
 Bee swarm macro without searchers or passive alts. Only the main account server hops to find vicious bees.
 
-This macro should be ran with the **lowest** roblox graphic settings.
-
 **performance stats** settings should also be turned **OFF** if you have it enabled
 
 ## Prerequisites
