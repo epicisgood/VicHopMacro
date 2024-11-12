@@ -75,7 +75,7 @@ SaveButton := MainGui.AddButton("x340 y200 w100 h30", "Save")
 SaveButton.OnEvent('click', SaveSettings)
 
 MainGui.SetFont("s8 cWhite", "Tahoma")
-MainGui.AddText("x1 y250 w448 h20 Right", "- Made by epic - v1.1.0")
+MainGui.AddText("x1 y250 w448 h20 Right", "- Made by epic - v1.1.1")
 
 MainGui.Show("w450 h280")
 
@@ -99,9 +99,9 @@ SaveSettings(*) {
 Start(*) {
     global MacroTime := A_TickCount
     KeyboardLayout()
-    PlayerStatus("Starting v1.1.0 VicHopMacro by epic", "0xFFFF00", , false, , false)
+    PlayerStatus("Starting v1.1.1 VicHopMacro by epic", "0xFFFF00", , false, , false)
     GetServerIds()
-    OnError (e, mode) => (mode = "return") * (-1)
+    ; OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
     }
@@ -147,7 +147,7 @@ KeyboardLayout() {
 
     if (!language = 0x0409) {
         MsgBox(
-            "You may continue if the '/' key is working (And you have to press shift + key to open roblox chat) switch to US querty keyboard!. The macro WILL not work without the '/' key working."
+            "You may continue if the '/' key is working. If you have to press shift + key to open roblox chat switch to US querty keyboard!. The macro WILL not work without the '/' key working to open up the roblox chat."
         )
     }
 }

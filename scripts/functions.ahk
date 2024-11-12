@@ -23,7 +23,6 @@ GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
     GetRobloxClientPos(hwnd)
     offsetY := GetYOffset()
 
-    ; Use global variables if the parameters are not provided (i.e., are 0)
     global windowX, windowY, windowWidth, windowHeight
     x := (pX != 0) ? pX : windowX
     y := (pY != 0) ? pY : windowY
@@ -37,14 +36,14 @@ GameLoaded() {
 
 
     ;STAGE 2 - wait for loading screen (or loaded game)
-    loop 10 {
+    loop 20 {
         ActivateRoblox()
+        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
         if !GetRobloxClientPos() {
             PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
             Gdip_DisposeImage(pBMScreen)
             return 0
         }
-        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
         ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 1) {
             Gdip_DisposeImage(pBMScreen)
@@ -68,7 +67,7 @@ GameLoaded() {
             CloseRoblox()
             return 0
         }
-        if (A_Index = 10) {
+        if (A_Index = 20) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("No BSS Found", "0xff0000", ,false, ,false)
             CloseRoblox()
@@ -78,7 +77,7 @@ GameLoaded() {
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
-        Sleep 1000 ; timeout 1 min, slow loading
+        Sleep 1000 ; timeout 20s 
     }
 
     ;STAGE 3 - wait for loaded game
@@ -86,7 +85,6 @@ GameLoaded() {
         ActivateRoblox()
         if !GetRobloxClientPos() {
             PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
-            Gdip_DisposeImage(pBMScreen)
             return 0
         }
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
@@ -164,12 +162,15 @@ NightDetection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
     for i, k in ["nightground"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            Gdip_DisposeImage(pBMScreen)
-            return 1 ; returns 1
+            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1) {
+                Gdip_DisposeImage(pBMScreen)
+                return 1 ; returns 1 night detected
+            }
         }
+        Gdip_DisposeImage(pBMScreen)
+        return 0
+
     }
-    Gdip_DisposeImage(pBMScreen)
-    return 0
 
 }
 
@@ -392,10 +393,10 @@ CheckFireButton() {
 
 ; Feild is where player where go to fight vicious bee again
 AttackVicLoop(feild) {
-    if (feild == "rose") {
+    if (feild == "rose" || feild == "spider") {
         Send "{" RotRight " 4}"
     }
-
+    
     if (feild == 'mountain') {
         if (AttackVic("mountain") == 0) {
             if !ResetCharacterLoop()
@@ -424,13 +425,24 @@ AttackVicLoop(feild) {
                 Rose()
                 Send "{" RotRight " 4}"
                 AttackVic()
+            case "spider":
+                if !ResetCharacterLoop()
+                    return 1
+                Spider()
+                Send "{" RotRight " 4}"
+                AttackVic()
+            case "clover":
+                if !ResetCharacterLoop()
+                    return 1
+                Clover()
+                AttackVic()
         }
     }
     return 1
 }
 Dead := false
 ViciousLeft := false
-; returns 2 if timeout reached
+; returns 2 if timeout reached or vic bee left for some reason
 ; returns 1 if vicious bee killed
 ; returns 0 if player died
 AttackVic(feild := '') {
@@ -514,7 +526,7 @@ AttackVic(feild := '') {
     }
 
     PlayerStatus("Vicious bee has been defeated!", "0x71368A", ,false)
-    global ViciousDeaftedCounter += 1
+    ; global ViciousDeaftedCounter += 1
 
     Sleep(5000)
 
@@ -621,9 +633,10 @@ VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to re
                 Cactus()
             case "rose":
                 Rose()
-            case "spider", "clover":
-                PlayerStatus("Leaving server because vicious is in " ViciousFeild, "0x213fc4", , false)
-                return 1 
+            case "spider":
+                Spider()
+            case "clover":
+                Clover()
         }
         
         if (AttackVicLoop(ViciousFeild)) {

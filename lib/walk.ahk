@@ -1,3 +1,5 @@
+pToken := Gdip_Startup()
+
 ; buff characters for stack detection
 buff_characters := Map()
 buff_characters[0] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAAgAAAAKCAAAAACsrEBcAAAAAnRSTlMAAHaTzTgAAAArSURBVHgBY2Rg+MzAwMALxCAaQoDBZyYYmwlMYmXAAFApWPVnBkYIi5cBAJNvCLCTFAy9AAAAAElFTkSuQmCC")
@@ -11,9 +13,7 @@ buff_characters[7] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAAQAAAAMCAA
 buff_characters[8] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAAQAAAAKCAAAAAC2kKDSAAAAAnRSTlMAAHaTzTgAAAA9SURBVHgBATIAzf8BAADzAAAA8wAAAgAAAAABAPMAAAEAAPMAAADzAAAAAAAAAADzAAAAAADzAAABAADzALv5B59oKTe0AAAAAElFTkSuQmCC")
 buff_characters[9] := Gdip_BitmapFromBase64("iVBORw0KGgoAAAANSUhEUgAAAAQAAAAKCAAAAAC2kKDSAAAAAnRSTlMAAHaTzTgAAAA9SURBVHgBATIAzf8BAADzAAAA8wAAAPMAAAAAAPMAAAEAAPMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA87TcBbXcfy3eAAAAAElFTkSuQmCC")
 
-; bitmaps for buff identification
-bitmaps := Map()
-bitmaps.CaseSense := 0  
+(bitmaps := Map()).CaseSense := 0
 bitmaps["pBMHaste"] := Gdip_CreateBitmap(10,1)
 pGraphics := Gdip_GraphicsFromImage(bitmaps["pBMHaste"]), Gdip_GraphicsClear(pGraphics, 0xfff0f0f0), Gdip_DeleteGraphics(pGraphics)
 bitmaps["pBMMelody"] := Gdip_CreateBitmap(3,2)
@@ -50,7 +50,8 @@ DetectMovespeed(&s, &f, hasteCap:=0)
 	DllCall("QueryPerformanceCounter", "Int64*", &s := 0)
 	
 	global hasty_guard := 0, gifted_hasty := 0, base_movespeed := IniRead("settings.ini", "Settings", "movespeed"), buff_characters, bitmaps, offsetY
-	
+	; gifted_hasty := ((Mod(base_movespeed*10, 11.5) = 0) && base_movespeed != 23) ? 1 : 0
+	; base_movespeed := Floor(IniRead("settings.ini", "Settings", "movespeed")/(gifted_hasty ? 1.15 : 1))
 	; check roblox window exists
 	GetRobloxClientPos()
 	if (windowWidth = 0)
@@ -58,7 +59,7 @@ DetectMovespeed(&s, &f, hasteCap:=0)
 	
 	; get screen bitmap of buff area from client window
 	chdc := CreateCompatibleDC(), hbm := CreateDIBSection(windowWidth, 30, chdc), obm := SelectObject(chdc, hbm), hhdc := GetDC()
-	BitBlt(chdc, 0, 0, windowWidth, 30, hhdc, windowX, windowY+offsetY+48)
+	BitBlt(chdc, 0, 0, windowWidth, 30, hhdc, windowX, windowY+offsetY+48+19)
 	ReleaseDC(hhdc)
 	pBMArea := Gdip_CreateBitmapFromHBITMAP(hbm)
 	SelectObject(chdc, obm), DeleteObject(hbm), DeleteDC(hhdc), DeleteDC(chdc)
@@ -82,7 +83,6 @@ DetectMovespeed(&s, &f, hasteCap:=0)
 		
 		x += 2*y-14 ; skip this buff on next search
 	}
-	
 	; analyse haste stacks (haste: 0=none, 1=haste, 2=haste+coconut)
 	coconut_haste := (haste = 2) ? 1 : 0
 	if haste
@@ -106,7 +106,7 @@ DetectMovespeed(&s, &f, hasteCap:=0)
 	bear := 0
 	for v in ["Brown","Black","Panda","Polar","Gummy","Science","Mother"]
 	{
-		if (Gdip_ImageSearch(pBMArea, bitmaps["pBMBear" v], , , 25, , 27, 8, , 2) = 1)
+		if (Gdip_ImageSearch(pBMArea, bitmaps["pBMBear" v], , , , , , , , 2))
 		{
 			bear := 1
 			break
@@ -116,6 +116,7 @@ DetectMovespeed(&s, &f, hasteCap:=0)
 	
 	; use movespeed formula on obtained values
 	v := ((base_movespeed + (coconut_haste ? 10 : 0) + (bear ? 4 : 0)) * (hasty_guard ? 1.1 : 1) * (gifted_hasty ? 1.15 : 1) * (1 + max(0, haste-hasteCap)*0.1) * (haste_plus ? 2 : 1) * (oil ? 1.2 : 1) * (smoothie ? 1.25 : 1))
-		
+    ; PlayerStatus(v "- bear: " bear "- haste: " haste, "0xFFFF00", , false, , false)
+
 	return (DllCall("QueryPerformanceCounter", "Int64*", &f := 0), v)
 }   

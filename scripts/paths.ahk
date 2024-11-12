@@ -125,7 +125,7 @@ CactusToRose() {
 	nm_Walk(10, WKey)
 	nm_Walk(13, AKey)
 
-	nm_Walk(17,Dkey)
+	nm_Walk(16,Dkey)
     Send "{" WKey " down}"
 	HyperSleep(1000)
     glider()
@@ -208,357 +208,383 @@ Cactus() {
 
 }
 
-Samovar() {
-    HyperSleep(100)
+
+Spider(){
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
-    Send "{" AKey " down}"
-    HyperSleep(1600) ; glide timing
-    glider()
-    HyperSleep(4500)
-    Send "{" AKey " up}"
-    Send "{" SpaceKey " 1}"
-    HyperSleep(2000)
-
-    Send "{" SKey " down}"
-    Walk(40)
-    Send "{" SKey " up}"
-
-    Send "{" SpaceKey " down}{" SKey " down}"
-    HyperSleep(50)
-    Send "{" SpaceKey " up}"
-    Walk(20)
-    Send "{" AKey " down}"
-    Walk(10)
-    Send "{" SKey " up}{" AKey " up}"
-
-    Send "{" SpaceKey " down}{" SKey " down}"
-    Walk(3)
-    Send "{" SpaceKey " up}"
-    Walk(6)
-    Send "{" SKey " up}"
-
-    Send "{" AKey " down}"
-    Walk(5)
-    Send "{" AKey " up}"
-
-    Send "{" EKey " down}"
-    HyperSleep(50)
-    Send "{" EKey " up}"
-
-    HyperSleep(5000)
-    Send "{" RotLeft " 1}"  ; <--- , key (turn left)
-
-    Send "{" WKey " down}"
-    Send "{" DKey " down}"
-    Walk(3)
-    Send "{" WKey " up}"
-    Send "{" DKey " up}"
-
-    Send "{" DKey " down}"
-    Send "{" SKey " down}"
-    Walk(3)
-    Send "{" DKey " up}"
-    Send "{" SKey " up}"
-
-    Send "{" SKey " down}"
-    Send "{" AKey " down}"
-    Walk(3)
-    Send "{" SKey " up}"
-    Send "{" AKey " up}"
-
-    Send "{" AKey " down}"
-    Send "{" WKey " down}"
-    Walk(3)
-    Send "{" AKey " up}"
-    Send "{" WKey " up}"
-}
-
-feast() {
-    HyperSleep(100)
-    Send "{" EKey " down}"
-    HyperSleep(100)
-    Send "{" EKey " up}"
-    Send "{" DKey " down}"
-    HyperSleep(750) ; 1175 to 975
-    glider()
-    HyperSleep(650)
-    Send "{" DKey " up}"
-    Send "{" SKey " down}"
     HyperSleep(750)
-    Send "{" SKey " up}"
-    Send "{" SpaceKey " 1}"
-    HyperSleep(1000)
-    Send "{" AKey " down}"
-    Walk(10)
-    Send "{" AKey " up}"
-
-    Send "{" WKey " down}"
-    Walk(15)
-    Send "{" WKey " up}"
-
-    Send "{" Dkey " down}"
-    Walk(12)
-    Send "{" Dkey " up}"
-
-    Send "{" SKey " down}"
-    Walk(6)
-    Send "{" SpaceKey " down}"
-    HyperSleep(200)
-    Send "{" SpaceKey " up}"
-    Send "{" SKey " up}"
-    HyperSleep(500)
-
-    Send "{" SKey " down}"
-    Walk(3)
-    Send "{" SKey " up}"
-
-    Send "{" AKey " down}"
-    Walk(2)
-    Send "{" AKey " up}"
-    ;; Claim Feist
-    Send "{" EKey " 1}"
-    HyperSleep(6000)
-    ;; landed
-    Send "{" RotLeft " 1}"
-    Send "{" WKey " down}"
-    Walk(1)
-    Send "{" WKey " up}"
-
-    Send "{" SKey " down}"
-    Send "{" DKey " down}"
-    Walk(2)
-    Send "{" SKey " up}"
-    Send "{" DKey " up}"
-
-    Send "{" SKey " down}"
-    Send "{" AKey " down}"
-    Walk(2)
-    Send "{" SKey " up}"
-    Send "{" AKey " up}"
-
-    Send "{" AKey " down}"
-    Send "{" WKey " down}"
-    Walk(2)
-    Send "{" AKey " up}"
-    Send "{" WKey " up}"
-
-    Send "{" WKey " down}"
-    Send "{" DKey " down}"
-    Walk(2)
-    Send "{" WKey " up}"
-    Send "{" DKey " up}"
-    HyperSleep(1000)
+    PressSpace()
+    PressSpace()
+    PressSpace()
+    HyperSleep(2500)
 }
 
-stockings() {
+Clover(){
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
-
+    HyperSleep(110)
+    PressSpace()
+    PressSpace()
     Send "{" AKey " down}"
-    HyperSleep(750) ; gliding timing 700 worked fine ig
-    glider()
-    HyperSleep(500)
-    Send "{" WKey " down}"
-    HyperSleep(7500)
-    Send "{" AKey " up}{" WKey " up}"
+    HyperSleep(1500)
+    Send "{" AKey " up}"
 
-    Send "{" Dkey " down}"
-    Walk(26)
-    Send "{" Dkey " up}"
-
-    Send "{" SKey " down}"
-    Walk(5)
-    Send "{" SKey " up}"
-
-    Send "{" Dkey " down}"
-    Walk(5.5)
-    Send "{" Dkey " up}"
     HyperSleep(3000)
-    Send "{" EKey " down}"
-    HyperSleep(100)
-    Send "{" EKey " up}"
-
-    Send "{" WKey " down}"
-    Walk(3)
-    Send "{" WKey " up}"
-
-    Send "{" AKey " down}"
-    Walk(3)
-    Send "{" AKey " up}"
-    Send "{" SpaceKey " down}"
-    HyperSleep(100)
-    Send "{" SpaceKey " up}"
-    HyperSleep(500)
-
-    Send "{" Dkey " down}"
-    Walk(6)
-    Send "{" Dkey " up}"
-
-    Send "{" SKey " down}"
-    Walk(2)
-    Send "{" SKey " up}"
-
-    HyperSleep(500)
-    Send "{" SpaceKey " down}"
-    HyperSleep(100)
-    Send "{" SpaceKey " up}"
-
-    HyperSleep(1000)
 }
 
-Candles() {
-    Send "{" DKey " down}"
-    Walk(25)
-    Send "{" DKey " up}"
+; Samovar() {
+;     HyperSleep(100)
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
+;     Send "{" AKey " down}"
+;     HyperSleep(1600) ; glide timing
+;     glider()
+;     HyperSleep(4500)
+;     Send "{" AKey " up}"
+;     Send "{" SpaceKey " 1}"
+;     HyperSleep(2000)
 
-    Send "{" DKey " down}{" SpaceKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
-    Send "{" WKey " down}"
-    Walk(4)
-    Send "{" WKey " up}"
-    Walk(5)
-    Send "{" DKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(40)
+;     Send "{" SKey " up}"
 
-    Send "{" WKey " down}{" DKey " down}"
-    Walk(2)
-    Send "{" DKey " up}"
-    Walk(3)
-    Send "{" WKey " up}"
+;     Send "{" SpaceKey " down}{" SKey " down}"
+;     HyperSleep(50)
+;     Send "{" SpaceKey " up}"
+;     Walk(20)
+;     Send "{" AKey " down}"
+;     Walk(10)
+;     Send "{" SKey " up}{" AKey " up}"
 
-    Send "{" WKey " down}{" SpaceKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
-    Walk(3)
-    Send "{" WKey " up}"
+;     Send "{" SpaceKey " down}{" SKey " down}"
+;     Walk(3)
+;     Send "{" SpaceKey " up}"
+;     Walk(6)
+;     Send "{" SKey " up}"
 
-    Send "{" RotLeft " 4}"
+;     Send "{" AKey " down}"
+;     Walk(5)
+;     Send "{" AKey " up}"
 
-    Send "{" WKey " down}"
-    Walk(1)
-    glider()
-    walk(9)
-    Send "{" WKey " up}"
+;     Send "{" EKey " down}"
+;     HyperSleep(50)
+;     Send "{" EKey " up}"
 
-    Send "{" RotLeft " 2}"
-    Send "{" WKey " down}"
-    Walk(16)
-    Send "{" WKey " up}"
+;     HyperSleep(5000)
+;     Send "{" RotLeft " 1}"  ; <--- , key (turn left)
 
-    Send "{" EKey " down}"
-    HyperSleep(100)
-    Send "{" EKey " up}"
+;     Send "{" WKey " down}"
+;     Send "{" DKey " down}"
+;     Walk(3)
+;     Send "{" WKey " up}"
+;     Send "{" DKey " up}"
 
-    HyperSleep(5000)
+;     Send "{" DKey " down}"
+;     Send "{" SKey " down}"
+;     Walk(3)
+;     Send "{" DKey " up}"
+;     Send "{" SKey " up}"
 
-    Send "{" WKey " down}"
-    Walk(2)
-    Send "{" WKey " up}"
+;     Send "{" SKey " down}"
+;     Send "{" AKey " down}"
+;     Walk(3)
+;     Send "{" SKey " up}"
+;     Send "{" AKey " up}"
 
-    Send "{" AKey " down}"
-    Walk(4)
-    Send "{" AKey " up}"
-    Send "{" Dkey " down}"
-    Walk(8)
-    Send "{" Dkey " up}"
+;     Send "{" AKey " down}"
+;     Send "{" WKey " down}"
+;     Walk(3)
+;     Send "{" AKey " up}"
+;     Send "{" WKey " up}"
+; }
 
-    HyperSleep(2000)
-}
+; feast() {
+;     HyperSleep(100)
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
+;     Send "{" DKey " down}"
+;     HyperSleep(750) ; 1175 to 975
+;     glider()
+;     HyperSleep(650)
+;     Send "{" DKey " up}"
+;     Send "{" SKey " down}"
+;     HyperSleep(750)
+;     Send "{" SKey " up}"
+;     Send "{" SpaceKey " 1}"
+;     HyperSleep(1000)
+;     Send "{" AKey " down}"
+;     Walk(10)
+;     Send "{" AKey " up}"
 
-LidArt() {
-    Send "{" EKey " down}"
-    HyperSleep(100)
-    Send "{" EKey " up}"
-    HyperSleep(3500)
+;     Send "{" WKey " down}"
+;     Walk(15)
+;     Send "{" WKey " up}"
 
-    Send "{" RotLeft " 4}"
+;     Send "{" Dkey " down}"
+;     Walk(12)
+;     Send "{" Dkey " up}"
 
-    Send "{" WKey " down}"
-    Walk(15)
-    Send "{" WKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(6)
+;     Send "{" SpaceKey " down}"
+;     HyperSleep(200)
+;     Send "{" SpaceKey " up}"
+;     Send "{" SKey " up}"
+;     HyperSleep(500)
 
-    Send "{" AKey " down}"
-    Walk(16)
-    Send "{" AKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(3)
+;     Send "{" SKey " up}"
 
-    Send "{" Dkey " down}"
-    Walk(5)
-    Send "{" Dkey " up}"
+;     Send "{" AKey " down}"
+;     Walk(2)
+;     Send "{" AKey " up}"
+;     ;; Claim Feist
+;     Send "{" EKey " 1}"
+;     HyperSleep(6000)
+;     ;; landed
+;     Send "{" RotLeft " 1}"
+;     Send "{" WKey " down}"
+;     Walk(1)
+;     Send "{" WKey " up}"
 
-    Send "{" WKey " down}"
-    loop 7 {
-        Walk(2)
-        glider()
-        Walk(2)
-    }
-    Walk(10)
-    Send "{" WKey " up}"
+;     Send "{" SKey " down}"
+;     Send "{" DKey " down}"
+;     Walk(2)
+;     Send "{" SKey " up}"
+;     Send "{" DKey " up}"
 
-    Send "{" SKey " down}"
-    Walk(7)
-    Send "{" SKey " up}"
+;     Send "{" SKey " down}"
+;     Send "{" AKey " down}"
+;     Walk(2)
+;     Send "{" SKey " up}"
+;     Send "{" AKey " up}"
 
-    Send "{" EKey " down}"
-    HyperSleep(100)
-    Send "{" EKey " up}"
+;     Send "{" AKey " down}"
+;     Send "{" WKey " down}"
+;     Walk(2)
+;     Send "{" AKey " up}"
+;     Send "{" WKey " up}"
 
-    HyperSleep(4000)
+;     Send "{" WKey " down}"
+;     Send "{" DKey " down}"
+;     Walk(2)
+;     Send "{" WKey " up}"
+;     Send "{" DKey " up}"
+;     HyperSleep(1000)
+; }
 
-    Send "{" SKey " down}"
-    Send "{" DKey " down}"
-    Walk(1.7)
-    Send "{" SKey " up}"
-    Send "{" DKey " up}"
+; stockings() {
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
 
-    Send "{" SKey " down}"
-    Send "{" AKey " down}"
-    Walk(1.7)
-    Send "{" SKey " up}"
-    Send "{" AKey " up}"
+;     Send "{" AKey " down}"
+;     HyperSleep(750) ; gliding timing 700 worked fine ig
+;     glider()
+;     HyperSleep(500)
+;     Send "{" WKey " down}"
+;     HyperSleep(7500)
+;     Send "{" AKey " up}{" WKey " up}"
 
-    Send "{" AKey " down}"
-    Send "{" WKey " down}"
-    Walk(2)
-    Send "{" AKey " up}"
-    Send "{" WKey " up}"
+;     Send "{" Dkey " down}"
+;     Walk(26)
+;     Send "{" Dkey " up}"
 
-    Send "{" WKey " down}"
-    Send "{" DKey " down}"
-    Walk(2)
-    Send "{" WKey " up}"
-    Send "{" DKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(5)
+;     Send "{" SKey " up}"
 
-    Send "{" WKey " down}"
-    walk(1)
-    Send "{" WKey " up}"
+;     Send "{" Dkey " down}"
+;     Walk(5.5)
+;     Send "{" Dkey " up}"
+;     HyperSleep(3000)
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
 
-    Send "{" AKey " down}"
-    walk(3)
-    Send "{" AKey " up}"
-    Send "{" SKey " down}"
-    Walk(1)
-    Send "{" SKey " up}"
-    Send "{" Dkey " down}"
-    walk(5)
-    Send "{" Dkey " up}"
+;     Send "{" WKey " down}"
+;     Walk(3)
+;     Send "{" WKey " up}"
 
-    Send "{" SKey " down}"
-    Walk(1)
-    Send "{" SKey " up}"
+;     Send "{" AKey " down}"
+;     Walk(3)
+;     Send "{" AKey " up}"
+;     Send "{" SpaceKey " down}"
+;     HyperSleep(100)
+;     Send "{" SpaceKey " up}"
+;     HyperSleep(500)
 
-    Send "{" AKey " down}"
-    walk(5)
-    Send "{" AKey " up}"
+;     Send "{" Dkey " down}"
+;     Walk(6)
+;     Send "{" Dkey " up}"
 
-    Send "{" SKey " down}"
-    Walk(1)
-    Send "{" SKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(2)
+;     Send "{" SKey " up}"
 
-    Send "{" Dkey " down}"
-    walk(5)
-    Send "{" Dkey " up}"
+;     HyperSleep(500)
+;     Send "{" SpaceKey " down}"
+;     HyperSleep(100)
+;     Send "{" SpaceKey " up}"
 
-}
+;     HyperSleep(1000)
+; }
+
+; Candles() {
+;     Send "{" DKey " down}"
+;     Walk(25)
+;     Send "{" DKey " up}"
+
+;     Send "{" DKey " down}{" SpaceKey " down}"
+;     Walk(2)
+;     Send "{" SpaceKey " up}"
+;     Send "{" WKey " down}"
+;     Walk(4)
+;     Send "{" WKey " up}"
+;     Walk(5)
+;     Send "{" DKey " up}"
+
+;     Send "{" WKey " down}{" DKey " down}"
+;     Walk(2)
+;     Send "{" DKey " up}"
+;     Walk(3)
+;     Send "{" WKey " up}"
+
+;     Send "{" WKey " down}{" SpaceKey " down}"
+;     Walk(2)
+;     Send "{" SpaceKey " up}"
+;     Walk(3)
+;     Send "{" WKey " up}"
+
+;     Send "{" RotLeft " 4}"
+
+;     Send "{" WKey " down}"
+;     Walk(1)
+;     glider()
+;     walk(9)
+;     Send "{" WKey " up}"
+
+;     Send "{" RotLeft " 2}"
+;     Send "{" WKey " down}"
+;     Walk(16)
+;     Send "{" WKey " up}"
+
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
+
+;     HyperSleep(5000)
+
+;     Send "{" WKey " down}"
+;     Walk(2)
+;     Send "{" WKey " up}"
+
+;     Send "{" AKey " down}"
+;     Walk(4)
+;     Send "{" AKey " up}"
+;     Send "{" Dkey " down}"
+;     Walk(8)
+;     Send "{" Dkey " up}"
+
+;     HyperSleep(2000)
+; }
+
+; LidArt() {
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
+;     HyperSleep(3500)
+
+;     Send "{" RotLeft " 4}"
+
+;     Send "{" WKey " down}"
+;     Walk(15)
+;     Send "{" WKey " up}"
+
+;     Send "{" AKey " down}"
+;     Walk(16)
+;     Send "{" AKey " up}"
+
+;     Send "{" Dkey " down}"
+;     Walk(5)
+;     Send "{" Dkey " up}"
+
+;     Send "{" WKey " down}"
+;     loop 7 {
+;         Walk(2)
+;         glider()
+;         Walk(2)
+;     }
+;     Walk(10)
+;     Send "{" WKey " up}"
+
+;     Send "{" SKey " down}"
+;     Walk(7)
+;     Send "{" SKey " up}"
+
+;     Send "{" EKey " down}"
+;     HyperSleep(100)
+;     Send "{" EKey " up}"
+
+;     HyperSleep(4000)
+
+;     Send "{" SKey " down}"
+;     Send "{" DKey " down}"
+;     Walk(1.7)
+;     Send "{" SKey " up}"
+;     Send "{" DKey " up}"
+
+;     Send "{" SKey " down}"
+;     Send "{" AKey " down}"
+;     Walk(1.7)
+;     Send "{" SKey " up}"
+;     Send "{" AKey " up}"
+
+;     Send "{" AKey " down}"
+;     Send "{" WKey " down}"
+;     Walk(2)
+;     Send "{" AKey " up}"
+;     Send "{" WKey " up}"
+
+;     Send "{" WKey " down}"
+;     Send "{" DKey " down}"
+;     Walk(2)
+;     Send "{" WKey " up}"
+;     Send "{" DKey " up}"
+
+;     Send "{" WKey " down}"
+;     walk(1)
+;     Send "{" WKey " up}"
+
+;     Send "{" AKey " down}"
+;     walk(3)
+;     Send "{" AKey " up}"
+;     Send "{" SKey " down}"
+;     Walk(1)
+;     Send "{" SKey " up}"
+;     Send "{" Dkey " down}"
+;     walk(5)
+;     Send "{" Dkey " up}"
+
+;     Send "{" SKey " down}"
+;     Walk(1)
+;     Send "{" SKey " up}"
+
+;     Send "{" AKey " down}"
+;     walk(5)
+;     Send "{" AKey " up}"
+
+;     Send "{" SKey " down}"
+;     Walk(1)
+;     Send "{" SKey " up}"
+
+;     Send "{" Dkey " down}"
+;     walk(5)
+;     Send "{" Dkey " up}"
+
+; }

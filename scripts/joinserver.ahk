@@ -1,10 +1,9 @@
 global serverIds := []
 global errorMessage := ""
 joinrandomserver() {
-    global JoinAttempts, serverIds
+    global serverIds
     if (serverIds.Length > 1) {
         global RandomServer := serverIds[Random(1, serverIds.Length)]
-        JoinAttempts++
         run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'
 
     } else {

@@ -7,8 +7,9 @@ Bee swarm macro without searchers or passive alts. Only the main account server 
 
 Before you can use this macro, ensure you have the following software installed on your computer:
 
-1. **AutoHotkey**: you might not need to install this if you have natro macro but do it anyways
+1. **AutoHotkey**: 
    - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-v2.exe).
+   - This is needed to run the macro 
 
 
 
@@ -16,8 +17,8 @@ Before you can use this macro, ensure you have the following software installed 
 
 To set up the macro on your machine, follow these steps:
 
-1. **Download the repository**: Click on releases
-   - Extract the ZIP file, to a folder of your choice.
+1. **Download the repository**: Click on the latest release
+   - Extract the ZIP file
 
 2. **Activate the macro**: Double click the `start.ahk` script by double-clicking it obviously.
    ```sh
@@ -27,13 +28,16 @@ To set up the macro on your machine, follow these steps:
 3. **Configure Movespeed and Discord**: If you need help with adding discord integration into the macro, you can read these pages for more information. [UserId](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID#h_01HRSTXPS5H5D7JBY2QKKPVKNA) [Webhooks](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks)
 
 
-4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro. Make sure the / key is worked as intended for the macro to work correctly
+4. **Start the macro**: To activate the macro, press the ``` F1 ``` key. Press the ``` F2 ``` key to stop the macro. 
+Make sure the / key is worked as intended for the macro to work correctly
 
 
 ## Contact
 
-discord: ``` _epic. ``` 
+My Discord: ``` _epic. ``` 
 
 [Github Link](https://github.com/epicisgood/VicHopMacro)
 
 Hope the macro is a W for real pay me 1 bee cub right now!! 🤑
+
+Hopefully you dont have a stinger shortage fr.

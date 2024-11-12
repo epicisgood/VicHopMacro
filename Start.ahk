@@ -7,6 +7,11 @@ KeyDelay := 40
 
 Setkeydelay KeyDelay
 
+GetRobloxClientPos()
+pToken := Gdip_Startup()
+bitmaps := Map()
+bitmaps.CaseSense := 0
+
 CoordMode "Mouse", "Screen"
 CoordMode "Pixel", "Screen"
 SendMode "Event"
@@ -47,16 +52,10 @@ SlashKey := "sc035" ; /
 #Include timers.ahk
 #Include webhook.ahk
 
-GetRobloxClientPos()
-pToken := Gdip_Startup()
-bitmaps := Map()
-bitmaps.CaseSense := 0
-
 #Include %A_ScriptDir%\images\bitmaps.ahk
 
-global ServerAttempts := 0 ; used for joinserver function to Clear ServerIds()
+global ServerAttempts := 1 ; used for joinserver function to Clear ServerIds()
 global NightSearchAttempts := 0 ; just for the webhook timer nothing else prob could be merged into 1 var but ya
-
 
 ; Total Report Varaibles maybe used for the future idk
 ; global ServerJoinCounter := 0
@@ -71,7 +70,7 @@ MainLoop() {
     if (NightDetection() == 1) {
         ; global NightServersCounter += 1
         ; global ServerJoinCounter += 1
-        global ServerAttempts := 0
+        global ServerAttempts := 1
         global NightSearchAttempts := 0
         PlayerStatus("Night Detected!!", "0x000000", , false)
         Send "{" Zoomout " 15}"
@@ -102,6 +101,8 @@ MainLoop() {
     }
     PlayerStatus("Going to Pepper Patch.", "0x1F8B4C", , false, , false)
     PepperPatch()
+    if LeaveServerEarly()
+        return
     if (VicSpawnedDetection("pepper")) {
         return
     }
@@ -120,20 +121,20 @@ MainLoop() {
     }
     PlayerStatus("Going to Mountain Top Field.", "0x1F8B4C", , false, , false)
     MountainTop()
+    if LeaveServerEarly()
+        return
     if (VicSpawnedDetection("mountain")) {
         return
     }
     PlayerStatus("Finished Checking Mountain Top Field.", "0x57F287", , false)
-    if LeaveServerEarly()
-        return
     PlayerStatus("Going to Cactus Field.", "0x1F8B4C", , false, , false)
     MountainToCactus()
+    if LeaveServerEarly()
+        return
     if VicSpawnedDetection("cactus") {
         return
     }
     PlayerStatus("Finished Checking Cactus Field.", "0x57F287", , false)
-    if LeaveServerEarly()
-        return
     PlayerStatus("Going to Rose Field.", "0x1F8B4C", , false, , false)
     CactusToRose()
     sleep 1000
@@ -150,13 +151,19 @@ MainLoop() {
 
 JoinServer() {
     loadroblox()
-    global SeverAttempts
-    if (SeverAttempts == 20) {
-        global SeverAttempts := 0
+    global ServerAttempts
+    if (Mod(ServerAttempts, 20) == 0) {
+        global ServerAttempts := 1
         CloseRoblox()
         GetServerIds()
+        HyperSleep(2000)
     } else {
-        send "{esc}{l}{Enter}"
+        SetKeyDelay 250
+        if GetRobloxClientPos()
+            send "{esc}{l}{Enter}"
+        global KeyDelay
+        SetKeyDelay KeyDelay
+        HyperSleep(2000)
     }
     if (GameLoaded()) {
         HyperSleep(850)
@@ -181,6 +188,3 @@ loadroblox() {
         Sleep 1000
     }
 }
-
-
-
