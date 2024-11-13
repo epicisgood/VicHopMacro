@@ -101,7 +101,7 @@ Start(*) {
     KeyboardLayout()
     PlayerStatus("Starting v1.1.1 VicHopMacro by epic", "0xFFFF00", , false, , false)
     GetServerIds()
-    ; OnError (e, mode) => (mode = "return") * (-1)
+    OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
     }

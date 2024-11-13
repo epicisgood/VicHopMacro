@@ -162,7 +162,7 @@ NightDetection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
     for i, k in ["nightground"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1) {
+            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
                 Gdip_DisposeImage(pBMScreen)
                 return 1 ; returns 1 night detected
             }
@@ -304,7 +304,7 @@ CheckNotHiveSpawn() {
 RotateHiveCorrection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
 
-    for i, k in ["nightground", "ground", "NightTransitionGround"] {
+    for i, k in ["nightground", "ground", "NightTransitionGround", "ground2"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 10) = 1) {
             Gdip_DisposeImage(pBMScreen)
             return 1
