@@ -1,84 +1,119 @@
 PepperPatch() {
-    nm_Walk(25, DKey)
-    Send "{" DKey " down}{" SpaceKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
-    nm_Walk(4, WKey)
-    Walk(5)
-    Send "{" DKey " up}"
+    movement := 
+    (
+        '
+        nm_Walk(25, DKey)
+        Send "{" DKey " down}{" SpaceKey " down}"
+        Walk(2)
+        Send "{" SpaceKey " up}"
+        nm_Walk(4, WKey)
+        Walk(5)
+        Send "{" DKey " up}"
+    
+        nm_Walk(2, WKey, DKey)
+        Walk(3)
+        Send "{" WKey " up}"
+    
+        Send "{" WKey " down}{" SpaceKey " down}"
+        Walk(2)
+        Send "{" SpaceKey " up}"
+    
+        ;; Correction to not bug out
+        Send "{" AKey " down}"
+        Walk(3)
+        Send "{" AKey " up}"
+        Walk(19)
+        Send "{" WKey " up}"
+        nm_Walk(6, DKey)
+    
+        ;; Jump part
+        nm_Walk(2, WKey, SpaceKey)
+        Hypersleep(600)
+        nm_Walk(2, WKey, SpaceKey)
+        Hypersleep(600)
+    
+        nm_Walk(2, WKey, SpaceKey)
+        Hypersleep(600)
+        nm_Walk(2, WKey, SpaceKey)
+        Hypersleep(600)
+    
+        Send "{" WKey " down}"
+        Walk(13)
+        ' PressSpace() '
+        Walk(4)
+        Send "{" WKey " up}"
+    
+        ;; Move to pepper field from next to coconut
+        nm_Walk(3, DKey)
+        ' glider() '
+        HyperSleep(500)
+        nm_walk(16,Dkey)
+        ' PressSpace() '
+        nm_Walk(6, WKey)
+    
+        ' PressSpace() '
+        nm_Walk(9, DKey)
+    
+        ;; At field
+        nm_Walk(19, WKey)
+        nm_Walk(5, DKey)
+        nm_Walk(19, SKey)
+        nm_Walk(5, DKey)
+        nm_Walk(19, WKey)
+        
+        
+        
+        
+        '
+    )
 
-    nm_Walk(2, WKey, DKey)
-    Walk(3)
-    Send "{" WKey " up}"
-
-    Send "{" WKey " down}{" SpaceKey " down}"
-    Walk(2)
-    Send "{" SpaceKey " up}"
-
-    ;; Correction to not bug out
-    Send "{" AKey " down}"
-    Walk(3)
-    Send "{" AKey " up}"
-    Walk(19)
-    Send "{" WKey " up}"
-    nm_Walk(6, DKey)
-
-    ;; Jump part
-    nm_Walk(2, WKey, SpaceKey)
-    Hypersleep(600)
-    nm_Walk(2, WKey, SpaceKey)
-    Hypersleep(600)
-
-    nm_Walk(2, WKey, SpaceKey)
-    Hypersleep(600)
-    nm_Walk(2, WKey, SpaceKey)
-    Hypersleep(600)
-
-    Send "{" WKey " down}"
-    Walk(10)
-    nm_Walk(2, SpaceKey)
-    Walk(3)
-    Send "{" WKey " up}"
-
-    ;; Move to pepper field from next to coconut
-    nm_Walk(30, DKey)
-    PressSpace()
-    nm_Walk(6, WKey)
-
-    PressSpace()
-    nm_Walk(9, DKey)
-
-    ;; At field
-    nm_Walk(19, WKey)
-    nm_Walk(5, DKey)
-    nm_Walk(19, SKey)
-    nm_Walk(5, DKey)
-    nm_Walk(19, WKey)
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
 
 PepperToCannon() {
+    movement :=
+    (
+    '
     Send "{" RotLeft " 4}"
-    nm_Walk(29, WKey)
+    nm_Walk(3, WKey)
+    ' glider() '
+    nm_Walk(20, WKey)
     nm_Walk(10, AKey)
     nm_Walk(20, Dkey)
     nm_Walk(3, SKey)
 
     nm_Walk(3, Dkey)
-    glider()
+    ' glider() '
 
     Send "{" Dkey " down}{" WKey " down}"
-    HyperSleep(2500)
+    HyperSleep(2700)
     Send "{" WKey " up}"
-    HyperSleep(500)
+    HyperSleep(700)
     Send "{" Dkey " up}"
 
-    PressSpace()
+    ' PressSpace() '
     Send "{" RotRight " 4}"
+
+            
+        
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 
 }
 
 ; we should probably check if the player died during searching
 MountainTop() {
+    movement :=
+    (
+    '
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
@@ -89,23 +124,40 @@ MountainTop() {
     nm_Walk(20, SKey)
     nm_Walk(11, DKey)
     nm_Walk(18, WKey)
+            
+        
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T20 L"
+    nm_endWalk()
 }
 
 MountainToCactus() {
+    movement :=
+    (
+    '
     nm_Walk(15, WKey)
     nm_Walk(15, Dkey)
-    nm_Walk(3, WKey)
-    glider()
-    HyperSleep(200)
+    nm_walk(1, Akey)
+    nm_walk(2,SKey)
+    nm_Walk(5.5, WKey)
+    ' glider() '
+
+    Send "{" WKey " down}"
+    HyperSleep(300)
+    Send "{" WKey " up}"
     Send "{" DKey " down}"
-    HyperSleep(1900)
+    HyperSleep(2200)
     Send "{" DKey " up}"
 
     Send "{" SKey " down}"
     HyperSleep(300)
     Send "{" SKey " up}"
 
-    PressSpace()
+    ' PressSpace() '
 
     nm_Walk(10,AKey)
     nm_Walk(7,SKey)
@@ -117,9 +169,20 @@ MountainToCactus() {
     nm_Walk(24, AKey)
     nm_Walk(4, SKey)
     nm_Walk(24, DKey)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
 
 CactusToRose() {
+    movement :=
+    (
+    '
 	nm_Walk(7, WKey)
 	nm_Walk(8, Dkey)
 	nm_Walk(10, WKey)
@@ -128,7 +191,7 @@ CactusToRose() {
 	nm_Walk(16,Dkey)
     Send "{" WKey " down}"
 	HyperSleep(1000)
-    glider()
+    ' glider() '
     HyperSleep(4000)
     Send "{" WKey " up}"
 
@@ -139,15 +202,26 @@ CactusToRose() {
     nm_Walk(25, AKey)
     nm_Walk(4, SKey)
     nm_Walk(24, DKey)
-    nm_Walk(4, SKey)
+    nm_Walk(5, SKey)
     nm_Walk(24, AKey)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
 Rose() {
+    movement :=
+    (
+    '
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
 
-    HyperSleep(230)
+    HyperSleep(230+210)
     Send "{" DKey " down}"
     Send "{" SpaceKey " down}"
     HyperSleep(25)
@@ -172,14 +246,25 @@ Rose() {
     nm_Walk(26, DKey)
     nm_Walk(5, SKey)
     nm_Walk(26, AKey)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
 
 Cactus() {
+    movement :=
+    (
+    '
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
     ;; Glide to cactus
-    HyperSleep(750)
+    HyperSleep(1000)
     Send "{" DKey " down}"
     Send "{" SpaceKey " down}"
     HyperSleep(300)
@@ -199,40 +284,76 @@ Cactus() {
 
     ;; Landed at cactus field
     HyperSleep(2000)
-
+    nm_walk(4,Dkey)
     nm_Walk(24, DKey)
     nm_Walk(4, SKey)
     nm_Walk(24, AKey)
     nm_Walk(4, SKey)
     nm_Walk(24, DKey)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 
 }
 
 
 Spider(){
+    movement :=
+    (
+    '
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
     HyperSleep(750)
-    PressSpace()
-    PressSpace()
-    PressSpace()
+    ' PressSpace() '
+    HyperSleep(100)
+    ' PressSpace() '
+    HyperSleep(100)
+    ' PressSpace() '
     HyperSleep(2500)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
 
 Clover(){
+    movement :=
+    (
+    '
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
-    HyperSleep(110)
-    PressSpace()
-    PressSpace()
+    HyperSleep(170)
+    ' PressSpace() '
+    HyperSleep(100)
+    ' PressSpace() '
     Send "{" AKey " down}"
     HyperSleep(1500)
     Send "{" AKey " up}"
 
     HyperSleep(3000)
+            
+        '
+    )
+
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T120 L"
+    nm_endWalk()
 }
+
+
+; beesmas paths 
 
 ; Samovar() {
 ;     HyperSleep(100)
@@ -241,7 +362,7 @@ Clover(){
 ;     Send "{" EKey " up}"
 ;     Send "{" AKey " down}"
 ;     HyperSleep(1600) ; glide timing
-;     glider()
+;     ' glider() '
 ;     HyperSleep(4500)
 ;     Send "{" AKey " up}"
 ;     Send "{" SpaceKey " 1}"
@@ -308,7 +429,7 @@ Clover(){
 ;     Send "{" EKey " up}"
 ;     Send "{" DKey " down}"
 ;     HyperSleep(750) ; 1175 to 975
-;     glider()
+;     ' glider() '
 ;     HyperSleep(650)
 ;     Send "{" DKey " up}"
 ;     Send "{" SKey " down}"
@@ -385,7 +506,7 @@ Clover(){
 
 ;     Send "{" AKey " down}"
 ;     HyperSleep(750) ; gliding timing 700 worked fine ig
-;     glider()
+;     ' glider() '
 ;     HyperSleep(500)
 ;     Send "{" WKey " down}"
 ;     HyperSleep(7500)
@@ -465,7 +586,7 @@ Clover(){
 
 ;     Send "{" WKey " down}"
 ;     Walk(1)
-;     glider()
+;     ' glider() '
 ;     walk(9)
 ;     Send "{" WKey " up}"
 
@@ -517,7 +638,7 @@ Clover(){
 ;     Send "{" WKey " down}"
 ;     loop 7 {
 ;         Walk(2)
-;         glider()
+;         ' glider() '
 ;         Walk(2)
 ;     }
 ;     Walk(10)

@@ -11,7 +11,7 @@ GetRobloxClientPos()
 pToken := Gdip_Startup()
 bitmaps := Map()
 bitmaps.CaseSense := 0
-
+currentWalk := {pid:"", name:""} ; stores "pid" (script process ID) and "name" (pattern/movement name)
 CoordMode "Mouse", "Screen"
 CoordMode "Pixel", "Screen"
 SendMode "Event"
@@ -75,7 +75,6 @@ MainLoop() {
         PlayerStatus("Night Detected!!", "0x000000", , false)
         Send "{" Zoomout " 15}"
         global ViciousFeild := 0
-        SetTimer(ViciousSpawnLocation, 500)
         if (!StartServerLoop()) {
             return
         }
@@ -86,14 +85,10 @@ MainLoop() {
         PlayerStatus("Searching For Night Servers. " NightSearchAttempts "x", "0x1ABC9C", , false, , false)
         return
     }
-    if (VicSpawnedDetection("none")) {
-        return
+    if (!CheckFireButton()) {
+        if !ResetCharacterLoop()
+            return
     }
-    SetTimer(ViciousSpawnLocation, 0)
-    if (!ResetCharacterLoop()) {
-        return
-    }
-    SetTimer(ViciousSpawnLocation, 500)
     if LeaveServerEarly()
         return
     if (VicSpawnedDetection("none", false)) {
@@ -111,10 +106,8 @@ MainLoop() {
     if LeaveServerEarly()
         return
     if (!CheckFireButton()) {
-        SetTimer(ViciousSpawnLocation, 0)
         if !ResetCharacterLoop()
             return
-        SetTimer(ViciousSpawnLocation, 500)
     }
     if (VicSpawnedDetection("none"), false) {
         return
@@ -137,13 +130,11 @@ MainLoop() {
     PlayerStatus("Finished Checking Cactus Field.", "0x57F287", , false)
     PlayerStatus("Going to Rose Field.", "0x1F8B4C", , false, , false)
     CactusToRose()
-    sleep 1000
     if VicSpawnedDetection("rose") {
         return
     }
     PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
-    SetTimer(ViciousSpawnLocation, 0)
 
     ; BeesmasInterupt()
 
@@ -187,4 +178,8 @@ loadroblox() {
         }
         Sleep 1000
     }
+}
+
+F3::{
+
 }

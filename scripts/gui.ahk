@@ -1,5 +1,6 @@
 #Requires AutoHotkey v2.0
 
+version := "v1.1.2"
 if (!FileExist("settings.ini")) {
     IniWrite("Insert Url", "settings.ini", "Settings", "url")
     IniWrite("Insert UserId", "settings.ini", "Settings", "discordID")
@@ -75,7 +76,7 @@ SaveButton := MainGui.AddButton("x340 y200 w100 h30", "Save")
 SaveButton.OnEvent('click', SaveSettings)
 
 MainGui.SetFont("s8 cWhite", "Tahoma")
-MainGui.AddText("x1 y250 w448 h20 Right", "- Made by epic - v1.1.1")
+MainGui.AddText("x1 y250 w448 h20 Right", "- Made by epic - " version)
 
 MainGui.Show("w450 h280")
 
@@ -99,8 +100,8 @@ SaveSettings(*) {
 Start(*) {
     global MacroTime := A_TickCount
     KeyboardLayout()
-    PlayerStatus("Starting v1.1.1 VicHopMacro by epic", "0xFFFF00", , false, , false)
-    GetServerIds()
+    PlayerStatus("Starting " version " VicHopMacro by epic", "0xFFFF00", , false, , false)
+    GetServerIds(2)
     OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
@@ -113,8 +114,9 @@ StopMacro(*) {
     ; global ViciousDeaftedCounter
 
     SetTimer(ViciousSpawnLocation, 0)
-    Send "{" WKey " up}{" AKey " up}{" SKey " up}{" Dkey " up}"
+    Send "{" WKey " up}{" AKey " up}{" SKey " up}{" Dkey " up}{F14 up}"
     try Gdip_Shutdown(pToken)
+    nm_endWalk()
     ExitApp()
     ; if (MacroTime >= 3600000 / 6) { ; after 1 hour results are given
     ;     FinalMacroTime := MacroTime

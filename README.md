@@ -38,6 +38,4 @@ My Discord: ``` _epic. ```
 
 [Github Link](https://github.com/epicisgood/VicHopMacro)
 
-Hope the macro is a W for real pay me 1 bee cub right now!! 🤑
-
-Hopefully you dont have a stinger shortage fr.
+Wheres my 50 bee cub at 🤑🤑

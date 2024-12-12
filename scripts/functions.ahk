@@ -12,10 +12,177 @@ HyperSleep(ms) {
     }
 }
 
-nm_Walk(tiles, MoveKey1, MoveKey2 := 0) {
-    Send '{' MoveKey1 ' down}' (MoveKey2 ? '{' MoveKey2 ' down}' : '')
-    Walk(tiles)
-    Send '{' MoveKey1 ' up}' (MoveKey2 ? '{' MoveKey2 ' up}' : '')
+
+nm_KeyVars(){
+    return
+	(
+	'
+    WKey := "' WKey '" ; w
+    AKey := "' AKey '" ; a
+    SKey := "' SKey '" ; s
+    Dkey := "' Dkey '" ; d
+    RotLeft := "' RotLeft '" ; ,
+    RotRight := "' RotRight '" ; .
+    RotUp := "' RotUp '" ; PgUp
+    RotDown := "' RotDown '" ; PgDn
+    ZoomIn := "' ZoomIn '" ; i
+    ZoomOut := "' ZoomOut '" ; o
+    Ekey := "' Ekey '" ; e
+    Rkey := "' Rkey '" ; r
+    Lkey := "' Lkey '" ; l
+    EscKey := "' EscKey '" ; Esc
+    EnterKey := "' EnterKey '" ; Enter
+    SpaceKey := "' SpaceKey '" ; Space
+    SlashKey := "' SlashKey '" ; /
+    '
+	)
+}
+
+nm_Walk(tiles, MoveKey1, MoveKey2:=0){ ; string form of the function which holds MoveKey1 (and optionally MoveKey2) down for 'tiles' tiles, not to be confused with the pure form in nm_createWalk below
+	return
+	(
+	'Send "{' MoveKey1 ' down}' (MoveKey2 ? '{' MoveKey2 ' down}"' : '"') '
+	Walk(' tiles ')
+	Send "{' MoveKey1 ' up}' (MoveKey2 ? '{' MoveKey2 ' up}"' : '"')
+	)
+}
+
+
+nm_createWalk(movement, name:="", vars:="") ; this function generates the 'walk' code and runs it for a given 'movement' (AHK code string), using movespeed correction if 'NewWalk' is enabled and legacy movement otherwise
+{
+	; F13 is used by 'natro_macro.ahk' to tell 'walk' to complete a cycle
+	; F14 is held down by 'walk' to indicate that the cycle is in progress, then released when the cycle is finished
+	; F16 can be used by any script to pause / unpause the walk script, when unpaused it will resume from where it left off
+
+	DetectHiddenWindows 1 ; allow communication with walk script
+    MoveSpeedNum := IniRead("settings.ini", "Settings", "movespeed")
+    
+	script :=
+	(
+	'
+    #SingleInstance Off
+    #NoTrayIcon
+    ProcessSetPriority("AboveNormal")
+    Setkeydelay ' KeyDelay '
+    KeyHistory 0
+    ListLines 0
+    OnExit(ExitFunc)
+
+    #Include "%A_ScriptDir%\lib"
+    #Include "Gdip_All.ahk"
+    #Include "Gdip_ImageSearch.ahk"
+    #Include "Roblox.ahk"
+	
+
+	; #Include Walk.ahk performs most of the initialisation, i.e. creating bitmaps and storing the necessary functions
+	; MoveSpeedNum must contain the exact in-game movespeed without buffs so the script can calculate the true base movespeed
+	
+    pToken := Gdip_Startup()
+    bitmaps := Map()
+    bitmaps.CaseSense := 0
+	
+    #Include "Walk.ahk"
+    movespeed := ' MoveSpeedNum '
+    both            := (Mod(movespeed*1000, 1265) = 0) || (Mod(Round((movespeed+0.005)*1000), 1265) = 0)
+    hasty_guard     := (both || Mod(movespeed*1000, 1100) < 0.00001)
+    gifted_hasty    := (both || Mod(movespeed*1000, 1150) < 0.00001)
+    base_movespeed  := round(movespeed / (both ? 1.265 : (hasty_guard ? 1.1 : (gifted_hasty ? 1.15 : 1))), 0)
+
+
+    
+	'
+
+	'
+	offsetY := ' GetYOffset() '
+
+	' nm_KeyVars() '
+	' vars '
+
+	start()
+	return
+
+	nm_Walk(tiles, MoveKey1, MoveKey2:=0)
+	{
+		Send "{" MoveKey1 " down}" (MoveKey2 ? "{" MoveKey2 " down}" : "")
+		' ('Walk(tiles)') '
+		Send "{" MoveKey1 " up}" (MoveKey2 ? "{" MoveKey2 " up}" : "")
+	}
+
+    HyperSleep(ms) {
+    static freq := (DllCall("QueryPerformanceFrequency", "Int64*", &f := 0), f)
+    DllCall("QueryPerformanceCounter", "Int64*", &begin := 0)
+    current := 0, finish := begin + ms * freq / 1000
+    while (current < finish) {
+        if ((finish - current) > 30000) {
+            DllCall("Winmm.dll\timeBeginPeriod", "UInt", 1)
+            DllCall("Sleep", "UInt", 1)
+            DllCall("Winmm.dll\timeEndPeriod", "UInt", 1)
+        }
+        DllCall("QueryPerformanceCounter", "Int64*", &current)
+        }
+    }
+
+	F13::
+		start(hk?)
+		{
+			Send "{F14 down}"
+			' movement '
+			Send "{F14 up}"
+		}
+
+	F16::
+	{
+		static key_states := Map(Dkey,0, AKey,0, WKey,0, SKey,0, SpaceKey,0)
+		if A_IsPaused
+		{
+			for k,v in key_states
+				if (v = 1)
+					Send "{" k " down}"
+		}
+		else
+		{
+			for k,v in key_states
+			{
+				key_states[k] := GetKeyState(k)
+				Send "{" k " up}"
+			}
+		}
+		Pause -1
+	}
+
+	ExitFunc(*)
+	{
+		Send "{' Dkey ' up}{' AKey ' up}{' WKey ' up}{' SKey ' up}{' SpaceKey ' up}{F14 up}"
+		try Gdip_Shutdown(pToken)
+	}
+	'
+	) ; this is just ahk code, it will be executed as a new script
+
+    shell := ComObject("WScript.Shell")
+    exec := shell.Exec('"' A_AhkPath '" /script /force *')
+    exec.StdIn.Write(script)
+    exec.StdIn.Close()
+
+	if WinWait("ahk_class AutoHotkey ahk_pid " exec.ProcessID, , 2) {
+		DetectHiddenWindows 0
+		currentWalk.pid := exec.ProcessID, currentWalk.name := name
+		return 1
+	}
+	else {
+		DetectHiddenWindows 0
+		return 0
+	}
+}
+
+
+nm_endWalk() ; this function ends the walk script
+{
+	global currentWalk
+	DetectHiddenWindows 1
+	try WinClose "ahk_class AutoHotkey ahk_pid " currentWalk.pid
+	DetectHiddenWindows 0
+	currentWalk.pid := currentWalk.name := ""
+	; if issues, we can check if closed, else kill and force keys up
 }
 
 GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
@@ -39,6 +206,8 @@ GameLoaded() {
     loop 20 {
         ActivateRoblox()
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
+        MouseMove windowX + windowWidth//2, windowY + windowHeight//2
+        Click
         if !GetRobloxClientPos() {
             PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
             Gdip_DisposeImage(pBMScreen)
@@ -71,9 +240,6 @@ GameLoaded() {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("No BSS Found", "0xff0000", ,false, ,false)
             CloseRoblox()
-            global counter += 1
-            if Mod(counter, 3) == 0
-                GetServerIds()
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
@@ -88,8 +254,7 @@ GameLoaded() {
             return 0
         }
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
-        if ((Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 0) || (Gdip_ImageSearch(pBMScreen,
-            bitmaps["science"], , , , , 150, 2) = 1)) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
             ; PlayerStatus("Detected Game Loaded", "0x34495E", ,false, ,false)
             return 1
@@ -125,11 +290,18 @@ StartServerLoop() {
     ; 1 means success at hive
     StartServer() {
         global current_hive
-        send "{" RotRight " 1}"
-        Walk(3)
-        nm_Walk(2, Dkey)
-        nm_Walk(23, WKey)
-        send "{" RotLeft " 1}"
+		movement :=
+		(
+		'Send "{' Dkey ' down}"
+		Walk(4)
+		Send "{' WKey ' down}"
+		Walk(20)
+		Send "{' Dkey ' up}{' WKey ' up}"'
+		)
+		nm_createWalk(movement)
+		KeyWait "F14", "D T5 L"
+		KeyWait "F14", "T20 L"
+		nm_endWalk()
 
         current_hive := FindHiveSlot()
         if (current_hive == 0) {
@@ -140,6 +312,8 @@ StartServerLoop() {
             send "{" Zoomout " 15}"
             return 0
         }
+        GoToRamp()
+
         return 1
     }
 
@@ -157,23 +331,6 @@ StartServerLoop() {
     }
     return 1
 }
-
-NightDetection() {
-    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-    for i, k in ["nightground"] {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
-                Gdip_DisposeImage(pBMScreen)
-                return 1 ; returns 1 night detected
-            }
-        }
-        Gdip_DisposeImage(pBMScreen)
-        return 0
-
-    }
-
-}
-
 ; returns the current hive which is 1-6 or fails with a return 0 if no hives found
 FindHiveSlot() {
 
@@ -214,8 +371,11 @@ FindHiveSlot() {
         return current_hive
     }
     loop 5 {
-        nm_Walk(9, AKey)
-        HyperSleep(500)
+        movement := nm_Walk(9.2, AKey)
+        nm_createWalk(movement)
+        KeyWait "F14", "D T5 L"
+        KeyWait "F14", "T20 L"
+        nm_endWalk()
         current_hive++
         if (ClaimHive(current_hive)) {
             return current_hive
@@ -223,6 +383,24 @@ FindHiveSlot() {
     }
     return 0
 }
+
+
+NightDetection() {
+    pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
+    for i, k in ["nightground"] {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
+                Gdip_DisposeImage(pBMScreen)
+                return 1 ; returns 1 night detected
+            }
+        }
+        Gdip_DisposeImage(pBMScreen)
+        return 0
+
+    }
+
+}
+
 
 ; returns 1 if character successfuly reseted and currently is at red cannon
 ; returns 0 if failed
@@ -237,7 +415,6 @@ ResetCharacterLoop() {
         if (CheckNotHiveSpawn() == 1) {
             Send "{" RotUp " 1}"
             GoToRamp2()
-            RedCannon()
             if (!CheckFireButton()) {
                 return 0
             }
@@ -245,7 +422,6 @@ ResetCharacterLoop() {
             Send "{" RotUp " 1}"
             RotateHiveCorrection()
             GoToRamp()
-            RedCannon()
             if (!CheckFireButton()) {
                 return 0
             }
@@ -319,16 +495,29 @@ RotateHiveCorrection() {
 
 GoToRamp() {
     global current_hive
+    movement :=
+    (
+    '
     nm_Walk(5, Wkey)
-    nm_Walk(9.2 * current_hive - 4, Dkey)
-    PressSpace()
+    nm_Walk(9.2 * ' current_hive ' - 4, Dkey)
+    ' PressSpace() '
     nm_Walk(3, Dkey)
-    HyperSleep(1000)
+    nm_Walk(1,Wkey)
+    nm_Walk(5,Dkey)
+    '
+    )
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T20 L"
+    nm_endWalk()
 
 }
 GoToRamp2() {
+    movement := 
+    (
+    '
     Send "{" Dkey " down}"
-    nm_Walk(24.5, WKey)
+    nm_Walk(25, WKey)
     Walk(10)
     Send "{" Dkey " up}"
     Send "{" SpaceKey " down}"
@@ -337,32 +526,48 @@ GoToRamp2() {
     Send "{" SpaceKey " up}"
     Walk(1)
     Send "{" Dkey " up}"
-    HyperSleep(1000)
+    nm_Walk(1,Wkey)
+    nm_Walk(5,Dkey)
+    '
+    )
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T20 L"
+    nm_endWalk()
 }
 
-RedCannon() {
-    Send "{" WKey " down}"
-    Walk(1)
-    Send "{" WKey " up}"
 
-    Send "{" Dkey " down}"
-    Walk(5)
-    Send "{" Dkey " up}"
-
-}
 
 glider() {
-    loop 2 {
+    return 
+    (
+        '
         Send "{" SpaceKey " down}"
-        HyperSleep(250)
+        HyperSleep(100)
         Send "{" SpaceKey " up}"
-    }
+        HyperSleep(100)
+
+        Send "{" SpaceKey " down}"
+        HyperSleep(100)
+        Send "{" SpaceKey " up}"
+        HyperSleep(100)
+
+        Send "{" SpaceKey " down}"
+        HyperSleep(100)
+        Send "{" SpaceKey " up}"
+    '
+    )
 }
 
 PressSpace() {
+    return 
+    (
+        '
     Send "{" SpaceKey " down}"
     HyperSleep(100)
     Send "{" SpaceKey " up}"
+    '
+    )
 }
 
 CheckFireButton() {
@@ -456,8 +661,8 @@ AttackVic(feild := '') {
 
     while (!TadaViciousDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > 240000 || ViciousLeft == true) { ;; 13 min to kill vicious bee
-            PlayerStatus("Timeout exceeded: Too long to kill vicious bee", "0x000000", , false)
+        if (ElapsedTime > 90000 || ViciousLeft == true) { ;; 1m 30s to kill vicious bee
+            PlayerStatus("Took too long to kill vicious bee.", "0x000000", , false)
             return 2
         }
         if (Dead == true) {
@@ -465,82 +670,81 @@ AttackVic(feild := '') {
         }
 
         if (feild == "mountain" && currentMinute <= 14) {
-            PlayerDied()
-            Send "{" Dkey " down}"
+            movement :=
+            (
+            'Send "{" Dkey " down}"
             Walk(15)
             Send "{" Dkey " up}"
-            PlayerDied()
             loop 5 {
-                PlayerDied()
                 Send "{" SKey " down}"
                 Walk(4)
-                PlayerDied()
                 Send "{" SKey " up}"
             }
             Send "{" AKey " down}"
             Walk(4)
-            PlayerDied()
             Send "{" AKey " up}"
-            PlayerDied()
             loop 5 {
                 Send "{" WKey " down}"
-                PlayerDied()
                 Walk(4)
                 Send "{" WKey " up}"
-            }
+            }'
+            )
 
         } else {
+            movement := 
+            (
+            '
             loop 2 {
-                PlayerDied()
                 Send "{" WKey " down}"
                 Walk(4)
-                PlayerDied()
                 Send "{" WKey " up}"
                 Walk(5)
             }
             loop 2 {
-                PlayerDied()
                 Send "{" AKey " down}"
                 Walk(4)
-                PlayerDied()
                 Send "{" AKey " up}"
                 Walk(5)
             }
             loop 2 {
-                PlayerDied()
                 Send "{" SKey " down}"
                 Walk(4)
-                PlayerDied()
                 Send "{" SKey " up}"
                 Walk(5)
             }
             loop 2 {
-                PlayerDied()
                 Send "{" Dkey " down}"
                 Walk(4)
-                PlayerDied()
                 Send "{" Dkey " up}"
                 Walk(5)
             }
+            '
+        )
         }
+        nm_createWalk(movement)
+        SetTimer(CheckPlayerDied, 500)
+        KeyWait "F14", "D T5 L"
+        KeyWait "F14", "T20 L"
+        nm_endWalk()
+        SetTimer(CheckPlayerDied, 0)
     }
 
-    PlayerStatus("Vicious bee has been defeated!", "0x71368A", ,false)
     ; global ViciousDeaftedCounter += 1
-
     Sleep(5000)
+    PlayerStatus("Vicious bee has been defeated!", "0x71368A", ,false)
 
 
     return 1
 }
 
-PlayerDied() {
+CheckPlayerDied() {
     global Dead
     global ViciousLeft
     pBMScreen := GetpBMScreen()
     if (Gdip_ImageSearch(pBMScreen, bitmaps["YouDied"], , , , , , 2)) {
         Dead := true
         PlayerStatus("Died during battle: What an embarrassment", "0x2C3E50", , false)
+        nm_endWalk()
         Gdip_DisposeImage(pBMScreen)
         return 1
     }
@@ -551,6 +755,7 @@ PlayerDied() {
     if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)) {
         ViciousLeft := true
         PlayerStatus("Vicious bee left sadly...", "0x4f2663", , false)
+        nm_endWalk()
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
@@ -574,8 +779,8 @@ TadaViciousDefeated() {
 global ViciousFeild := 0
 ViciousSpawnLocation() {
     global ViciousFeild
+    Send "{" SlashKey "}" "{" EnterKey "}"
     pBMScreen := GetpBMScreen(windowX + windowWidth - 700, windowY, 700, 250)
-
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 5)) {
         Gdip_DisposeImage(pBMScreen)
         return 0
@@ -588,12 +793,10 @@ ViciousSpawnLocation() {
             global ViciousFeild := feild
             if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 5)){
                 PlayerStatus(ViciousFeild " Gifted Vicious Was detected!", "0x7004eb")
-                SetTimer(ViciousSpawnLocation, 0)
                 Gdip_DisposeImage(pBMScreen)
                 return feild
             }
             PlayerStatus(ViciousFeild " Vicious Was detected!", "0x213fc4")
-            SetTimer(ViciousSpawnLocation, 0)
             Gdip_DisposeImage(pBMScreen)
             return feild
         }
@@ -604,6 +807,8 @@ ViciousSpawnLocation() {
 
 ; returns 1 if we need to break out of loop
 VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to reset
+    ViciousSpawnLocation()
+    sleep 500
     if (ViciousFeild == 0)
         return 0
     if (feild == "none" && ViciousFeild == "pepper")
@@ -639,9 +844,9 @@ VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to re
                 Clover()
         }
         
-        if (AttackVicLoop(ViciousFeild)) {
-            return 1
-        }
+        AttackVicLoop(ViciousFeild)
+        return 1
+        
     }
 }
 

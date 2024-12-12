@@ -1,5 +1,4 @@
 global serverIds := []
-global errorMessage := ""
 joinrandomserver() {
     global serverIds
     if (serverIds.Length > 1) {
@@ -7,38 +6,52 @@ joinrandomserver() {
         run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'
 
     } else {
-        global errorMessage
-        PlayerStatus("Error in roblox API [ Code: " errorMessage.errors[1].code ", Message: " errorMessage.errors[1].message " ]",
-            0, , , , false)
-        Sleep 5000
+        GetServerIds()
     }
 
 }
-GetServerIds() {
-    try {
+GetServerIds(amount := 8) {
+    
         global serverIds := []
         cursor := ""
-
-        loop 2 {
-            url := "https://games.roblox.com/v1/games/1537690962/servers/0?sortOrder=1&excludeFullGames=true&limit=100" (
-                cursor ? "&cursor=" cursor : "")
-            req := ComObject("WinHttp.WinHttpRequest.5.1")
-            req.open("GET", url, true)
-            req.send()
-            req.WaitForResponse()
-
-            response := JSON.parse(req.responsetext, true, false)
-
+        ratelimit := 90000
+        loop amount {
+            try {
+                url := "https://games.roblox.com/v1/games/1537690962/servers/0?sortOrder=1&excludeFullGames=true&limit=100" (
+                    cursor ? "&cursor=" cursor : "")
+                req := ComObject("WinHttp.WinHttpRequest.5.1")
+                req.open("GET", url, true)
+                req.send()
+                req.WaitForResponse()
+                response := JSON.parse(req.responsetext, true, false)
+            } catch Error as e {
+                return
+            }
+            try {
+                if (response.errors[1].message == "Too many requests"){
+                    PlayerStatus("Error in roblox API [ Code: " response.errors[1].code ", Message: " response.errors[1].message " ]",
+                    0, ,false , , false)
+                    response := JSON.parse(req.responsetext, true, false)
+                    Sleep ratelimit
+                    ratelimit += 30000
+                    continue
+                }
+                PlayerStatus("Error in roblox API [ Code: " response.errors[1].code ", Message: " response.errors[1].message " ]",
+                0, , , , false)
+                return
+            } catch Error as e {
+                ratelimit := 90000
+                ; this is kinda stupid tbh idk if theres a better way to handle errors like this
+            }
+        
             cursor := response.nextPageCursor
             data := response.data
             for server in data {
                 serverIds.push(server.id)
+                if (server.playing == 3){
+                    return
+                }
             }
-        }
-    } catch Error {
-        response := JSON.parse(req.responsetext, true, false)
-        global errorMessage := response
-        return
-    }
 
+        }
 }
