@@ -1,15 +1,14 @@
-#Requires AutoHotkey v2.0
 ; This is all for beesmas 2024 will remain here incase this macro will be used again in "next" beesmas if it ever happens lol!
-
+; it did happen wow 12/17/2024 
 nowUnix() {
     return DateDiff(A_NowUTC, "19700101000000", "Seconds")
 }
 
-global LastStockings := nowUnix()
-global LastFeast := nowUnix()
-global LastCandles := nowUnix()
-global LastSamovar := nowUnix()
-global LastLidArt := nowUnix()
+LastStockings := nowUnix()
+LastFeast := nowUnix()
+LastCandles := nowUnix()
+LastSamovar := nowUnix()
+LastLidArt := nowUnix()
 
 BeesmasChecker() {
     global LastStockings, LastFeast, LastCandles, LastSamovar, LastLidArt

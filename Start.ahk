@@ -43,6 +43,8 @@ SlashKey := "sc035" ; /
 #Include roblox.ahk
 #Include walk.ahk
 
+#Include %A_ScriptDir%\images\
+#include bitmaps.ahk
 #include %A_ScriptDir%\scripts\
 
 #Include functions.ahk
@@ -52,35 +54,35 @@ SlashKey := "sc035" ; /
 #Include timers.ahk
 #Include webhook.ahk
 
-#Include %A_ScriptDir%\images\bitmaps.ahk
 
-global ServerAttempts := 1 ; used for joinserver function to Clear ServerIds()
-global NightSearchAttempts := 0 ; just for the webhook timer nothing else prob could be merged into 1 var but ya
 
 ; Total Report Varaibles maybe used for the future idk
 ; global ServerJoinCounter := 0
 ; global NightServersCounter := 0
 ; global ViciousDeaftedCounter := 0
 ; global MacroTime := A_TickCount
+ServerAttempts := 1 ; used for joinserver function to Clear ServerIds()
+NightSearchAttempts := 0 ; just for the webhook timer nothing else prob could be merged into 1 var but ya
 
 MainLoop() {
+    global ServerAttempts, NightSearchAttempts
     while (JoinServer() == 2) {
         HyperSleep(350)
     }
     if (NightDetection() == 1) {
         ; global NightServersCounter += 1
         ; global ServerJoinCounter += 1
-        global ServerAttempts := 1
-        global NightSearchAttempts := 0
+        ServerAttempts := 1
+        NightSearchAttempts := 0
         PlayerStatus("Night Detected!!", "0x000000", , false)
         Send "{" Zoomout " 15}"
-        global ViciousFeild := 0
+        global Viciousfield := 0
         if (!StartServerLoop()) {
             return
         }
     } else {
-        global ServerAttempts += 1
-        global NightSearchAttempts += 1
+        ServerAttempts += 1
+        NightSearchAttempts += 1
         ; global ServerJoinCounter += 1
         PlayerStatus("Searching For Night Servers. " NightSearchAttempts "x", "0x1ABC9C", , false, , false)
         return
@@ -136,15 +138,15 @@ MainLoop() {
     PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
 
-    ; BeesmasInterupt()
+    BeesmasInterupt()
 
 }
 
 JoinServer() {
-    loadroblox()
     global ServerAttempts
+    loadroblox()
     if (Mod(ServerAttempts, 20) == 0) {
-        global ServerAttempts := 1
+        ServerAttempts := 1
         CloseRoblox()
         GetServerIds()
         HyperSleep(2000)
@@ -172,8 +174,8 @@ loadroblox() {
         }
         ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)    }
         if (A_Index = 15) {
-            PlayerStatus("No Roblox Found", "0xc500ec", , false, , false)
-            GetServerIds()
+            PlayerStatus("No Roblox Found", "0xc500ec", , false, , false) ; change to false later
+            try WinClose "Bloxstrap" ; for any bloxstrap users to prevent any errors including "waiting for other intances"
             return
         }
         Sleep 1000
@@ -181,5 +183,7 @@ loadroblox() {
 }
 
 F3::{
-
+    if (VicSpawnedDetection("pepper")) {
+        return
+    }
 }

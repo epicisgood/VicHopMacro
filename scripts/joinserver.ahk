@@ -1,10 +1,9 @@
-global serverIds := []
+serverIds := []
 joinrandomserver() {
     global serverIds
     if (serverIds.Length > 1) {
         global RandomServer := serverIds[Random(1, serverIds.Length)]
-        run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'
-
+        run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'        
     } else {
         GetServerIds()
     }
@@ -14,7 +13,7 @@ GetServerIds(amount := 8) {
     
         global serverIds := []
         cursor := ""
-        ratelimit := 90000
+        ratelimit := 45000
         loop amount {
             try {
                 url := "https://games.roblox.com/v1/games/1537690962/servers/0?sortOrder=1&excludeFullGames=true&limit=100" (
@@ -29,18 +28,18 @@ GetServerIds(amount := 8) {
             }
             try {
                 if (response.errors[1].message == "Too many requests"){
-                    PlayerStatus("Error in roblox API [ Code: " response.errors[1].code ", Message: " response.errors[1].message " ]",
+                    PlayerStatus("Waiting for " ratelimit/1000 " seconds. Requests: {" A_Index "/" amount "}",
                     0, ,false , , false)
                     response := JSON.parse(req.responsetext, true, false)
                     Sleep ratelimit
-                    ratelimit += 30000
+                    ratelimit *= 1.3
                     continue
                 }
                 PlayerStatus("Error in roblox API [ Code: " response.errors[1].code ", Message: " response.errors[1].message " ]",
                 0, , , , false)
                 return
             } catch Error as e {
-                ratelimit := 90000
+                ratelimit := 45000
                 ; this is kinda stupid tbh idk if theres a better way to handle errors like this
             }
         

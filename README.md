@@ -38,4 +38,5 @@ My Discord: ``` _epic. ```
 
 [Github Link](https://github.com/epicisgood/VicHopMacro)
 
-Wheres my 50 bee cub at 🤑🤑
+Beesmas is crazy did not expect it tbh
+LF rubber duckies 🤑🤑🤑

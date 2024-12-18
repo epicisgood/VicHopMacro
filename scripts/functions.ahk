@@ -200,8 +200,6 @@ GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
 }
 global counter := 0 
 GameLoaded() {
-
-
     ;STAGE 2 - wait for loading screen (or loaded game)
     loop 20 {
         ActivateRoblox()
@@ -384,20 +382,34 @@ FindHiveSlot() {
     return 0
 }
 
+; NOT beesmas detection.
+; NightDetection() {
+;     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
+;     for i, k in ["nightground"] {
+;         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+;             if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
+;                 Gdip_DisposeImage(pBMScreen)
+;                 return 1 ; returns 1 night detected
+;             }
+;         }
+;         Gdip_DisposeImage(pBMScreen)
+;         return 0
 
+;     }
+
+; }
+
+;Beesmas function
 NightDetection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-    for i, k in ["nightground"] {
+    for i, k in ["nightground", "nightground2"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
-                Gdip_DisposeImage(pBMScreen)
-                return 1 ; returns 1 night detected
-            }
+            Gdip_DisposeImage(pBMScreen)
+            return 1 ; returns 1
         }
-        Gdip_DisposeImage(pBMScreen)
-        return 0
-
     }
+    Gdip_DisposeImage(pBMScreen)
+    return 0
 
 }
 
@@ -464,8 +476,7 @@ CheckNotHiveSpawn() {
     HyperSleep(300)
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + windowHeight - 125, 400, 125)
 
-    for i, k in ["NotHiveSpawn", "NotHiveSpawnNight"
-    ] {
+    for i, k in ["NotHiveSpawn", "NotHiveSpawnNight"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             return 1
@@ -480,7 +491,7 @@ CheckNotHiveSpawn() {
 RotateHiveCorrection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
 
-    for i, k in ["nightground", "ground", "NightTransitionGround", "ground2"] {
+    for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 10) = 1) {
             Gdip_DisposeImage(pBMScreen)
             return 1
@@ -526,8 +537,8 @@ GoToRamp2() {
     Send "{" SpaceKey " up}"
     Walk(1)
     Send "{" Dkey " up}"
-    nm_Walk(1,Wkey)
-    nm_Walk(5,Dkey)
+    nm_Walk(2,Wkey)
+    nm_Walk(8,Dkey)
     '
     )
     nm_createWalk(movement)
@@ -596,13 +607,13 @@ CheckFireButton() {
 ;     return 0
 ; }
 
-; Feild is where player where go to fight vicious bee again
-AttackVicLoop(feild) {
-    if (feild == "rose" || feild == "spider") {
+; field is where player where go to fight vicious bee again
+AttackVicLoop(field) {
+    if (field == "rose" || field == "spider") {
         Send "{" RotRight " 4}"
     }
     
-    if (feild == 'mountain') {
+    if (field == 'mountain') {
         if (AttackVic("mountain") == 0) {
             if !ResetCharacterLoop()
                 return 1
@@ -611,7 +622,7 @@ AttackVicLoop(feild) {
         }
         return 1
     } else if (AttackVic() == 0) {
-        switch feild {
+        switch field {
             case "pepper":
                 if !ResetCharacterLoop()
                     return 1
@@ -650,7 +661,7 @@ ViciousLeft := false
 ; returns 2 if timeout reached or vic bee left for some reason
 ; returns 1 if vicious bee killed
 ; returns 0 if player died
-AttackVic(feild := '') {
+AttackVic(field := '') {
     PlayerStatus("Attacking: Vicious Bee!", "0xe67e22", , false, , false)
     StartTime := 0
     StartTime := A_TickCount
@@ -669,7 +680,7 @@ AttackVic(feild := '') {
             return 0
         }
 
-        if (feild == "mountain" && currentMinute <= 14) {
+        if (field == "mountain" && currentMinute <= 14) {
             movement :=
             (
             'Send "{" Dkey " down}"
@@ -776,9 +787,9 @@ TadaViciousDefeated() {
     return 0
 
 }
-global ViciousFeild := 0
+global Viciousfield := 0
 ViciousSpawnLocation() {
-    global ViciousFeild
+    global Viciousfield
     Send "{" SlashKey "}" "{" EnterKey "}"
     pBMScreen := GetpBMScreen(windowX + windowWidth - 700, windowY, 700, 250)
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 5)) {
@@ -787,18 +798,18 @@ ViciousSpawnLocation() {
     }
 
     VicSpawned := ["pepper","pepper2", "mountain", "mountain2", "cactus", "cactus2", "rose", "rose2", "spider","spider2", "clover", "clover2"]
-    for i, feild in VicSpawned {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][feild], , , , , , 5)) {
-            feild := StrReplace(feild, "2")
-            global ViciousFeild := feild
+    for i, field in VicSpawned {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 5)) {
+            field := StrReplace(field, "2")
+            global Viciousfield := field
             if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 5)){
-                PlayerStatus(ViciousFeild " Gifted Vicious Was detected!", "0x7004eb")
+                PlayerStatus(Viciousfield " Gifted Vicious Was detected!", "0x7004eb")
                 Gdip_DisposeImage(pBMScreen)
-                return feild
+                return field
             }
-            PlayerStatus(ViciousFeild " Vicious Was detected!", "0x213fc4")
+            PlayerStatus(Viciousfield " Vicious Was detected!", "0x213fc4")
             Gdip_DisposeImage(pBMScreen)
-            return feild
+            return field
         }
     }
     Gdip_DisposeImage(pBMScreen)
@@ -806,12 +817,12 @@ ViciousSpawnLocation() {
 }
 
 ; returns 1 if we need to break out of loop
-VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to reset
+VicSpawnedDetection(field, reset := true) { ; if we at cannon we dont need to reset
     ViciousSpawnLocation()
     sleep 500
-    if (ViciousFeild == 0)
+    if (Viciousfield == 0)
         return 0
-    if (feild == "none" && ViciousFeild == "pepper")
+    if (field == "none" && Viciousfield == "pepper")
         return 0
     pBMScreen := GetpBMScreen(windowWidth - 400, windowHeight - 125, 400, 125)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)){
@@ -820,16 +831,16 @@ VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to re
         return 1
     }
     Gdip_DisposeImage(pBMScreen)
-    if (ViciousFeild == feild) {
-        AttackVicLoop(ViciousFeild)
+    if (Viciousfield == field) {
+        AttackVicLoop(Viciousfield)
         return 1
     } else {
-        PlayerStatus("Going to " ViciousFeild "!", "0x213fc4", , false)
+        PlayerStatus("Going to " Viciousfield "!", "0x213fc4", , false)
         if (reset == true){
             if !ResetCharacterLoop()
                 return 1
         }
-        switch ViciousFeild {
+        switch Viciousfield {
             case "pepper":
                 PepperPatch()
             case "mountain":
@@ -844,7 +855,7 @@ VicSpawnedDetection(feild, reset := true) { ; if we at cannon we dont need to re
                 Clover()
         }
         
-        AttackVicLoop(ViciousFeild)
+        AttackVicLoop(Viciousfield)
         return 1
         
     }
