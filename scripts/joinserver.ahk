@@ -2,7 +2,8 @@ serverIds := []
 joinrandomserver() {
     global serverIds
     if (serverIds.Length > 1) {
-        global RandomServer := serverIds[Random(1, serverIds.Length)]
+        global RandomServer := serverIds.RemoveAt(Random(1, serverIds.Length))
+        ; PlayerStatus("GameinstanceID = " RandomServer, "0x1F8B4C", , false, , false)
         run '"roblox://placeId=1537690962&gameInstanceId=' RandomServer '"'        
     } else {
         GetServerIds()

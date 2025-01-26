@@ -200,14 +200,17 @@ GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
 }
 global counter := 0 
 GameLoaded() {
+    global BSSLoadTime
     ;STAGE 2 - wait for loading screen (or loaded game)
-    loop 20 {
+    loop BSSLoadTime {
         ActivateRoblox()
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
-        MouseMove windowX + windowWidth//2, windowY + windowHeight//2
-        Click
+        MouseMove windowX + windowWidth//4, windowY + windowHeight//4
+        if Mod(A_Index, BSSLoadTime // 2){
+            Click
+        }
         if !GetRobloxClientPos() {
-            PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
+            PlayerStatus("Disconnected from roblox", "0xfa7900", ,false, ,false)
             Gdip_DisposeImage(pBMScreen)
             return 0
         }
@@ -224,18 +227,33 @@ GameLoaded() {
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
-            PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
+            PlayerStatus("Disconnected join error", "0xfa7900", ,false, ,false)
             CloseRoblox()
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 2) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 3) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
             CloseRoblox()
             return 0
         }
-        if (A_Index = 20) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 3) = 1) {
             Gdip_DisposeImage(pBMScreen)
+            PlayerStatus("Experience is full", "0x61f8f8", ,false, ,false)
+            CloseRoblox()
+            return 0
+        }
+        if (A_Index = BSSLoadTime) {
+            Gdip_DisposeImage(pBMScreen)
+            global counter
+            counter++
+            if (Mod(counter, 4) == 0) {
+                PlayerStatus("Killing roblox", "0xae00ff", ,false)
+                try WinKill("Roblox")
+                sleep 2000
+                GetServerIds(3)
+                return 0
+            }
             PlayerStatus("No BSS Found", "0xff0000", ,false, ,false)
             CloseRoblox()
             return 0
@@ -243,12 +261,13 @@ GameLoaded() {
         Gdip_DisposeImage(pBMScreen)
         Sleep 1000 ; timeout 20s 
     }
-
+    global counter := 0
+    
     ;STAGE 3 - wait for loaded game
-    loop 120 {
+    loop 90 {
         ActivateRoblox()
         if !GetRobloxClientPos() {
-            PlayerStatus("Disconnected during Reconnect", "0xfa7900", ,false, ,false)
+            PlayerStatus("Disconnected from roblox", "0xfa7900", ,false, ,false)
             return 0
         }
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
@@ -259,18 +278,12 @@ GameLoaded() {
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
-            PlayerStatus("Disconnected or joined diff game", "0xfa7900", ,false, ,false)
-            CloseRoblox()
-            return 0
-        }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 2) = 1) {
-            Gdip_DisposeImage(pBMScreen)
-            PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
+            PlayerStatus("Disconnected or joined different game error", "0xfa7900", ,false, ,false)
             CloseRoblox()
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
-        if (A_Index = 120) {
+        if (A_Index = 90) {
             PlayerStatus("BSS Load Timeout", "0xff0000", ,false, ,false)
             return 0
         }
@@ -612,7 +625,10 @@ AttackVicLoop(field) {
     if (field == "rose" || field == "spider") {
         Send "{" RotRight " 4}"
     }
-    
+    if (field == "pepper"){
+        Send "{" RotLeft " 2}"
+
+    }
     if (field == 'mountain') {
         if (AttackVic("mountain") == 0) {
             if !ResetCharacterLoop()

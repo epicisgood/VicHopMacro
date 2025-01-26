@@ -1,15 +1,17 @@
 # information
 Bee swarm macro without searchers or passive alts. Only the main account server hops to find vicious bees.
 
-**performance stats** settings should also be turned **OFF** if you have it enabled
+**Performance stats** settings should also be turned **OFF** if you have it enabled and have the roblox chat enabled 
 
+Resolution of 1920x1080 or lower with 100% scale is the best resolution for the macro, any lower is fine aswell but the macro will not function properly on higher resolutions. 
+ 
 ## Prerequisites
 
-Before you can use this macro, ensure you have the following software installed on your computer:
+Before you can use this macro, ensure you have installed AutoHotKey V2.0 on your computer:
 
 1. **AutoHotkey**: 
-   - Download and install from [AutoHotkey official website](https://www.autohotkey.com/download/ahk-v2.exe).
-   - This is needed to run the macro 
+
+   - Download and install [AutoHotkey](https://www.autohotkey.com/download/ahk-v2.exe) (https://www.autohotkey.com/).
 
 
 

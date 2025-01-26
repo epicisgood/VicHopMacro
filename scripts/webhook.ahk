@@ -52,7 +52,7 @@ PlayerStatus(statusTitle, statusColor, statusDescription := "", Mentions := True
         webhook.SetRequestHeader("Content-Type", hdr_ContentType)
         webhook.Send(postdata)
         webhook.WaitForResponse()
-
+        
         FileExist("ss.jpg") ? FileDelete("ss.jpg") : ""
     } catch Error as e {
         return

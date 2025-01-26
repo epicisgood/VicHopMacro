@@ -1,6 +1,6 @@
 #Requires AutoHotkey v2.0
 
-version := "v1.1.3"
+version := "v1.1.4"
 if (!FileExist("settings.ini")) {
     IniWrite("Insert Url", "settings.ini", "Settings", "url")
     IniWrite("Insert UserId", "settings.ini", "Settings", "discordID")
@@ -100,7 +100,6 @@ SaveSettings(*) {
 }
 
 Start(*) {
-    global MacroTime := A_TickCount
     KeyboardLayout()
     PlayerStatus("Starting " version " VicHopMacro by epic", "0xFFFF00", , false, , false)
     GetServerIds(2)
@@ -110,26 +109,11 @@ Start(*) {
     }
 }
 StopMacro(*) {
-    ; global MacroTime := A_TickCount - MacroTime ; ms
-    ; global ServerJoinCounter
-    ; global NightServersCounter
-    ; global ViciousDeaftedCounter
-
     SetTimer(ViciousSpawnLocation, 0)
     Send "{" WKey " up}{" AKey " up}{" SKey " up}{" Dkey " up}{F14 up}"
     try Gdip_Shutdown(pToken)
     nm_endWalk()
     ExitApp()
-    ; if (MacroTime >= 3600000 / 6) { ; after 1 hour results are given
-    ;     FinalMacroTime := MacroTime
-    ;     hourly := 0
-    ;     while MacroTime >= 3600000 {
-    ;         MacroTime -= 3600000
-    ;         global hourly += 1
-    ;     }
-        ; PlayerStatus("VicHopMacro Results:\n\nMacro time: " FinalMacroTime "\nJoined servers: " ServerJoinCounter "\nNight servers joined: " NightServersCounter "\nVicious Defeated: " ViciousDeaftedCounter "\n\nAverage Night Servers: " Round(
-            ; ServerJoinCounter / NightServersCounter) "\nHourly Vicious Defeated: " Round(ViciousDeaftedCounter / hourly
-        ; ), "0x00aeff", , false, , false)
     
 }
 

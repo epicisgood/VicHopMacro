@@ -2,8 +2,14 @@
 #SingleInstance Force
 #Warn VarUnset, Off
 SetWorkingDir A_ScriptDir
-
 KeyDelay := 40
+
+
+; Default RobloxLoadTime = 20, BSSLoadTime = 20
+; How many seconds to open Roblox (i would not lower this)
+RobloxLoadTime := 20 
+; How many seconds from roblox to inside bee swarm (blue loading screen)
+BSSLoadTime := 20 
 
 Setkeydelay KeyDelay
 
@@ -56,11 +62,6 @@ SlashKey := "sc035" ; /
 
 
 
-; Total Report Varaibles maybe used for the future idk
-; global ServerJoinCounter := 0
-; global NightServersCounter := 0
-; global ViciousDeaftedCounter := 0
-; global MacroTime := A_TickCount
 ServerAttempts := 1 ; used for joinserver function to Clear ServerIds()
 NightSearchAttempts := 0 ; just for the webhook timer nothing else prob could be merged into 1 var but ya
 
@@ -70,8 +71,6 @@ MainLoop() {
         HyperSleep(350)
     }
     if (NightDetection() == 1) {
-        ; global NightServersCounter += 1
-        ; global ServerJoinCounter += 1
         ServerAttempts := 1
         NightSearchAttempts := 0
         PlayerStatus("Night Detected!!", "0x000000", , false)
@@ -83,7 +82,6 @@ MainLoop() {
     } else {
         ServerAttempts += 1
         NightSearchAttempts += 1
-        ; global ServerJoinCounter += 1
         PlayerStatus("Searching For Night Servers. " NightSearchAttempts "x", "0x1ABC9C", , false, , false)
         return
     }
@@ -137,18 +135,27 @@ MainLoop() {
     }
     PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
-
     BeesmasInterupt()
+
+    ClearRoblox()
 
 }
 
+
 JoinServer() {
     global ServerAttempts
+    ProccesCounter := 1
+    for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
+        ProccesCounter++
+    if (Mod(ProccesCounter, 6) == 0) {
+        ClearRoblox()
+        sleep 1000
+    }
     loadroblox()
     if (Mod(ServerAttempts, 20) == 0) {
         ServerAttempts := 1
-        CloseRoblox()
         GetServerIds()
+        CloseRoblox()
         HyperSleep(2000)
     } else {
         SetKeyDelay 250
@@ -166,24 +173,53 @@ JoinServer() {
     }
 }
 loadroblox() {
+    global RobloxLoadTime
     joinrandomserver()
-    loop 15 {
+    loop RobloxLoadTime {
         if GetRobloxHWND() {
             ActivateRoblox()
             return
         }
         ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)    }
-        if (A_Index = 15) {
-            PlayerStatus("No Roblox Found", "0xc500ec", , false, , false) ; change to false later
-            try WinClose "Bloxstrap" ; for any bloxstrap users to prevent any errors including "waiting for other intances"
+        if (A_Index = RobloxLoadTime) {
+            PlayerStatus("No Roblox Found", "0xc500ec", , false, , true) ; change to false later
+            if (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe")){
+
+                PlayerStatus("Installing roblox updates..", "0x2f00ff", ,false)
+                while (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe")){
+                    Sleep 1000
+                }
+                PlayerStatus("Finished roblox updates..", "0x2f00ff", ,false)
+            }
+            ClearRoblox()
+            sleep 5000
             return
         }
         Sleep 1000
     }
 }
+ElevateScript() {
+	try
+		file := FileOpen("scripts\functions.ahk", "a")
+	catch {
+		if (!A_IsAdmin || !(DllCall("GetCommandLine","Str") ~= " /restart(?!\S)"))
+			Try RunWait '*RunAs "' A_AhkPath '" /script /restart "' A_ScriptFullPath '"'
+		if !A_IsAdmin {
+			MsgBox "You must run VichopMacro as administrator in this folder!`nIf you don't want to do this, move the macro to a different folder (e.g. Downloads, Desktop)", "Error", 0x40010
+			ExitApp
+		}
+		; elevated but still can't write, read-only directory?
+		MsgBox "You cannot run VichopMacro in this folder!`nTry moving the macro to a different folder (e.g. Downloads, Desktop)", "Error", 0x40010
+    }
+}
+ElevateScript()
+
 
 F3::{
-    if (VicSpawnedDetection("pepper")) {
-        return
-    }
+    ; stockings()
+    ; feast()
+    ; LidArt()
+    ; fix below still
+    Candles()
+    ; Samovar()
 }

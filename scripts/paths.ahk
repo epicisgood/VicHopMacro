@@ -491,16 +491,18 @@ feast() {
         walk(5)
         Send "{" SKey " up}"
         Send "{" AKey " down}"
-        Walk(2)
+        Walk(3.5)
         Send "{" AKey " up}"
+
         ;; Claim Feist
         Send "{" EKey " 1}"
         HyperSleep(6000)
         ;; landed
-        nm_walk(1,Skey)
-        nm_walk(1,Akey)
-        nm_walk(3,Wkey,Akey)
-        nm_walk(3,Wkey,Dkey)
+        Send "{" RotLeft " 2}"
+        nm_walk(2,Skey)
+        nm_walk(2,Akey,Skey)
+        nm_walk(3.5,Wkey,Akey)
+        nm_walk(3.5,Wkey,Dkey)
         nm_walk(3,Dkey,Skey)
         nm_walk(3,Akey,Skey)
         HyperSleep(1000)
@@ -537,9 +539,12 @@ stockings() {
     Walk(26)
     Send "{" Dkey " up}"
 
-    Send "{" SKey " down}"
-    Walk(5)
-    Send "{" SKey " up}"
+    nm_walk(4, Skey)
+
+    nm_walk(5, Wkey)
+    nm_walk(4, Akey)
+    nm_walk(4, Skey)
+
 
     Send "{" Dkey " down}"
     Walk(6)
@@ -550,7 +555,7 @@ stockings() {
     Send "{" EKey " up}"
 
     Send "{" WKey " down}"
-    Walk(3)
+    Walk(1.5)
     Send "{" WKey " up}"
 
     Send "{" AKey " down}"
@@ -562,7 +567,7 @@ stockings() {
     HyperSleep(500)
 
     Send "{" Dkey " down}"
-    Walk(6)
+    Walk(7)
     Send "{" Dkey " up}"
 
     Send "{" SKey " down}"
@@ -671,11 +676,11 @@ LidArt() {
         Send "{" AKey " up}"
     
         Send "{" Dkey " down}"
-        Walk(5)
+        Walk(4.5)
         Send "{" Dkey " up}"
     
         Send "{" WKey " down}"
-        loop 7 {
+        loop 5 {
             Walk(2)
             ' glider() '
             Walk(2)
@@ -683,16 +688,25 @@ LidArt() {
         Walk(10)
         Send "{" WKey " up}"
     
-        Send "{" SKey " down}"
-        Walk(7)
-        Send "{" SKey " up}"
-    
+        nm_walk(15,Wkey)
+
+        Send "{" SpaceKey " down}"
+        HyperSleep(200)
+        Send "{" SpaceKey " up}"
+        hypersleep(300)
+        Send "{" Wkey " down}"
+        Hypersleep(300)
+        Send "{" Wkey " up}"
+        Hypersleep(1000)
+
+        MsgBox("hi")
         Send "{" EKey " down}"
         HyperSleep(100)
         Send "{" EKey " up}"
     
         HyperSleep(4000)
     
+        nm_walk(2,Wkey)
         Send "{" SKey " down}"
         Send "{" DKey " down}"
         Walk(1.7)
