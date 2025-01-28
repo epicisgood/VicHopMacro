@@ -699,7 +699,6 @@ LidArt() {
         Send "{" Wkey " up}"
         Hypersleep(1000)
 
-        MsgBox("hi")
         Send "{" EKey " down}"
         HyperSleep(100)
         Send "{" EKey " up}"

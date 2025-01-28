@@ -214,12 +214,3 @@ ElevateScript() {
 }
 ElevateScript()
 
-
-F3::{
-    ; stockings()
-    ; feast()
-    ; LidArt()
-    ; fix below still
-    Candles()
-    ; Samovar()
-}
