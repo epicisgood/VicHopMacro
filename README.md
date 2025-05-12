@@ -45,7 +45,7 @@ Roblox sometimes throws you in a different game besides BSS for some reason whic
 
 - "Unknown status" or other join errors.
 
-Seems to be a roblox api issue, using a vpn may help solve this issue.
+Seems to be a roblox api issue, using a vpn may help solve this issue if frequent enough.
 
 - Why does the macro skip over spider and clover?
 
