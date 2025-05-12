@@ -165,8 +165,8 @@ nm_createWalk(movement, name:="", vars:="") ; this function generates the 'walk'
 
 	if WinWait("ahk_class AutoHotkey ahk_pid " exec.ProcessID, , 2) {
 		DetectHiddenWindows 0
-		currentWalk.pid := exec.ProcessID, currentWalk.name := name
-		return 1
+		currentWalk.pid := exec.ProcessID
+		
 	}
 	else {
 		DetectHiddenWindows 0
@@ -198,24 +198,99 @@ GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
 
     return Gdip_BitmapFromScreen(x "|" y + offsetY "|" width "|" height)
 }
+
+
 global counter := 0 
 GameLoaded() {
     global BSSLoadTime
-    ;STAGE 2 - wait for loading screen (or loaded game)
-    loop BSSLoadTime {
+    WinMaximize(GetRobloxHWND())
+
+    loop RobloxLoadTime {
+        if GetRobloxHWND() {
+            ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)   
+            ActivateRoblox()
+            break
+        }
+        if (A_Index = RobloxLoadTime) {
+            PlayerStatus("No Roblox Found", "0xc500ec", , false, , true) ; change to false later
+            if (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe") || WinExist("Bloxstrap")){
+                PlayerStatus("Installing roblox updates..", "0x2f00ff", ,false)
+                while (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe")){
+                    Sleep 1000
+                    if (A_Index == 120){
+                        PlayerStatus("Installing roblox update failed. Killing and trying again.", "0x2f00ff", ,false)
+                        try WinKill("Roblox")
+                        ; global ChangeServer := true
+                        sleep 2000
+                        return 0
+                    }
+                }
+                PlayerStatus("Finished roblox updates..", "0x2f00ff", ,false)
+            }
+            CloseRoblox()
+            sleep 5000
+            ; global ChangeServer := true
+            return 0
+        }
+        Sleep 1000
+    }
+
+    counter := 0
+    ;STAGE 2 - wait for Blue loading screen (or loaded game)
+    loop {
         ActivateRoblox()
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
-        MouseMove windowX + windowWidth//4, windowY + windowHeight//4
         if Mod(A_Index, BSSLoadTime // 2){
-            Click
+            MouseMove windowX + windowWidth//4, windowY + windowHeight//4
         }
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["robloxlogin"] , , , , , , 25) = 1 || Gdip_ImageSearch(pBMScreen, bitmaps["robloxsignup"] , , , , , , 25) = 1) {
+            PlayerStatus("Logging back into roblox app", "0xc161f8", ,false)
+            Gdip_DisposeImage(pBMScreen)
+            run "https://www.roblox.com/games/1537690962/Bee-Swarm-Simulator"
+            Sleep 15000
+            pBMScreen := GetpBMScreen()
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["playbutton"], &OutputList, , , , , 25, ,3) = 1) {
+                coords := StrSplit(OutputList, ",")
+                MouseMove coords[1], coords[2]
+                Sleep 1000
+                Click
+                Click
+                Sleep 15000
+            }
+            Gdip_DisposeImage(pBMScreen)
+    
+            for hwnd in WinGetList(,, "Program Manager")
+                {
+                    p := WinGetProcessName("ahk_id " hwnd)
+                    if (InStr(p, "Roblox") || InStr(p, "AutoHotkey"))
+                        continue ; skip roblox and AHK windows
+                    title := WinGetTitle("ahk_id " hwnd)
+                    if (title = "")
+                        continue ; skip empty title windows
+                    s := WinGetStyle("ahk_id " hwnd)
+                    if ((s & 0x8000000) || !(s & 0x10000000))
+                        continue ; skip NoActivate and invisible windows
+                    s := WinGetExStyle("ahk_id " hwnd)
+                    if ((s & 0x80) || (s & 0x40000) || (s & 0x8))
+                        continue ; skip ToolWindow and AlwaysOnTop windows
+                    try
+                    {
+                        WinActivate "ahk_id " hwnd
+                        WinMaximize("ahk_id " hwnd)
+                        Sleep 500
+                        Send "^{w}"
+                    }
+                    break
+                }    
+            return 0
+        }
+
         if !GetRobloxClientPos() {
             PlayerStatus("Disconnected from roblox", "0xfa7900", ,false, ,false)
             Gdip_DisposeImage(pBMScreen)
             return 0
         }
-        ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 1) {
+        If (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 1) {
             Gdip_DisposeImage(pBMScreen)
             ; PlayerStatus("Detected BSS Loading Screen", "0x0060c0", ,false, ,false)
             break
@@ -228,38 +303,45 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Disconnected join error", "0xfa7900", ,false, ,false)
-            CloseRoblox()
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 3) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["X"], &OutputList , , , , , 5) = 1) {
+            coords := StrSplit(OutputList, ",")
+            MouseMove coords[1], coords[2]+60
+            Sleep 1000
+            Click
+            Click
+        }
+        ; InGame Errors Detection
+        Gdip_DisposeImage(pBMScreen)
+        pBMScreen := GetpBMScreen(windowX + windowWidth * 0.4, windowY + windowHeight - windowHeight * 0.4, windowWidth * 0.2, windowHeight // 2)
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
-            CloseRoblox()
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 3) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is full", "0x61f8f8", ,false, ,false)
-            CloseRoblox()
             return 0
         }
-        if (A_Index = BSSLoadTime) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 15) = 1) { ; this is all i need left 
             Gdip_DisposeImage(pBMScreen)
-            global counter
-            counter++
-            if (Mod(counter, 4) == 0) {
-                PlayerStatus("Killing roblox", "0xae00ff", ,false)
-                try WinKill("Roblox")
-                sleep 2000
-                GetServerIds(3)
-                return 0
-            }
-            PlayerStatus("No BSS Found", "0xff0000", ,false, ,false)
-            CloseRoblox()
+            PlayerStatus("Unknown status", "0xc3f861", ,false, ,false)
+            return 0
+        }
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 15) = 1) {
+            Gdip_DisposeImage(pBMScreen)
+            PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
+            return 0
+        }
+        if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
+            Gdip_DisposeImage(pBMScreen)
+            PlayerStatus("BSS Join Error.", "0xff0000", ,false)
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
-        Sleep 1000 ; timeout 20s 
+        Sleep 1000 // 2 
     }
     global counter := 0
     
@@ -270,17 +352,11 @@ GameLoaded() {
             PlayerStatus("Disconnected from roblox", "0xfa7900", ,false, ,false)
             return 0
         }
-        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
+        pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|150")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
             ; PlayerStatus("Detected Game Loaded", "0x34495E", ,false, ,false)
             return 1
-        }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
-            Gdip_DisposeImage(pBMScreen)
-            PlayerStatus("Disconnected or joined different game error", "0xfa7900", ,false, ,false)
-            CloseRoblox()
-            return 0
         }
         Gdip_DisposeImage(pBMScreen)
         if (A_Index = 90) {
@@ -292,6 +368,7 @@ GameLoaded() {
     }
     return 0
 }
+
 
 
 global current_hive := 1
@@ -396,35 +473,35 @@ FindHiveSlot() {
 }
 
 ; NOT beesmas detection.
-; NightDetection() {
-;     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-;     for i, k in ["nightground"] {
-;         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-;             if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
-;                 Gdip_DisposeImage(pBMScreen)
-;                 return 1 ; returns 1 night detected
-;             }
-;         }
-;         Gdip_DisposeImage(pBMScreen)
-;         return 0
-
-;     }
-
-; }
-
-;Beesmas function
 NightDetection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-    for i, k in ["nightground", "nightground2"] {
+    for i, k in ["nightground"] {
         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            Gdip_DisposeImage(pBMScreen)
-            return 1 ; returns 1
+            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
+                Gdip_DisposeImage(pBMScreen)
+                return 1 ; returns 1 night detected
+            }
         }
+        Gdip_DisposeImage(pBMScreen)
+        return 0
+
     }
-    Gdip_DisposeImage(pBMScreen)
-    return 0
 
 }
+
+;Beesmas function
+; NightDetection() {
+;     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
+;     for i, k in ["nightground", "nightground2"] {
+;         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+;             Gdip_DisposeImage(pBMScreen)
+;             return 1 ; returns 1
+;         }
+;     }
+;     Gdip_DisposeImage(pBMScreen)
+;     return 0
+
+; }
 
 
 ; returns 1 if character successfuly reseted and currently is at red cannon
@@ -445,7 +522,7 @@ ResetCharacterLoop() {
             }
         } else {
             Send "{" RotUp " 1}"
-            RotateHiveCorrection()
+            ; RotateHiveCorrection()
             GoToRamp()
             if (!CheckFireButton()) {
                 return 0
@@ -504,8 +581,9 @@ CheckNotHiveSpawn() {
 RotateHiveCorrection() {
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
 
-    for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"] {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 10) = 1) {
+    ; for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"] { Beesmas ground
+    for i, k in ["nightground" "ground", "ground2"] { ; this doesnt even work but im lazy to fix it so im just not gnona use this yay problem solved.. hopefully...
+        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 16) = 1) {
             Gdip_DisposeImage(pBMScreen)
             return 1
         }
@@ -669,8 +747,8 @@ AttackVicLoop(field) {
                 Clover()
                 AttackVic()
         }
+        return 1
     }
-    return 1
 }
 Dead := false
 ViciousLeft := false
@@ -759,15 +837,13 @@ AttackVic(field := '') {
     ; global ViciousDeaftedCounter += 1
     Sleep(5000)
     PlayerStatus("Vicious bee has been defeated!", "0x71368A", ,false)
-
-
     return 1
 }
 
 CheckPlayerDied() {
     global Dead
     global ViciousLeft
-    pBMScreen := GetpBMScreen()
+    pBMScreen := GetpBMScreen(windowWidth - 400, windowHeight - 125, 400, 125)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["YouDied"], , , , , , 2)) {
         Dead := true
         PlayerStatus("Died during battle: What an embarrassment", "0x2C3E50", , false)
@@ -775,10 +851,6 @@ CheckPlayerDied() {
         Gdip_DisposeImage(pBMScreen)
         return 1
     }
-    Gdip_DisposeImage(pBMScreen)
-
-    pBMScreen := GetpBMScreen(windowWidth - 400, windowHeight - 125, 400, 125)
-
     if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)) {
         ViciousLeft := true
         PlayerStatus("Vicious bee left sadly...", "0x4f2663", , false)
@@ -786,6 +858,8 @@ CheckPlayerDied() {
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
+    Gdip_DisposeImage(pBMScreen)
+
 }
 
 ; Returns 1 if vicious bee was detected
@@ -793,9 +867,8 @@ CheckPlayerDied() {
 ; Checks the 🎉 emoji to see if vicious bee is defeated
 TadaViciousDefeated() {
     Send "{" SlashKey "}" "{" EnterKey "}"
-    pBMScreen := GetpBMScreen(windowX + windowWidth * 0.70, windowY, windowWidth * 0.30, windowHeight * 0.30)
-
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 5)) {
+    pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 10)) {
         Gdip_DisposeImage(pBMScreen)
         return 1
     }
@@ -807,15 +880,16 @@ global Viciousfield := 0
 ViciousSpawnLocation() {
     global Viciousfield
     Send "{" SlashKey "}" "{" EnterKey "}"
-    pBMScreen := GetpBMScreen(windowX + windowWidth - 700, windowY, 700, 250)
-    if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 5)) {
+    pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
+    if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
 
-    VicSpawned := ["pepper","pepper2", "mountain", "mountain2", "cactus", "cactus2", "rose", "rose2", "spider","spider2", "clover", "clover2"]
+    VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
+    ; VicSpawned := ["pepper","pepper2", "mountain", "mountain2", "cactus", "cactus2", "rose", "rose2", "spider","spider2", "clover", "clover2"]
     for i, field in VicSpawned {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 5)) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
             field := StrReplace(field, "2")
             global Viciousfield := field
             if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 5)){

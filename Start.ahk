@@ -4,12 +4,13 @@
 SetWorkingDir A_ScriptDir
 KeyDelay := 40
 
-
-; Default RobloxLoadTime = 20, BSSLoadTime = 20
-; How many seconds to open Roblox (i would not lower this)
+; Default RobloxLoadTime = 20, BSSLoadTime = 5
+; Incase you have a really slow pc and need more than 20 seconds to open roblox.
 RobloxLoadTime := 20 
+
 ; How many seconds from roblox to inside bee swarm (blue loading screen)
-BSSLoadTime := 20 
+; Ususually good to change for unkown status or any other ingame erros.
+BSSLoadTime := 15
 
 Setkeydelay KeyDelay
 
@@ -38,7 +39,7 @@ Lkey := "sc026" ; l
 EscKey := "sc001" ; Esc
 EnterKey := "sc01c" ; Enter
 SpaceKey := "sc039" ; Space
-SlashKey := "sc035" ; /
+SlashKey := "vk6F" ; /
 
 #include %A_ScriptDir%\lib\
 
@@ -57,22 +58,21 @@ SlashKey := "sc035" ; /
 #Include gui.ahk
 #include joinserver.ahk
 #Include paths.ahk
-#Include timers.ahk
+; #Include timers.ahk
 #Include webhook.ahk
 
 
 
-ServerAttempts := 1 ; used for joinserver function to Clear ServerIds()
-NightSearchAttempts := 0 ; just for the webhook timer nothing else prob could be merged into 1 var but ya
+NightSearchAttempts := 1
 
 MainLoop() {
-    global ServerAttempts, NightSearchAttempts
+    global NightSearchAttempts
     while (JoinServer() == 2) {
         HyperSleep(350)
     }
+
     if (NightDetection() == 1) {
-        ServerAttempts := 1
-        NightSearchAttempts := 0
+        NightSearchAttempts := 1
         PlayerStatus("Night Detected!!", "0x000000", , false)
         Send "{" Zoomout " 15}"
         global Viciousfield := 0
@@ -80,9 +80,8 @@ MainLoop() {
             return
         }
     } else {
-        ServerAttempts += 1
         NightSearchAttempts += 1
-        PlayerStatus("Searching For Night Servers. " NightSearchAttempts "x", "0x1ABC9C", , false, , false)
+        PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
         return
     }
     if (!CheckFireButton()) {
@@ -109,7 +108,7 @@ MainLoop() {
         if !ResetCharacterLoop()
             return
     }
-    if (VicSpawnedDetection("none"), false) {
+    if (VicSpawnedDetection("none", false)) {
         return
     }
     PlayerStatus("Going to Mountain Top Field.", "0x1F8B4C", , false, , false)
@@ -135,69 +134,27 @@ MainLoop() {
     }
     PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
-    BeesmasInterupt()
+    ; BeesmasInterupt()
 
-    ClearRoblox()
 
 }
 
 
 JoinServer() {
-    global ServerAttempts
-    ProccesCounter := 1
-    for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%'")
-        ProccesCounter++
-    if (Mod(ProccesCounter, 6) == 0) {
-        ClearRoblox()
-        sleep 1000
-    }
-    loadroblox()
-    if (Mod(ServerAttempts, 20) == 0) {
-        ServerAttempts := 1
-        GetServerIds()
-        CloseRoblox()
-        HyperSleep(2000)
-    } else {
-        SetKeyDelay 250
-        if GetRobloxClientPos()
-            send "{esc}{l}{Enter}"
-        global KeyDelay
-        SetKeyDelay KeyDelay
-        HyperSleep(2000)
-    }
-    if (GameLoaded()) {
-        HyperSleep(850)
-        return 1
-    } else {
-        return 2
-    }
-}
-loadroblox() {
-    global RobloxLoadTime
+    global NightSearchAttempts
     joinrandomserver()
-    loop RobloxLoadTime {
-        if GetRobloxHWND() {
-            ActivateRoblox()
-            return
-        }
-        ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)    }
-        if (A_Index = RobloxLoadTime) {
-            PlayerStatus("No Roblox Found", "0xc500ec", , false, , true) ; change to false later
-            if (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe")){
+    if (Mod(NightSearchAttempts, 20) == 0) {
+        GetServerIds(8)
+    } 
+    if (GameLoaded()) {
+        return 1 ; game loaded good
+    } else {
+        return 2 ; join error
 
-                PlayerStatus("Installing roblox updates..", "0x2f00ff", ,false)
-                while (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe")){
-                    Sleep 1000
-                }
-                PlayerStatus("Finished roblox updates..", "0x2f00ff", ,false)
-            }
-            ClearRoblox()
-            sleep 5000
-            return
-        }
-        Sleep 1000
     }
 }
+
+
 ElevateScript() {
 	try
 		file := FileOpen("scripts\functions.ahk", "a")
@@ -214,3 +171,29 @@ ElevateScript() {
 }
 ElevateScript()
 
+ScreenResolution(){
+    if (A_ScreenDPI != 96){
+        MsgBox "
+        (
+        Your Display Scale seems to be a value other than 100%. This means the macro will NOT work correctly!
+        
+        To change this:
+        Right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Scale to 100% -> Close and Restart Roblox before starting the macro.
+        )", "WARNING!!", 0x1030 " T60"
+    }
+    
+    if (A_ScreenHeight > 1080 || A_ScreenWidth > 1920){
+        MsgBox "
+        (
+            Your Resolution is too massive!! Lower it to 1920x1080 or any lower. This means the macro will NOT work correctly!
+            
+            To change this:
+            Right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Resolution to 1920x1080.
+            You can also use a Remote Desktop (RDP) to use this macro under or 1920x1080 resolution. For more information I would recommend looking up information on how to macro on an RDP  
+            )", "WARNING!!", 0x1030 " T60"
+        }
+        
+    }
+    
+    
+ScreenResolution()

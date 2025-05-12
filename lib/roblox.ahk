@@ -102,10 +102,6 @@ ActivateRoblox()
 CloseRoblox() {
 	try WinClose "Roblox"
 	sleep 500
-	ClearRoblox()
-}
-
-ClearRoblox(){
 	for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%' OR Name LIKE '%Bloxstrap%'")
 		ProcessClose p.ProcessID
 }

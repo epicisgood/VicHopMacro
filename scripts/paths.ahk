@@ -184,7 +184,7 @@ CactusToRose() {
     (
     '
 	nm_Walk(7, WKey)
-	nm_Walk(8, Dkey)
+	nm_Walk(10, Dkey)
 	nm_Walk(10, WKey)
 	nm_Walk(13, AKey)
 
@@ -401,8 +401,9 @@ Samovar() {
         Send "{" AKey " up}"
 
         nm_walk(3,Skey)
+        HyperSleep(1000)
         Send "{" EKey " down}"
-        HyperSleep(50)
+        HyperSleep(100)
         Send "{" EKey " up}"
     
         HyperSleep(5000)
@@ -410,7 +411,7 @@ Samovar() {
     
         Send "{" WKey " down}"
         Send "{" DKey " down}"
-        Walk(3)
+        Walk(3.5)
         Send "{" WKey " up}"
         Send "{" DKey " up}"
     
@@ -422,7 +423,7 @@ Samovar() {
     
         Send "{" SKey " down}"
         Send "{" AKey " down}"
-        Walk(3)
+        Walk(3.2)
         Send "{" SKey " up}"
         Send "{" AKey " up}"
     
@@ -549,10 +550,11 @@ stockings() {
     Send "{" Dkey " down}"
     Walk(6)
     Send "{" Dkey " up}"
-    HyperSleep(3000)
+    HyperSleep(2000)
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
+    HyperSleep(2000)
 
     Send "{" WKey " down}"
     Walk(1.5)
@@ -622,22 +624,25 @@ Candles() {
     Send "{" WKey " down}"
     Walk(1)
     ' glider() '
-    walk(9)
+    walk(25)
     Send "{" WKey " up}"
 
+    nm_walk(5.5,Skey)
     Send "{" RotLeft " 2}"
     Send "{" WKey " down}"
-    Walk(16)
+    Walk(17)
     Send "{" WKey " up}"
+
+    HyperSleep(1000)
 
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
-
+    
     HyperSleep(5000)
 
     Send "{" WKey " down}"
-    Walk(2)
+    Walk(5)
     Send "{" WKey " up}"
 
     Send "{" AKey " down}"
