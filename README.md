@@ -56,7 +56,7 @@ Before running the macro, install **AutoHotkey v2.0**:
 
 ### :thought_balloon: Why does the macro join random games?
 
-This is a **Roblox deeplink bug** — sometimes it sends you to other games. Nothing we can do on our end.
+This is a **Roblox deeplink bug** — sometimes it sends you to other games. Nothing I can do to fix it.
 
 ---
 
@@ -88,7 +88,7 @@ The macro is mainly for **mid-to-endgame** players farming **stingers** for Star
 
 ## :speech_balloon: Contact
 
-This macro is **only** published on GitHub. I do **not** run a Discord server.
+This macro is **only** published on GitHub. I do **not** run a Discord server for this macro.
 
 Need help, even if it’s just unzipping a file? DM me any time.
 
