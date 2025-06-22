@@ -8,7 +8,7 @@ A Bee Swarm Simulator macro designed **without passive alts or searchers** — o
 
 ## :warning: Important Setup Notes
 
-* **Performance Stats:** Disable this setting if it's on, especially if Roblox chat is enabled.
+* **Performance Stats:** Disable this setting if it's on.
 * **Recommended Resolution:** Best used in **1920x1080**. Higher resolutions are not supported — use RDP or adjust display settings if needed.
 * **Roblox Sign-outs:** Sometimes Roblox logs you out of the app. Make sure your **default browser is logged into Roblox** to auto-login if needed.
 * **Chat Detection:** The macro detects Vicious Bees through **Roblox chat**. If detection fails, switch your keyboard to **EN-US layout**.
