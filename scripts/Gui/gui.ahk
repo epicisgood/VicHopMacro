@@ -31,40 +31,45 @@ MyWindow.AddHostObjectToScript("Dragger", { func: BeginDrag })
 screenWidth := A_ScreenWidth
 screenHeight := A_ScreenHeight
 
+winWidth := screenWidth * 0.35    ; 40% of screen width
+winHeight := screenHeight * 0.45  ; 50% of screen height
 
-winHeight := screenHeight * 0.425
-if (data.beesmas){
-    winHeight := 450
-} else {
-    winHeight := 410
-}
-
-winWidth := 625
 MyWindow.Show("w" winWidth " h" winHeight)
 
-Sleep(250)
-MyWindow.ExecuteScriptAsync("document.querySelector('#random-message').textContent = '" data.message "'")
-MyWindow.ExecuteScriptAsync("document.querySelector('.donate-btn').src = '" data.image "'")
+Sleep(500)
+MyWindow.ExecuteScriptAsync("document.querySelector('#random-message').textContent = '" GetRandomMessage() "'")
 
-if (data.beesmas){
+if (GetBeesmas()){
     MyWindow.ExecuteScriptAsync("document.querySelector('#beesmas').removeAttribute('disabled')")
-    MyWindow.ExecuteScriptAsync("document.querySelector('#maintab').removeAttribute('disabled')")
 }
 
-
-GetUpdateData() {
+GetRandomMessage() {
     request := ComObject("WinHttp.WinHttpRequest.5.1")
     request.Open("GET", "https://raw.githubusercontent.com/epicisgood/Vichop-Updater/refs/heads/main/update.json", true)
     request.Send()
     request.WaitForResponse()
+
     if (request.Status = 200) {
-        Response := JSON.Parse(request.ResponseText, true, false)
-        return Response
+        response := JSON.Parse(request.ResponseText, true, false)
+        return response.message
+    } else {
+        return ""
+    }
+}
+
+GetBeesmas() {
+    request := ComObject("WinHttp.WinHttpRequest.5.1")
+    request.Open("GET", "https://raw.githubusercontent.com/epicisgood/Vichop-Updater/refs/heads/main/update.json", true)
+    request.Send()
+    request.WaitForResponse()
+
+    if (request.Status = 200) {
+        response := JSON.Parse(request.ResponseText, true, false)
+        return response.beesmas
     } else {
         return false
     }
 }
-
 
 BeginDrag(*) {
     DllCall("ReleaseCapture")

@@ -1,0 +1,583 @@
+* {
+  box-sizing: border-box;
+  user-select: none;
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #0f0f1b;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#ahkTitleBar {
+    -webkit-app-region: drag;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  background-color: #1b1b2f;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: background-color 0.3s;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  background-color: #23233b;
+  padding: 8px;
+  gap: 10%;
+  width: 15%;
+  position: relative;
+  top: 0;
+}
+
+.tabs button {
+  background-color: #2c2c4d;
+  border: none;
+  padding: 8px 100%;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 25%;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
+}
+
+.tabs button {
+  background: linear-gradient(to bottom, #3a3a5c, #2c2c4d);
+}
+
+.tabs button:hover {
+  background: linear-gradient(to bottom, #4a4a6c, #3a3a5c);
+}
+
+.tabs button:hover {
+  background-color: #3a3a5c;
+  transform: scale(1.05);
+  box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.3),
+    0 6px 12px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.tabs button:active {
+  box-shadow: 
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  transform: translateY(1px) scale(1.03);
+}
+
+.tab-button-active {
+  box-shadow: 0 0 0 2px #3c91e6, 0 4px 8px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(60, 145, 230, 0.2) !important;
+  background: linear-gradient(to bottom, #4a4a6c, #3a3a5c);
+}
+
+.tab {
+  opacity: 0;
+  visibility: hidden;
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(0.95);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.tab.active {
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+  transform: scale(1);
+  animation: tabPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding-block: 0;
+}
+
+@keyframes tabPopIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+
+button:disabled{
+  background: hsl(0, 60%, 24%, 0.5) !important;
+  display: none;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  background: #23233b;
+  border: 1px solid #3a3a5c;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-size: 100%;
+  transition: all 0.2s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  background-color: #2c2c4d;
+  border-color: #3c91e6;
+  box-shadow: 0 0 0 2px rgba(60, 145, 230, 0.2);
+}
+
+label {
+  font-size: 100%;
+  display: block;
+  margin-top: 1%;
+  transition: color 0.2s;
+}
+
+/* Consolidated Checkbox and Radio Styles */
+input[type="checkbox"],
+input[type="radio"] {
+  margin-right: 6px;
+  transform: scale(1.1);
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+input[type="checkbox"]:hover,
+input[type="radio"]:hover {
+  transform: scale(1.3);
+}
+
+/* Checkbox Specific Styles */
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3a3a5c;
+  border-radius: 4px;
+  background-color: #23233b;
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #3c91e6;
+  border-color: #3c91e6;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  left: 2px;
+  top: -2px;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Radio Button Specific Styles */
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #3a3a5c;
+  border-radius: 50%;
+  background-color: #23233b;
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked {
+  background-color: #3c91e6;
+  border-color: #3c91e6;
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+}
+
+.seconds-input {
+  width: 110px !important;
+  margin-left: 8px;
+  max-width: 110px;
+}
+
+button {
+  background-color: #3c91e6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  margin: 8px 0;
+  font-size: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #337fd9;
+  transform: scale(1.03);
+}
+
+/* .donation-container{
+  position: relative;
+  top: 100%;
+  justify-content: flex-end;
+  
+} */
+
+.donate-btn {
+  font-weight: bold;
+  cursor: pointer;
+  justify-self: flex-end;
+  width: 20px;
+  /* margin-right: 1%; */
+  margin-top: 1%;
+}
+
+.donate-btn:hover {
+  transform: scale(1.3);
+}
+
+
+.credits {
+  color: #888;
+  font-size: 12px;
+  margin-top: 8px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #444;
+  margin: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.tab button {
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: #23233b;
+  transition: background-color 0.3s;
+}
+
+.footer button {
+  flex: 1;
+  margin: 0 10px;
+}
+
+svg {
+  stroke: currentColor;
+  fill: none;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  transition: stroke 0.2s;
+}
+
+.window-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.closeButton,
+.minimizeButton {
+  font-family: 'Monaco', monospace;
+  font-weight: bold;
+  background-color: hsl(0, 0%, 10%);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 8.5%;
+  max-height: 15%;
+  transition: background-color 0.2s, transform 0.2s;
+  margin: 3px;
+}
+
+.window-controls button:hover {
+  background-color: hsl(0, 0%, 13%);
+  transform: scale(1.05);
+}
+
+.rewards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+}
+
+.reward-box {
+  background-color: #23233b;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 1px solid #3a3a5c;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+}
+
+.reward-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.reward-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 100%;
+  margin-bottom: 10%;
+  color: #e0e0e0;
+}
+
+.reward-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reward-options label {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  color: #e0e0e0;
+}
+
+.mode-section {
+  margin-bottom: 20px;
+}
+
+.mode-section h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #3c91e6;
+  font-size: 18px;
+}
+
+.mode-box {
+  background-color: #23233b;
+  border-radius: 8px;
+  /* padding: 12px; */
+  padding: 2%;
+  margin-bottom: 12px;
+  border: 1px solid #3a3a5c;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mode-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.mode-box h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  color: #e0e0e0;
+  font-size: 100%;
+}
+
+.bubble-options {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #3a3a5c;
+}
+
+.bubble-options h4 {
+  margin-bottom: 8px;
+  color: #e0e0e0;
+  font-size: 100%;
+}
+
+.bubble-sell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.bubble-sell input {
+  margin: 0;
+  max-width: 110px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  color: #e0e0e0;
+
+}
+
+.selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.selector-container {
+  display: flex;
+  align-items: center;
+}
+
+.tab::-webkit-scrollbar,
+.custom-dropdown-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab::-webkit-scrollbar-track,
+.custom-dropdown-options::-webkit-scrollbar-track {
+  background: #23233b;
+  border-radius: 4px;
+}
+
+.tab::-webkit-scrollbar-thumb,
+.custom-dropdown-options::-webkit-scrollbar-thumb {
+  background: #3c91e6;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.tab::-webkit-scrollbar-thumb:hover,
+.custom-dropdown-options::-webkit-scrollbar-thumb:hover {
+  background: #337fd9;
+}
+
+.custom-dropdown {
+  position: relative;
+  width: 150px;
+  background-color: #101010;
+  border-radius: 6px;
+  user-select: none;
+  cursor: pointer;
+  color: white;
+  transition: background-color 0.2s, color 0.2s;
+  left: 3%;
+}
+
+.custom-dropdown-selected {
+  padding: 6px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  transition: background-color 0.2s, border 0.2s;
+}
+
+button:disabled {
+  background-color: hsla(0, 0%, 83%,0.5);
+}
+
+input:disabled {
+  background-color: hsla(0, 0%, 83%,0.5);
+}
+
+
+
+.custom-dropdown-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #1a1a1a;
+  border-radius: 0 0 6px 6px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+  transition: max-height 0.3s ease;
+}
+
+.custom-dropdown-options div {
+  padding: 6px;
+  border-bottom: 1px solid #2b2b2b;
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-options div:hover {
+  background-color: #333;
+}
+
+.dropdown-divider {
+  padding: 6px;
+  font-size: 12px;
+  color: #777;
+  pointer-events: none;
+}
+
+.custom-dropdown-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-track {
+  background: #1e1e1e;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.custom-dropdown-options::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.macrotitle {
+  position: absolute;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  user-select: none;
+  margin-top: 1%; 
+  margin-left: 2%; 
+}

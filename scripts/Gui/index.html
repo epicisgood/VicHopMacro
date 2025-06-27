@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VicHopMacro UI</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <div class="container">
+  <div class="macrotitle">
+        <img src="../../images\Stinger.ico"
+        style="width: 20px; height: 20px; margin-bottom: 3px; vertical-align: middle;">
+        VicHopMacro
+  </div>
+  <div class="window-controls" id="ahkTitleBar" onclick="ahk.Dragger.Func(this)">
+    <button class="minimizeButton" onclick="ahk.global.WinMinimize('A')">_</button>
+    <button class="closeButton" onclick="ahk.global.WinClose('A')">x</button>
+  </div>
+
+    <div class="tabs">
+      <button onclick="switchTab('main')" aria-label="Main tab" id="maintab" disabled>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-house-icon lucide-house">
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+          <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </svg>
+        Main
+      </button>
+
+      <button onclick="switchTab('rewards')" aria-label="Rewards tab" id="beesmas" disabled>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="32 4 12 32 24 32 8 60 56 60 40 32 52 32 32 4"/>
+        <line x1="32" y1="32" x2="32" y2="60"/>
+      </svg>
+        Beesmas
+      </button>
+
+    </div>
+
+    <div id="main" class="tab active">
+      <label>Webhook URL:</label>
+      <input type="text" id="url" placeholder="https://discord.com/api/webhooks/WebhookHere">
+
+      <label>Discord ID:</label>
+      <input type="text" id="discordID" placeholder="1234567890">
+
+      <label>MoveSpeed:</label>
+      <input type="text" id="MoveSpeed" placeholder="33.35">
+
+      <div class="donate-section">
+        <div class="credits">
+          <span>Macro By: _epic. </span>
+          <!-- <div class="donation-container"> -->
+            <span id="random-message"></span>
+            <div></div>
+            <img class="donate-btn" onclick="ahk.global.run('https://www.roblox.com/games/17723449397/Bee-Swarm-Vicious-Hop#!/store')" alt="Donation">
+          <!-- </div> -->
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div id="rewards" class="tab">  
+      <div class="rewards-grid">
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Brownbearstockingscomplete.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Stockings</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Stockings">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Beesmas_Feast2.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Feast</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Feast">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Honeyday_Candles.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Candles</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Candles">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Completedsamovar.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Samovar</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Samovar">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Onett's_Lid_Art.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>LidArt</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="LidArt">Claim</label>
+          </div>
+        </div>
+
+      </div>
+    </div>  
+  
+  
+    <hr>
+
+    <div class="footer">
+      <button onclick="ahkButtonClick('Start')">Start (F1)</button>
+      <button onclick="ahkButtonClick('Stop')">Stop (F2)</button>
+      <button onclick="onSaveClick(this)">Save All</button>
+    </div>
+  </div>
+
+<script src="script.js" ></script>
+</body>
+</html>

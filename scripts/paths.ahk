@@ -13,11 +13,17 @@ PepperPatch() {
         nm_Walk(2, WKey, DKey)
         Walk(3)
         Send "{" WKey " up}"
-    
+        
+        Send "{" Dkey " down}{" SpaceKey " down}"
+        Walk(3)
+        Send "{" SpaceKey " up}{" Dkey " up}"
+
+        Sleep(1000)
+
         Send "{" WKey " down}{" SpaceKey " down}"
         Walk(2)
         Send "{" SpaceKey " up}"
-    
+        nm_walk(2,Akey)
         ;; Correction to not bug out
         Send "{" AKey " down}"
         Walk(3)
@@ -56,12 +62,13 @@ PepperPatch() {
     
         ;; At field
         nm_Walk(19, WKey)
-        nm_Walk(5, DKey)
-        nm_Walk(19, SKey)
-        nm_Walk(5, DKey)
-        nm_Walk(19, WKey)
-        
-        
+        nm_Walk(10, DKey)
+        loop 2 {
+            nm_Walk(5, SKey)
+            nm_Walk(5, Akey)
+            nm_Walk(5, SKey)
+            nm_Walk(5, Dkey)
+        }
         
         
         '
@@ -78,14 +85,9 @@ PepperToCannon() {
     (
     '
     Send "{" RotLeft " 4}"
-    nm_Walk(3, WKey)
-    ' glider() '
-    nm_Walk(20, WKey)
-    nm_Walk(10, AKey)
-    nm_Walk(20, Dkey)
-    nm_Walk(3, SKey)
+    nm_Walk(6, Wkey)
 
-    nm_Walk(3, Dkey)
+    nm_Walk(16, Dkey)
     ' glider() '
 
     Send "{" Dkey " down}{" WKey " down}"

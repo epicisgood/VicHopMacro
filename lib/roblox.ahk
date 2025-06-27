@@ -98,10 +98,17 @@ ActivateRoblox()
 		return 1
 }
 
-
 CloseRoblox() {
 	try WinClose "Roblox"
 	sleep 500
 	for p in ComObjGet("winmgmts:").ExecQuery("SELECT * FROM Win32_Process WHERE Name LIKE '%Roblox%' OR CommandLine LIKE '%ROBLOXCORPORATION%' OR Name LIKE '%Bloxstrap%'")
 		ProcessClose p.ProcessID
+}
+
+; Added by _epic.
+ResizeRoblox() {
+    ActivateRoblox()
+	WinMove(0, 0, 1920, 1080 - 2, "Roblox")
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
 }

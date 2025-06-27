@@ -39,8 +39,10 @@ Lkey := "sc026" ; l
 EscKey := "sc001" ; Esc
 EnterKey := "sc01c" ; Enter
 SpaceKey := "sc039" ; Space
-; SlashKey := "vk6F" ; /
 SlashKey := "sc035" ; /
+
+global data := GetUpdateData()
+
 
 #include %A_ScriptDir%\lib\
 
@@ -51,6 +53,12 @@ SlashKey := "sc035" ; /
 #Include roblox.ahk
 #Include walk.ahk
 
+; All for gui lol
+#Include ComVar.ahk
+#Include Promise.ahk
+#Include WebView2.ahk
+#Include WebViewToo.ahk
+
 #Include %A_ScriptDir%\images\
 #include bitmaps.ahk
 #include %A_ScriptDir%\scripts\
@@ -59,15 +67,17 @@ SlashKey := "sc035" ; /
 #Include gui.ahk
 #include joinserver.ahk
 #Include paths.ahk
-; #Include timers.ahk
+#Include timers.ahk
 #Include webhook.ahk
+
+
 
 
 
 NightSearchAttempts := 1
 
 MainLoop() {
-    global NightSearchAttempts
+    global NightSearchAttempts, data
     while (JoinServer() == 2) {
         HyperSleep(350)
     }
@@ -135,7 +145,9 @@ MainLoop() {
     }
     PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
-    ; BeesmasInterupt()
+    if (data.beesmas){
+        BeesmasInterupt()
+    }
 
 
 }

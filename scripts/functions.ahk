@@ -203,12 +203,13 @@ GetpBMScreen(pX := 0, pY := 0, pWidth := 0, pHeight := 0) {
 global counter := 0 
 GameLoaded() {
     global BSSLoadTime
-    WinMaximize(GetRobloxHWND())
 
     loop RobloxLoadTime {
         if GetRobloxHWND() {
             ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)   
             ActivateRoblox()
+            WinMaximize(GetRobloxHWND())
+            ResizeRoblox()
             break
         }
         if (A_Index = RobloxLoadTime) {
@@ -249,9 +250,9 @@ GameLoaded() {
             run "https://www.roblox.com/games/1537690962/Bee-Swarm-Simulator"
             Sleep 15000
             pBMScreen := GetpBMScreen()
-            if (Gdip_ImageSearch(pBMScreen, bitmaps["playbutton"], &OutputList, , , , , 25, ,3) = 1) {
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["playbutton"], &OutputList, , , , , 25, ,8) = 1) {
                 coords := StrSplit(OutputList, ",")
-                MouseMove coords[1], coords[2]
+                MouseMove coords[1] - 30, coords[2] + 30
                 Sleep 1000
                 Click
                 Click
@@ -474,34 +475,32 @@ FindHiveSlot() {
 
 ; NOT beesmas detection.
 NightDetection() {
+    global data
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-    for i, k in ["nightground"] {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-            if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
+    if (data.beesmas){
+        for i, k in ["nightground", "nightground2"] {
+            if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
                 Gdip_DisposeImage(pBMScreen)
-                return 1 ; returns 1 night detected
+                return 1 ; returns 1
             }
         }
         Gdip_DisposeImage(pBMScreen)
         return 0
-
+    } else {
+        for i, k in ["nightground"] {
+            if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
+                if (!Gdip_ImageSearch(pBMScreen, bitmaps["ground"], , , , , , 6) = 1 || !Gdip_ImageSearch(pBMScreen, bitmaps["ground2"], , , , , , 6) = 1) {
+                    Gdip_DisposeImage(pBMScreen)
+                    return 1 ; returns 1 night detected
+                }
+            }
+            Gdip_DisposeImage(pBMScreen)
+            return 0
+    
+        }
     }
 
 }
-
-;Beesmas function
-; NightDetection() {
-;     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-;     for i, k in ["nightground", "nightground2"] {
-;         if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 6) = 1) {
-;             Gdip_DisposeImage(pBMScreen)
-;             return 1 ; returns 1
-;         }
-;     }
-;     Gdip_DisposeImage(pBMScreen)
-;     return 0
-
-; }
 
 
 ; returns 1 if character successfuly reseted and currently is at red cannon
@@ -579,16 +578,25 @@ CheckNotHiveSpawn() {
 }
 
 RotateHiveCorrection() {
+    global data
     pBMScreen := GetpBMScreen(windowX + windowWidth // 2 - 200, windowY + offsetY, 400, windowHeight)
-
-    ; for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"] { Beesmas ground
-    for i, k in ["nightground" "ground", "ground2"] { ; this doesnt even work but im lazy to fix it so im just not gnona use this yay problem solved.. hopefully...
-        if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 16) = 1) {
-            Gdip_DisposeImage(pBMScreen)
-            return 1
+    if (data.beesmas){
+        for i, k in ["nightground", "nightground2", "ground", "ground2", "NightTransitionGround"] {
+            if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 16) = 1) {
+                Gdip_DisposeImage(pBMScreen)
+                return 1
+            }
         }
-    }
+    } else {
+        for i, k in ["nightground" "ground", "ground2"] { ; this doesnt even work but im lazy to fix it so im just not gnona use this yay problem solved.. hopefully...
+            if (Gdip_ImageSearch(pBMScreen, bitmaps[k], , , , , , 16) = 1) {
+                Gdip_DisposeImage(pBMScreen)
+                return 1
+            }
+        }
 
+    }
+    
     Gdip_DisposeImage(pBMScreen)
     send "{" RotLeft " 4}"
     return 0
@@ -688,10 +696,6 @@ CheckFireButton() {
 AttackVicLoop(field) {
     if (field == "rose" || field == "spider") {
         Send "{" RotRight " 4}"
-    }
-    if (field == "pepper"){
-        Send "{" RotLeft " 2}"
-
     }
     if (field == 'mountain') {
         if (AttackVic("mountain") == 0) {
@@ -853,8 +857,10 @@ CheckPlayerDied() {
 ; Checks the 🎉 emoji to see if vicious bee is defeated
 TadaViciousDefeated() {
     Send "{" SlashKey "}"
-    Sleep(300)
-    Send "{" EnterKey "}"
+    loop 5 {
+        send "{" EnterKey "}"
+        Sleep(50)
+    }
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 10)) {
         Gdip_DisposeImage(pBMScreen)
@@ -868,8 +874,10 @@ global Viciousfield := 0
 ViciousSpawnLocation() {
     global Viciousfield
     Send "{" SlashKey "}"
-    Sleep(300)
-    Send "{" EnterKey "}"
+    loop 5 {
+        send "{" EnterKey "}"
+        Sleep(50)
+    }
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
