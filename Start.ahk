@@ -39,7 +39,8 @@ Lkey := "sc026" ; l
 EscKey := "sc001" ; Esc
 EnterKey := "sc01c" ; Enter
 SpaceKey := "sc039" ; Space
-SlashKey := "vk6F" ; /
+; SlashKey := "vk6F" ; /
+SlashKey := "sc035" ; /
 
 #include %A_ScriptDir%\lib\
 

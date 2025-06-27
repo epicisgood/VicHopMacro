@@ -683,20 +683,6 @@ CheckFireButton() {
     return 0
 }
 
-; Checks the ⚠️ emoji to see if vicious bee is summoned
-; ActiveVicious() {
-
-;     Send "{" SlashKey "}" "{" EnterKey "}"
-;     Sleep(100)
-
-;     pBMScreen := GetpBMScreen()
-;     if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 10)) {
-;         Gdip_DisposeImage(pBMScreen)
-;         return 1
-;     }
-;     Gdip_DisposeImage(pBMScreen)
-;     return 0
-; }
 
 ; field is where player where go to fight vicious bee again
 AttackVicLoop(field) {
@@ -866,7 +852,9 @@ CheckPlayerDied() {
 ; Returns 0 if no vicious bee was found
 ; Checks the 🎉 emoji to see if vicious bee is defeated
 TadaViciousDefeated() {
-    Send "{" SlashKey "}" "{" EnterKey "}"
+    Send "{" SlashKey "}"
+    Sleep(300)
+    Send "{" EnterKey "}"
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 10)) {
         Gdip_DisposeImage(pBMScreen)
@@ -879,7 +867,9 @@ TadaViciousDefeated() {
 global Viciousfield := 0
 ViciousSpawnLocation() {
     global Viciousfield
-    Send "{" SlashKey "}" "{" EnterKey "}"
+    Send "{" SlashKey "}"
+    Sleep(300)
+    Send "{" EnterKey "}"
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
