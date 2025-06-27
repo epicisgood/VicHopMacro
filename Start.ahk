@@ -195,16 +195,16 @@ ScreenResolution(){
         )", "WARNING!!", 0x1030 " T60"
     }
     
-    if (A_ScreenHeight > 1080 || A_ScreenWidth > 1920){
-        MsgBox "
-        (
-            Your Resolution is too massive!! Lower it to 1920x1080 or any lower. This means the macro will NOT work correctly!
+    ; if (A_ScreenHeight > 1080 || A_ScreenWidth > 1920){
+    ;     MsgBox "
+    ;     (
+    ;         Your Resolution is too massive!! Lower it to 1920x1080 or any lower. This means the macro will NOT work correctly!
             
-            To change this:
-            Right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Resolution to 1920x1080.
-            You can also use a Remote Desktop (RDP) to use this macro under or 1920x1080 resolution. For more information I would recommend looking up information on how to macro on an RDP  
-            )", "WARNING!!", 0x1030 " T60"
-        }
+    ;         To change this:
+    ;         Right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Resolution to 1920x1080.
+    ;         You can also use a Remote Desktop (RDP) to use this macro under or 1920x1080 resolution. For more information I would recommend looking up information on how to macro on an RDP  
+    ;         )", "WARNING!!", 0x1030 " T60"
+    ;     }
         
     }
     
