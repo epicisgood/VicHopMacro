@@ -112,7 +112,6 @@ StopMacro(*) {
     
 }
 
-PlayerStatus("Connected to discord!", "0x34495E", , false, , false)
 
 F1:: {
     Start
@@ -180,7 +179,7 @@ SendSettings(){
 
 SendSettings()
 
-settingsFile := A_ScriptDir . "\settings.ini"
+
 
 url := IniRead(settingsFile, "Settings", "url")
 discordID := IniRead(settingsFile, "Settings", "discordID")
@@ -194,6 +193,7 @@ IniLidArt := IniRead(settingsFile, "Settings", "LidArt")
 
 
 
+PlayerStatus("Connected to discord!", "0x34495E", , false, , false)
 
 
 

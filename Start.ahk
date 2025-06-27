@@ -43,6 +43,21 @@ SlashKey := "sc035" ; /
 
 global data := GetUpdateData()
 
+settingsFile := A_ScriptDir . "\settings.ini"
+
+
+if (!FileExist(settingsFile)) {
+    IniWrite("", settingsFile, "Settings", "url")
+    IniWrite("", settingsFile, "Settings", "discordID")
+    IniWrite("", settingsFile, "Settings", "movespeed")
+    IniWrite(1, settingsFile, "Settings", "Stockings")
+    IniWrite(1, settingsFile, "Settings", "Feast")
+    IniWrite(1, settingsFile, "Settings", "Candles")
+    IniWrite(1, settingsFile, "Settings", "Samovar")
+    IniWrite(1, settingsFile, "Settings", "LidArt")
+
+}
+
 
 #include %A_ScriptDir%\lib\
 

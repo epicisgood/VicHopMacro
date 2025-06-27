@@ -8,7 +8,7 @@ PlayerStatus(statusTitle, statusColor, statusDescription := "", Mentions := True
     } catch Error as e {
         return 0
     }
-
+    
     DiscordUserId := IniRead("settings.ini", "Settings", "discordID")
     mentionStr := Mentions ? "<@" DiscordUserId ">" : ""
 
