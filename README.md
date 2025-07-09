@@ -94,7 +94,7 @@ Need help, even if it’s just unzipping a file? DM me any time.
 
 * **Discord:** `_epic.`
 * **GitHub:** [epicisgood/VicHopMacro](https://github.com/epicisgood/VicHopMacro)
-* **Donate:** [Give me robux!](https://www.roblox.com/games/3780570380/Donation-area#!/store)
+* **Donate:** [Give me robux!](https://www.roblox.com/games/17723449397/Bee-Swarm-Vicious-Hop-Donation-Center#!/store)
 
 ---
 
