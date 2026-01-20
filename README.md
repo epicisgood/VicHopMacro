@@ -1,15 +1,14 @@
+# :bee: BSS VicHopMacro
+A Bee Swarm Simulator macro designed to hop servers to find **Vicious Bees** - (**without passive alts or searchers**) — only your **main account**.
 
-
-# :bee: VicHopMacro – Vicious Bee Hopping Macro
-
-A Bee Swarm Simulator macro designed **without passive alts or searchers** — only your **main account** hops servers to find **Vicious Bees**.
+<img width="450" height="500" alt="image" src="https://github.com/user-attachments/assets/49dd1c83-5777-4dfb-be8c-fc30cf502bf2" />
 
 ---
 
 ## :warning: Important Setup Notes
 
 * **Performance Stats:** Disable this setting if it's on.
-* **Recommended Resolution:** Best used in **1920x1080**. Higher resolutions are not supported — use RDP or adjust display settings if needed.
+* **Resolution:** Any is fine, auto resizes to 1920x1080 if too big of resolution. 
 * **Roblox Sign-outs:** Sometimes Roblox logs you out of the app. Make sure your **default browser is logged into Roblox** to auto-login if needed.
 * **Chat Detection:** The macro detects Vicious Bees through **Roblox chat**. If detection fails, switch your keyboard to **EN-US layout**.
 
@@ -74,7 +73,7 @@ This makes vicious hopping more efficient. The macro **will** go to Spider/Clove
 
 ### :thought_balloon: The vicious bee takes too long to kill?
 
-The macro is mainly for **mid-to-endgame** players farming **stingers** for Star Saw. If you're underleveled, especially in **Pepper Patch**, use **NatroMacro** instead.
+The macro is mainly for **mid-to-endgame** players farming **stingers** for Star Saw. If you're underleveled, especially in **Pepper Patch**, use **NatroMacro** instead or **Revolution Macro!**
 
 ---
 
@@ -94,7 +93,7 @@ Need help, even if it’s just unzipping a file? DM me any time.
 
 * **Discord:** `_epic.`
 * **GitHub:** [epicisgood/VicHopMacro](https://github.com/epicisgood/VicHopMacro)
-* **Donate:** [Give me robux!](https://www.roblox.com/games/3780570380/Donation-area#!/store)
+* **Donate:** [Give me robux!](https://www.roblox.com/games/17723449397/Bee-Swarm-Vicious-Hop-Donation-Center#!/store)
 
 ---
 
