@@ -181,7 +181,9 @@ JoinServer() {
 
     }
 }
-
+F3::{
+    AttackVicLoop("cactus")
+}
 
 ElevateScript() {
 	try

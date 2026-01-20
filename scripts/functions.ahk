@@ -315,7 +315,9 @@ GameLoaded() {
         }
         ; InGame Errors Detection
         Gdip_DisposeImage(pBMScreen)
+
         pBMScreen := GetpBMScreen(windowX + windowWidth * 0.4, windowY + windowHeight - windowHeight * 0.4, windowWidth * 0.2, windowHeight // 2)
+        Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
@@ -852,15 +854,40 @@ CheckPlayerDied() {
 
 }
 
+
+relativeMouseMove(relx, rely) {
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    moveX := windowX + Round(relx * windowWidth)
+    moveY := windowY + Round(rely * windowHeight)
+    MouseMove(moveX,moveY)
+}
+
+
+openChat(){
+    ActivateRoblox()
+    hwnd := GetRobloxHWND()
+    GetRobloxClientPos(hwnd)
+    pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY "|" windowWidth * 0.25 "|" windowHeight //8)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["ChatClosed"] , &OutputList, , , , , 25) = 1) {
+        Cords := StrSplit(OutputList, ",")
+        x := Cords[1] + windowX
+        y := Cords[2] + windowY
+        MouseMove(x, y)
+        Sleep(300)
+        Click
+    }
+    relativeMouseMove(0.9, 0.1)
+    Sleep(50)
+    relativeMouseMove(0.5, 0.5)
+    Gdip_DisposeImage(pBMScreen)
+}
+
 ; Returns 1 if vicious bee was detected
 ; Returns 0 if no vicious bee was found
 ; Checks the 🎉 emoji to see if vicious bee is defeated
 TadaViciousDefeated() {
-    Send "{" SlashKey "}"
-    loop 5 {
-        send "{" EnterKey "}"
-        Sleep(50)
-    }
+    openChat()
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 10)) {
         Gdip_DisposeImage(pBMScreen)
@@ -873,11 +900,7 @@ TadaViciousDefeated() {
 global Viciousfield := 0
 ViciousSpawnLocation() {
     global Viciousfield
-    Send "{" SlashKey "}"
-    loop 5 {
-        send "{" EnterKey "}"
-        Sleep(50)
-    }
+    openChat()
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
@@ -885,7 +908,6 @@ ViciousSpawnLocation() {
     }
 
     VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
-    ; VicSpawned := ["pepper","pepper2", "mountain", "mountain2", "cactus", "cactus2", "rose", "rose2", "spider","spider2", "clover", "clover2"]
     for i, field in VicSpawned {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
             field := StrReplace(field, "2")
