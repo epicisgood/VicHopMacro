@@ -34,8 +34,18 @@ nm_KeyVars(){
     EnterKey := "' EnterKey '" ; Enter
     SpaceKey := "' SpaceKey '" ; Space
     SlashKey := "' SlashKey '" ; /
+    SC_LShift := "' SC_LShift '" ; Left Shift
     '
 	)
+}
+small_walk(tiles, MoveKey1, MoveKey2:=0)
+{
+    movement := nm_Walk(tiles, MoveKey1, MoveKey2)
+    nm_createWalk(movement)
+    KeyWait "F14", "D T5 L"
+    KeyWait "F14", "T20 L"
+    nm_endWalk()
+
 }
 
 nm_Walk(tiles, MoveKey1, MoveKey2:=0){ ; string form of the function which holds MoveKey1 (and optionally MoveKey2) down for 'tiles' tiles, not to be confused with the pure form in nm_createWalk below
@@ -694,54 +704,59 @@ CheckFireButton() {
 }
 
 
-; field is where player where go to fight vicious bee again
-AttackVicLoop(field) {
-    if (field == "rose" || field == "spider") {
-        Send "{" RotRight " 4}"
-    }
-    if (field == 'mountain') {
-        if (AttackVic("mountain") == 0) {
-            if !ResetCharacterLoop()
-                return 1
-            MountainTop()
-            AttackVic("mountain")
-        }
-        return 1
-    } else if (AttackVic() == 0) {
-        switch field {
-            case "pepper":
-                if !ResetCharacterLoop()
-                    return 1
-                PepperPatch()
-                AttackVic()
-                ; in order mountain would be next
-
-            case "cactus":
-                if !ResetCharacterLoop()
-                    return 1
-                Cactus()
-                AttackVic()
-            case "rose":
-                if !ResetCharacterLoop()
-                    return 1
-                Rose()
-                Send "{" RotRight " 4}"
-                AttackVic()
-            case "spider":
-                if !ResetCharacterLoop()
-                    return 1
-                Spider()
-                Send "{" RotRight " 4}"
-                AttackVic()
-            case "clover":
-                if !ResetCharacterLoop()
-                    return 1
-                Clover()
-                AttackVic()
-        }
-        return 1
+gotoCenter(field){
+    switch field {
+        case "pepper":
+            small_walk(7,Wkey)
+        case "cactus":
+            small_walk(3,Wkey)
+            small_walk(10,Akey)
+        case "rose":
+            small_walk(5,Wkey,Dkey)
+            small_walk(11,Dkey)
+        case "spider":
+            small_walk(5,Wkey)
+        case "clover":
+            Sleep(1)
+        case "mountain":
+            small_walk(4,Skey,Akey)
+            small_walk(7,Skey)
     }
 }
+
+AttackVicLoop(field) {
+    gotoCenter(field)
+
+    isMountain := (field == "mountain")
+    result := AttackVic(isMountain ? "mountain" : "")
+    
+    if (result == 0) { ; player died
+        if !ResetCharacterLoop()
+            return 1
+        
+        switch field {
+            case "pepper":
+                PepperPatch()
+            case "cactus":
+                Cactus()
+            case "rose":
+                Rose()
+                Send "{" RotRight " 4}"
+            case "spider":
+                Spider()
+                Send "{" RotRight " 4}"
+            case "clover":
+                Clover()
+            case "mountain":
+                MountainTop()
+        }
+        
+        AttackVic(isMountain ? "mountain" : "")
+    }
+    return 1
+}
+
+
 Dead := false
 ViciousLeft := false
 ; returns 2 if timeout reached or vic bee left for some reason
@@ -756,7 +771,7 @@ AttackVic(field := '') {
     global Dead := false
     global ViciousLeft := false
 
-    while (!TadaViciousDefeated()) {
+    while (!detectViciousDefeated()) {
         ElapsedTime := A_TickCount - StartTime
         if (ElapsedTime > 90000 || ViciousLeft == true) { ;; 1m 30s to kill vicious bee
             PlayerStatus("Took too long to kill vicious bee.", "0x000000", , false)
@@ -769,7 +784,8 @@ AttackVic(field := '') {
         if (field == "mountain" && currentMinute <= 14) {
             movement :=
             (
-            'Send "{" Dkey " down}"
+            '
+            Send "{" Dkey " down}"
             Walk(15)
             Send "{" Dkey " up}"
             loop 5 {
@@ -784,42 +800,28 @@ AttackVic(field := '') {
                 Send "{" WKey " down}"
                 Walk(4)
                 Send "{" WKey " up}"
-            }'
+            }
+                '
             )
 
         } else {
             movement := 
             (
             '
-            loop 2 {
-                Send "{" WKey " down}"
-                Walk(4)
-                Send "{" WKey " up}"
-                Walk(5)
-            }
-            loop 2 {
-                Send "{" AKey " down}"
-                Walk(4)
-                Send "{" AKey " up}"
-                Walk(5)
-            }
-            loop 2 {
-                Send "{" SKey " down}"
-                Walk(4)
-                Send "{" SKey " up}"
-                Walk(5)
-            }
-            loop 2 {
-                Send "{" Dkey " down}"
-                Walk(4)
-                Send "{" Dkey " up}"
-                Walk(5)
-            }
+                nm_walk(4, WKey)
+                Sleep(500)
+                nm_walk(4, Akey)
+                Sleep(500)
+                nm_walk(4, Skey)
+                Sleep(500)
+                nm_walk(4, Dkey)
+                Sleep(500)
+            
             '
         )
         }
         nm_createWalk(movement)
-        SetTimer(CheckPlayerDied, 500)
+        SetTimer(CheckPlayerDied, 250)
         KeyWait "F14", "D T5 L"
         KeyWait "F14", "T20 L"
         nm_endWalk()
@@ -886,15 +888,15 @@ openChat(){
 ; Returns 1 if vicious bee was detected
 ; Returns 0 if no vicious bee was found
 ; Checks the 🎉 emoji to see if vicious bee is defeated
-TadaViciousDefeated() {
+detectViciousDefeated() {
     openChat()
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["TadaViciousDead"], , , , , , 10)) {
         Gdip_DisposeImage(pBMScreen)
-        return 1
+        return true
     }
     Gdip_DisposeImage(pBMScreen)
-    return 0
+    return false
 
 }
 global Viciousfield := 0
@@ -972,7 +974,7 @@ VicSpawnedDetection(field, reset := true) { ; if we at cannon we dont need to re
 }
 
 LeaveServerEarly() {
-    if (TadaViciousDefeated()) {
+    if (detectViciousDefeated()) {
         PlayerStatus("Leaving server: Vicious bee Defeated Already", "0x206694", , false)
         return 1
     }

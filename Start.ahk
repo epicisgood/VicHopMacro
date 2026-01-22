@@ -40,6 +40,7 @@ EscKey := "sc001" ; Esc
 EnterKey := "sc01c" ; Enter
 SpaceKey := "sc039" ; Space
 SlashKey := "sc035" ; /
+SC_LShift:= "sc02a" ; LShift
 
 global data := GetUpdateData()
 
@@ -181,9 +182,10 @@ JoinServer() {
 
     }
 }
-F3::{
-    AttackVicLoop("cactus")
-}
+; F3::{
+;     GameLoaded()
+;     MsgBox("YAY")
+; }
 
 ElevateScript() {
 	try

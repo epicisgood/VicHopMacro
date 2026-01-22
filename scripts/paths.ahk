@@ -33,15 +33,14 @@ PepperPatch() {
         nm_Walk(6, DKey)
     
         ;; Jump part
-        nm_Walk(2, WKey, SpaceKey)
-        Hypersleep(600)
-        nm_Walk(2, WKey, SpaceKey)
-        Hypersleep(600)
-    
-        nm_Walk(2, WKey, SpaceKey)
-        Hypersleep(600)
-        nm_Walk(2, WKey, SpaceKey)
-        Hypersleep(600)
+        Send("{" SC_LShift "}")
+        loop 3 {
+            Send "{" SpaceKey " down}"
+            HyperSleep(300)
+            Send "{" SpaceKey " up}"
+            nm_walk(2,Wkey)
+        }
+        Send("{" SC_LShift "}")
     
         Send "{" WKey " down}"
         Walk(13)
