@@ -214,7 +214,7 @@ global counter := 0
 GameLoaded() {
     global BSSLoadTime
 
-    loop RobloxLoadTime {
+    loop RobloxOpenTime {
         if GetRobloxHWND() {
             ; PlayerStatus("Detected Roblox Open", "0x00a838", ,false, ,false)   
             ActivateRoblox()
@@ -222,7 +222,7 @@ GameLoaded() {
             ResizeRoblox()
             break
         }
-        if (A_Index = RobloxLoadTime) {
+        if (A_Index = RobloxOpenTime) {
             PlayerStatus("No Roblox Found", "0xc500ec", , false, , true) ; change to false later
             if (WinExist("Roblox ahk_exe RobloxPlayerInstaller.exe") || WinExist("Bloxstrap")){
                 PlayerStatus("Installing roblox updates..", "0x2f00ff", ,false)
@@ -325,27 +325,31 @@ GameLoaded() {
         }
         ; InGame Errors Detection
         Gdip_DisposeImage(pBMScreen)
-
-        pBMScreen := GetpBMScreen(windowX + windowWidth * 0.4, windowY + windowHeight - windowHeight * 0.4, windowWidth * 0.2, windowHeight // 2)
+        hwnd := GetRobloxHWND()
+        GetRobloxClientPos(hwnd)
+        pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth * 0.4 "|" windowY + windowHeight - windowHeight * 0.2 "|" windowWidth * 0.2 "|" windowHeight * 0.2)
         Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
+            ; Sleep(3000)
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 15) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 30) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is full", "0x61f8f8", ,false, ,false)
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 15) = 1) { ; this is all i need left 
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 50) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Unknown status", "0xc3f861", ,false, ,false)
+            ; Sleep(3000)
             return 0
         }
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 15) = 1) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 35) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
+            ; Sleep(3000)
             return 0
         }
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.

@@ -4,11 +4,11 @@
 SetWorkingDir A_ScriptDir
 KeyDelay := 40
 
-; Default RobloxLoadTime = 20, BSSLoadTime = 5
+; Default RobloxOpenTime = 20, BSSLoadTime = 5
 ; Incase you have a really slow pc and need more than 20 seconds to open roblox.
-RobloxLoadTime := 20 
+RobloxOpenTime := 20 
 
-; How many seconds from roblox to inside bee swarm (blue loading screen)
+; How many seconds from roblox (Joining Server...) to blue loading screen
 ; Ususually good to change for unkown status or any other ingame erros.
 BSSLoadTime := 15
 
@@ -94,8 +94,8 @@ NightSearchAttempts := 1
 
 MainLoop() {
     global NightSearchAttempts, data
-    while (JoinServer() == 2) {
-        HyperSleep(350)
+    while (!JoinServer()) {
+        Sleep(500)
     }
 
     if (NightDetection() == 1) {
@@ -168,7 +168,8 @@ MainLoop() {
 
 }
 
-
+; Returns True = Inside Bee Swarm!
+; Returns False = Join Error
 JoinServer() {
     global NightSearchAttempts
     joinrandomserver()
@@ -176,16 +177,23 @@ JoinServer() {
         GetServerIds(8)
     } 
     if (GameLoaded()) {
-        return 1 ; game loaded good
-    } else {
-        return 2 ; join error
-
+        return true
     }
+
+    return false
 }
+
 ; F3::{
 ;     GameLoaded()
 ;     MsgBox("YAY")
 ; }
+
+
+; GetServerIds(1)
+; F3::{
+;     joinrandomserver()
+; }
+
 
 ElevateScript() {
 	try
