@@ -105,11 +105,11 @@ MainLoop() {
         Sleep(500)
     }
 
-    ; if (!NightDetection()) {
-    ;     NightSearchAttempts += 1
-    ;     PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
-    ;     return
-    ; }
+    if (!NightDetection()) {
+        NightSearchAttempts += 1
+        PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
+        return
+    }
 
     NightSearchAttempts := 1
     PlayerStatus("Night Detected!!", "0x000000", , false)
