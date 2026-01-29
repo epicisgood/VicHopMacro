@@ -75,9 +75,12 @@ BeginDrag(*) {
 
 
 
-
 Start(*) {
     PlayerStatus("Starting " version " VicHopMacro by epic", "0xFFFF00", , false, , false)
+    if (IniRead(settingsFile, "Settings", "movespeed", "") == "") {
+        PlayerStatus("ERROR: Add a valid movespeed", "0xff0000", , true, , false)
+        MsgBox "Please provide a valid movespeed in settings!`nYou might of forgotten to save settings.", "Error", 0x40010
+    }
     CloseRoblox()
     GetServerIds(2)
     OnError (e, mode) => (mode = "return") * (-1)

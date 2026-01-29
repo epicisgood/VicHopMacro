@@ -101,6 +101,7 @@ NightSearchAttempts := 1
 
 MainLoop() {
     global NightSearchAttempts, data
+    
     while (!JoinServer()) {
         Sleep(500)
     }
