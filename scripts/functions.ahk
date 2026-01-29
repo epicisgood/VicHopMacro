@@ -355,7 +355,7 @@ GameLoaded() {
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("BSS Join Error.", "0xff0000", ,true)
-            MsgBox("YOO")
+            ; MsgBox("YOO")
             ; PlayerStatus("BSS Join Error.", "0xff0000", ,false)
             return 0
         }
