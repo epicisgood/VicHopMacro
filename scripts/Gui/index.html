@@ -19,12 +19,20 @@
   </div>
 
     <div class="tabs">
-      <button onclick="switchTab('main')" aria-label="Main tab" id="maintab" disabled>
+      <button onclick="switchTab('main')" aria-label="Main tab" id="maintab">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-house-icon lucide-house">
           <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
           <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         </svg>
         Main
+      </button>
+
+      <button onclick="switchTab('setitngs')" aria-label="Settings tab" id="settingtab">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-house-icon lucide-house">
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+          <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        </svg>
+        Settings
       </button>
 
       <button onclick="switchTab('rewards')" aria-label="Rewards tab" id="beesmas" disabled>
@@ -112,6 +120,72 @@
           </div>
           <div class="reward-options">
             <label><input type="checkbox" id="LidArt">Claim</label>
+          </div>
+        </div>
+
+      </div>
+    </div>  
+
+    <div id="setitngs" class="tab">  
+      <div class="rewards-grid">
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/PepperPatch.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Pepper</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Pepper">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Mountain.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Mountain</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Mountain">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Cactus.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Cactus</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Cactus">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Rose.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Rose</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Rose">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Spider.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Spider</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Spider">Claim</label>
+          </div>
+        </div>
+
+        <div class="reward-box">
+          <div class="reward-header">
+            <img src="../../images/Clover.webp" style="width: 20px; height: 20px; margin-right: 3px; vertical-align: middle;">
+            <span>Clover</span>
+          </div>
+          <div class="reward-options">
+            <label><input type="checkbox" id="Clover">Claim</label>
           </div>
         </div>
 

@@ -317,6 +317,12 @@ Spider(){
     HyperSleep(100)
     ' PressSpace() '
     HyperSleep(2500)
+
+
+    nm_walk(7,Akey)
+    nm_walk(12,Skey)
+    nm_walk(14,Dkey)
+    nm_walk(14,Wkey)
             
         '
     )
@@ -334,16 +340,28 @@ Clover(){
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
-    HyperSleep(170)
+    Send "{" AKey " down}"
+    HyperSleep(200)
     ' PressSpace() '
     HyperSleep(100)
     ' PressSpace() '
-    Send "{" AKey " down}"
-    HyperSleep(1500)
     Send "{" AKey " up}"
+    HyperSleep(7000)
+    
+    nm_walk(15,Wkey)
+    nm_walk(13,Dkey)
+    nm_walk(5,Skey)
+    nm_walk(6,Akey)
 
-    HyperSleep(3000)
-            
+    nm_walk(5,Skey)
+    nm_walk(6,Dkey)
+    
+    nm_walk(5,Skey)
+    nm_walk(6,Akey)
+
+    nm_walk(5,Skey)
+    nm_walk(6,Dkey)
+                
         '
     )
 

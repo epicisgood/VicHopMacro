@@ -20,6 +20,12 @@ function onSaveClick() {
     Candles:               +document.getElementById('Candles').checked,
     Samovar:               +document.getElementById('Samovar').checked,
     LidArt:                +document.getElementById('LidArt').checked,
+    Pepper:                +document.getElementById('Pepper').checked,
+    Mountain:                +document.getElementById('Mountain').checked,
+    Cactus:                +document.getElementById('Cactus').checked,
+    Rose:                +document.getElementById('Rose').checked,
+    Spider:                +document.getElementById('Spider').checked,
+    Clover:                +document.getElementById('Clover').checked,
   };
 
   ahkSave(JSON.stringify(cfg))
@@ -39,6 +45,13 @@ function applySettings(a) {
   document.getElementById('Candles').checked   = !!+s.Candles;
   document.getElementById('Samovar').checked   = !!+s.Samovar;
   document.getElementById('LidArt').checked   = !!+s.LidArt;
+
+  document.getElementById('Pepper').checked   = !!+s.Pepper;
+  document.getElementById('Mountain').checked   = !!+s.Mountain;
+  document.getElementById('Cactus').checked   = !!+s.Cactus;
+  document.getElementById('Rose').checked   = !!+s.Rose;
+  document.getElementById('Spider').checked   = !!+s.Spider;
+  document.getElementById('Clover').checked   = !!+s.Clover;
   
 }
 

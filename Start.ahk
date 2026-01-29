@@ -57,6 +57,13 @@ if (!FileExist(settingsFile)) {
     IniWrite(1, settingsFile, "Settings", "Samovar")
     IniWrite(1, settingsFile, "Settings", "LidArt")
 
+    IniWrite(1, settingsFile, "Settings", "Pepper")
+    IniWrite(1, settingsFile, "Settings", "Mountain")
+    IniWrite(1, settingsFile, "Settings", "Cactus")
+    IniWrite(1, settingsFile, "Settings", "Rose")
+    IniWrite(0, settingsFile, "Settings", "Spider")
+    IniWrite(0, settingsFile, "Settings", "Clover")
+
 }
 
 
@@ -98,68 +105,163 @@ MainLoop() {
         Sleep(500)
     }
 
-    if (NightDetection() == 1) {
-        NightSearchAttempts := 1
-        PlayerStatus("Night Detected!!", "0x000000", , false)
-        Send "{" Zoomout " 15}"
-        global Viciousfield := 0
-        if (!StartServerLoop()) {
+    ; if (!NightDetection()) {
+    ;     NightSearchAttempts += 1
+    ;     PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
+    ;     return
+    ; }
+
+    NightSearchAttempts := 1
+    PlayerStatus("Night Detected!!", "0x000000", , false)
+    Send "{" Zoomout " 15}"
+    
+    global ViciousField := "none"
+    if (!StartServerLoop()) {
+        return
+    }
+
+    PepperChecked := IniRead(settingsFile, "Settings", "Pepper", 0)
+    MountainChecked := IniRead(settingsFile, "Settings", "Mountain", 0)
+    CactusChecked := IniRead(settingsFile, "Settings", "Cactus", 0)
+    RoseChecked := IniRead(settingsFile, "Settings", "Rose", 0)
+    SpiderChecked := IniRead(settingsFile, "Settings", "Spider", 0)
+    CloverChecked := IniRead(settingsFile, "Settings", "Clover", 0)
+
+
+    if (!CheckFireButton()) {
+        if !ResetCharacterLoop()
+            return
+    }
+    openChat()
+    if LeaveServerEarly()
+        return
+    if (VicSpawnedDetection("none", false)) {
+        return
+    }
+    if (PepperChecked){
+        PlayerStatus("Going to Pepper Patch.", "0x1F8B4C", , false, , false)
+        PepperPatch()
+        openChat()
+        if LeaveServerEarly()
+            return
+        if (VicSpawnedDetection("pepper")) {
             return
         }
-    } else {
-        NightSearchAttempts += 1
-        PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
-        return
-    }
-    if (!CheckFireButton()) {
-        if !ResetCharacterLoop()
+        PlayerStatus("Finished Checking Pepper Patch.", "0x57F287", , false)
+        PepperToCannon()
+        openChat()
+        if LeaveServerEarly()
             return
-    }
-    if LeaveServerEarly()
-        return
-    if (VicSpawnedDetection("none", false)) {
-        return
-    }
-    PlayerStatus("Going to Pepper Patch.", "0x1F8B4C", , false, , false)
-    PepperPatch()
-    if LeaveServerEarly()
-        return
-    if (VicSpawnedDetection("pepper")) {
-        return
-    }
-    PlayerStatus("Finished Checking Pepper Patch.", "0x57F287", , false)
-    PepperToCannon()
-    if LeaveServerEarly()
-        return
-    if (!CheckFireButton()) {
-        if !ResetCharacterLoop()
+        if (!CheckFireButton()) {
+            if !ResetCharacterLoop()
+                return
+        }
+        if (VicSpawnedDetection("none", false)) {
             return
+        }
     }
-    if (VicSpawnedDetection("none", false)) {
-        return
+    if (MountainChecked){
+        PlayerStatus("Going to Mountain Top Field.", "0x1F8B4C", , false, , false)
+        MountainTop()
+        openChat()
+        if LeaveServerEarly()
+            return
+        if (VicSpawnedDetection("mountain")) {
+            return
+        }
+        PlayerStatus("Finished Checking Mountain Top Field.", "0x57F287", , false)
     }
-    PlayerStatus("Going to Mountain Top Field.", "0x1F8B4C", , false, , false)
-    MountainTop()
-    if LeaveServerEarly()
-        return
-    if (VicSpawnedDetection("mountain")) {
-        return
+
+    if (CactusChecked){
+        PlayerStatus("Going to Cactus Field.", "0x1F8B4C", , false, , false)
+        if MountainChecked
+            MountainToCactus()
+
+        if !MountainChecked {
+            if (!CheckFireButton()) {
+                if !ResetCharacterLoop()
+                    return
+            }
+            if LeaveServerEarly()
+                return
+            if (VicSpawnedDetection("none", false)) {
+                return
+            }
+            Cactus()
+        }
+
+        openChat()
+        if LeaveServerEarly()
+            return
+        if VicSpawnedDetection("cactus") {
+            return
+        }
+        PlayerStatus("Finished Checking Cactus Field.", "0x57F287", , false)
     }
-    PlayerStatus("Finished Checking Mountain Top Field.", "0x57F287", , false)
-    PlayerStatus("Going to Cactus Field.", "0x1F8B4C", , false, , false)
-    MountainToCactus()
-    if LeaveServerEarly()
-        return
-    if VicSpawnedDetection("cactus") {
-        return
+    if (RoseChecked){
+        PlayerStatus("Going to Rose Field.", "0x1F8B4C", , false, , false)
+        if CactusChecked
+            CactusToRose()
+
+        if !CactusChecked {
+            if (!CheckFireButton()) {
+                if !ResetCharacterLoop()
+                    return
+            }
+            if LeaveServerEarly()
+                return
+            if (VicSpawnedDetection("none", false)) {
+                return
+            }
+            Rose()
+        }
+
+        openChat()
+        if VicSpawnedDetection("rose") {
+            return
+        }
+        PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
     }
-    PlayerStatus("Finished Checking Cactus Field.", "0x57F287", , false)
-    PlayerStatus("Going to Rose Field.", "0x1F8B4C", , false, , false)
-    CactusToRose()
-    if VicSpawnedDetection("rose") {
-        return
+
+    if (SpiderChecked){
+        PlayerStatus("Going to Spider Field.", "0x1F8B4C", , false, , false)
+        if (!CheckFireButton()) {
+            if !ResetCharacterLoop()
+                return
+        }
+        if LeaveServerEarly()
+            return
+        if (VicSpawnedDetection("none", false)) {
+            return
+        }
+        Spider()
+        openChat()
+        if VicSpawnedDetection("spider") {
+            return
+        }
+        PlayerStatus("Finished Checking Spider Field.", "0x57F287", , false)
     }
-    PlayerStatus("Finished Checking Rose Field.", "0x57F287", , false)
+
+    if (CloverChecked){
+        PlayerStatus("Going to Clover Field.", "0x1F8B4C", , false, , false)
+        if (!CheckFireButton()) {
+            if !ResetCharacterLoop()
+                return
+        }
+        if LeaveServerEarly()
+            return
+        if (VicSpawnedDetection("none", false)) {
+            return
+        }
+        Clover()
+        openChat()
+        if VicSpawnedDetection("clover") {
+            return
+        }
+        PlayerStatus("Finished Checking Clover Field.", "0x57F287", , false)
+    }
+
+
     PlayerStatus("No Vicious bees found.", "0x7F8C8D", , false, , false)
     if (data.beesmas){
         BeesmasInterupt()
@@ -187,7 +289,6 @@ JoinServer() {
 ;     GameLoaded()
 ;     MsgBox("YAY")
 ; }
-
 
 ; GetServerIds(1)
 ; F3::{

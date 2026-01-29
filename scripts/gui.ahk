@@ -48,7 +48,7 @@ MyWindow.ExecuteScriptAsync("document.querySelector('.donate-btn').src = '" data
 
 if (data.beesmas){
     MyWindow.ExecuteScriptAsync("document.querySelector('#beesmas').removeAttribute('disabled')")
-    MyWindow.ExecuteScriptAsync("document.querySelector('#maintab').removeAttribute('disabled')")
+    ; MyWindow.ExecuteScriptAsync("document.querySelector('#maintab').removeAttribute('disabled')")
 }
 
 
@@ -160,6 +160,13 @@ SendSettings(){
         IniWrite(1, settingsFile, "Settings", "Samovar")
         IniWrite(1, settingsFile, "Settings", "LidArt")
 
+        IniWrite(1, settingsFile, "Settings", "Pepper")
+        IniWrite(1, settingsFile, "Settings", "Mountain")
+        IniWrite(1, settingsFile, "Settings", "Cactus")
+        IniWrite(1, settingsFile, "Settings", "Rose")
+        IniWrite(0, settingsFile, "Settings", "Spider")
+        IniWrite(0, settingsFile, "Settings", "Clover")
+
     }
 	
     SettingsJson := { 
@@ -171,6 +178,12 @@ SendSettings(){
     , Candles:              IniRead(settingsFile, "Settings", "Candles")
     , Samovar:              IniRead(settingsFile, "Settings", "Samovar")
     , LidArt:               IniRead(settingsFile, "Settings", "LidArt")
+    , Pepper:               IniRead(settingsFile, "Settings", "Pepper")
+    , Mountain:               IniRead(settingsFile, "Settings", "Mountain")
+    , Cactus:               IniRead(settingsFile, "Settings", "Cactus")
+    , Rose:               IniRead(settingsFile, "Settings", "Rose")
+    , Spider:               IniRead(settingsFile, "Settings", "Spider")
+    , Clover:               IniRead(settingsFile, "Settings", "Clover")
     
     }
 	Sleep(200)
