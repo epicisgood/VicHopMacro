@@ -296,7 +296,6 @@ JoinServer() {
 ;     joinrandomserver()
 ; }
 
-
 ElevateScript() {
 	try
 		file := FileOpen("scripts\functions.ahk", "a")
