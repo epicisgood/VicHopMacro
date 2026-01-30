@@ -328,11 +328,10 @@ GameLoaded() {
         hwnd := GetRobloxHWND()
         GetRobloxClientPos(hwnd)
         pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth * 0.4 "|" windowY + windowHeight - windowHeight * 0.2 "|" windowWidth * 0.2 "|" windowHeight * 0.2)
-        Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+        ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
-            ; Sleep(3000)
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 30) = 1) {
@@ -343,19 +342,16 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 50) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Unknown status", "0xc3f861", ,false, ,false)
-            ; Sleep(3000)
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 35) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
-            ; Sleep(3000)
             return 0
         }
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("BSS Join Error.", "0xff0000", ,true)
-            MsgBox("YOO")
             ; PlayerStatus("BSS Join Error.", "0xff0000", ,false)
             return 0
         }
@@ -919,6 +915,7 @@ openChat(){
     relativeMouseMove(0.9, 0.1)
     Sleep(50)
     relativeMouseMove(0.5, 0.5)
+    Sleep(250)
     Gdip_DisposeImage(pBMScreen)
 }
 

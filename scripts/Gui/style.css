@@ -251,29 +251,20 @@ button:hover {
   transform: scale(1.03);
 }
 
-/* .donation-container{
-  position: relative;
-  top: 100%;
-  justify-content: flex-end;
-  
-} */
-
-.donate-btn {
+.donate-btn, .discord-btn{
   font-weight: bold;
   cursor: pointer;
   justify-self: flex-end;
   width: 20px;
-  /* margin-right: 1%; */
   margin-top: 1%;
 }
 
-.donate-btn:hover {
+.donate-btn:hover, .discord-btn:hover{
   transform: scale(1.3);
 }
 
-
-.credits {
-  color: #888;
+.credits{
+  color: var(--muted);
   font-size: 12px;
   margin-top: 8px;
   text-align: left;
@@ -281,6 +272,7 @@ button:hover {
   justify-content: space-between;
   align-items: center;
 }
+
 
 hr {
   border: none;
