@@ -83,7 +83,7 @@ Start(*) {
     }
     CloseRoblox()
     GetServerIds(2)
-    OnError (e, mode) => (mode = "return") * (-1)
+    ; OnError (e, mode) => (mode = "return") * (-1)
     loop {
         MainLoop()
     }
@@ -209,7 +209,7 @@ IniLidArt := IniRead(settingsFile, "Settings", "LidArt")
 
 
 
-PlayerStatus("Connected to discord!", "0x34495E", , false, , false)
+PlayerStatus("Connected to discord!", "0x4D4DFF", , false, , false)
 
 
 

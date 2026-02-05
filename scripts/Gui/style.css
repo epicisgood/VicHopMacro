@@ -251,6 +251,13 @@ button:hover {
   transform: scale(1.03);
 }
 
+/* .donation-container{
+  position: relative;
+  top: 100%;
+  justify-content: flex-end;
+  
+} */
+
 .donate-btn, .discord-btn{
   font-weight: bold;
   cursor: pointer;
@@ -263,8 +270,10 @@ button:hover {
   transform: scale(1.3);
 }
 
-.credits{
-  color: var(--muted);
+
+
+.credits {
+  color: #888;
   font-size: 12px;
   margin-top: 8px;
   text-align: left;
@@ -272,7 +281,6 @@ button:hover {
   justify-content: space-between;
   align-items: center;
 }
-
 
 hr {
   border: none;

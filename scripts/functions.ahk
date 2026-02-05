@@ -309,7 +309,7 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
             ; PlayerStatus("Detected BSS Loaded", "0x34495E", ,false, ,false)
-            return 1
+            return true
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
@@ -328,10 +328,18 @@ GameLoaded() {
         hwnd := GetRobloxHWND()
         GetRobloxClientPos(hwnd)
         pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth * 0.4 "|" windowY + windowHeight - windowHeight * 0.2 "|" windowWidth * 0.2 "|" windowHeight * 0.2)
-        ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+        Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+        static restictedCount := 0
+        static systemCount := 0
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
+            restictedCount += 1
+            if (restictedCount == 5){
+                CloseRoblox()
+                Sleep(5000)
+                GetServerIds(2)
+            }
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 30) = 1) {
@@ -342,15 +350,24 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 50) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Unknown status", "0xc3f861", ,false, ,false)
+            Sleep(5000)
+            CloseRoblox()
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 35) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
+            systemCount += 1
+            if (systemCount == 5){
+                CloseRoblox()
+                Sleep(5000)
+                GetServerIds(8)
+            }
             return 0
         }
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
             Gdip_DisposeImage(pBMScreen)
+            MsgBox("WSP")
             PlayerStatus("BSS Join Error.", "0xff0000", ,true)
             ; PlayerStatus("BSS Join Error.", "0xff0000", ,false)
             return 0
@@ -359,7 +376,9 @@ GameLoaded() {
         Sleep 1000 // 2 
     }
     global counter := 0
-    
+
+    restictedCount := 0
+    systemCount := 0
     ;STAGE 3 - wait for loaded game
     loop 90 {
         ActivateRoblox()
@@ -370,8 +389,8 @@ GameLoaded() {
         pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY+30 "|" windowWidth "|150")
         if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
-            ; PlayerStatus("Detected Game Loaded", "0x34495E", ,false, ,false)
-            return 1
+            ; PlayerStatus("Detected BSS Loaded (3rd stage)", "0x34495E", ,false, ,false)
+            return true
         }
         Gdip_DisposeImage(pBMScreen)
         if (A_Index = 90) {
@@ -543,7 +562,10 @@ ResetCharacterLoop() {
 }
 
 ResetCharacter(goRamp := true) {
+    rn := KeyDelay
+    SetKeyDelay 250 + KeyDelay
     Send "{" EscKey "}{" Rkey "}{" EnterKey "}"
+    SetKeyDelay rn
     Sleep 500
     HealthDetection()
 
@@ -935,12 +957,13 @@ detectViciousDefeated() {
 global ViciousField := "none"
 ViciousSpawnLocation() {
     global ViciousField
-    ; openChat()
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
+    Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
+    MsgBox("hehe vicious active!")
 
     VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
     for i, field in VicSpawned {

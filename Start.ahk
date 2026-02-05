@@ -66,6 +66,8 @@ if (!FileExist(settingsFile)) {
 
 }
 
+NightSearchAttempts := 1
+
 
 #include %A_ScriptDir%\lib\
 
@@ -97,18 +99,24 @@ if (!FileExist(settingsFile)) {
 
 
 
-NightSearchAttempts := 1
 
 MainLoop() {
     global NightSearchAttempts, data
     
-    while (!JoinServer()) {
-        Sleep(500)
+    joinrandomserver()
+    if (GameLoaded() != true) {
+        return
     }
 
-    if (!NightDetection()) {
+    if (NightDetection() != true) {
         NightSearchAttempts += 1
         PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
+        ActivateRoblox()
+        rn := KeyDelay
+        SetKeyDelay 250 + KeyDelay
+        Send "{" EscKey "}{" Lkey "}{" EnterKey "}"
+        SetKeyDelay rn
+        Sleep(500)
         return
     }
 
@@ -271,30 +279,11 @@ MainLoop() {
 
 }
 
-; Returns True = Inside Bee Swarm!
-; Returns False = Join Error
-JoinServer() {
-    global NightSearchAttempts
-    joinrandomserver()
-    if (Mod(NightSearchAttempts, 20) == 0) {
-        GetServerIds(8)
-    } 
-    if (GameLoaded()) {
-        return true
-    }
 
-    return false
+
+F3::{
+    Sleep(100)
 }
-
-; F3::{
-;     GameLoaded()
-;     MsgBox("YAY")
-; }
-
-; GetServerIds(1)
-; F3::{
-;     joinrandomserver()
-; }
 
 ElevateScript() {
 	try
