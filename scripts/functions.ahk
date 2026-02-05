@@ -963,19 +963,19 @@ ViciousSpawnLocation() {
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
-    MsgBox("hehe vicious active!")
 
+    
     VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
     for i, field in VicSpawned {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
             field := StrReplace(field, "2")
             global ViciousField := field
-            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 5)){
-                PlayerStatus("Gifted vicious was detected in " StrTitle(ViciousField) "!", "0x7004eb")
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 10)){
+                PlayerStatus("Gifted vicious was detected in " StrTitle(ViciousField) "!", "0x7004eb",,false)
                 Gdip_DisposeImage(pBMScreen)
                 return field
             }
-            PlayerStatus("Vicious was detected in " StrTitle(ViciousField) "!", "0x213fc4")
+            PlayerStatus("Vicious was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false)
             Gdip_DisposeImage(pBMScreen)
             return field
         }

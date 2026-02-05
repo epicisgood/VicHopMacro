@@ -101,7 +101,14 @@ leaveServer(){
     if ActivateRoblox() != 1 {
         return
     }
-    
+    pBMScreen := Gdip_BitmapFromScreen(windowX "|" windowY + 30 "|" windowWidth "|" windowHeight - 30)
+
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["science"], , , , , 150, 2) = 0) {
+        Gdip_DisposeImage(pBMScreen)
+        return
+    }
+    Gdip_DisposeImage(pBMScreen)
+
     rn := KeyDelay
     SetKeyDelay 250 + KeyDelay
     Send "{" EscKey "}{" Lkey "}{" EnterKey "}"
@@ -287,7 +294,8 @@ MainLoop() {
 
 
 F3::{
-    Sleep(100)
+    openChat()
+    ViciousSpawnLocation()
 }
 
 ElevateScript() {
