@@ -293,10 +293,10 @@ MainLoop() {
 
 
 
-F3::{
-    openChat()
-    ViciousSpawnLocation()
-}
+; F3::{
+;     openChat()
+;     ViciousSpawnLocation()
+; }
 
 ElevateScript() {
 	try

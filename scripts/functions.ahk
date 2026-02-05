@@ -334,40 +334,41 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
+            CloseRoblox()
             restictedCount += 1
             if (restictedCount == 5){
-                CloseRoblox()
+                GetServerIds(8)
                 Sleep(5000)
-                GetServerIds(2)
             }
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameFull"] , , , , , , 30) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is full", "0x61f8f8", ,false, ,false)
+            CloseRoblox()
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["UnknownStatus"] , , , , , , 50) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Unknown status", "0xc3f861", ,false, ,false)
-            Sleep(5000)
             CloseRoblox()
+            Sleep(5000)
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["SystemError"] , , , , , , 35) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
+            CloseRoblox()
             systemCount += 1
             if (systemCount == 5){
-                CloseRoblox()
-                Sleep(5000)
                 GetServerIds(8)
+                Sleep(5000)
             }
             return 0
         }
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
             Gdip_DisposeImage(pBMScreen)
-            MsgBox("WSP")
+            ; MsgBox("WSP")
             PlayerStatus("BSS Join Error.", "0xff0000", ,true)
             ; PlayerStatus("BSS Join Error.", "0xff0000", ,false)
             return 0
@@ -964,7 +965,7 @@ ViciousSpawnLocation() {
         return 0
     }
 
-    
+
     VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
     for i, field in VicSpawned {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
