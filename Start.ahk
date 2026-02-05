@@ -97,12 +97,23 @@ NightSearchAttempts := 1
 
 
 
-
+leaveServer(){
+    if ActivateRoblox() != 1 {
+        return
+    }
+    
+    rn := KeyDelay
+    SetKeyDelay 250 + KeyDelay
+    Send "{" EscKey "}{" Lkey "}{" EnterKey "}"
+    SetKeyDelay rn
+    Sleep(500)
+}
 
 
 MainLoop() {
     global NightSearchAttempts, data
-    
+    leaveServer()
+
     joinrandomserver()
     if (GameLoaded() != true) {
         return
@@ -111,12 +122,6 @@ MainLoop() {
     if (NightDetection() != true) {
         NightSearchAttempts += 1
         PlayerStatus("Searching For Night Servers. " NightSearchAttempts-1 "x", "0x1ABC9C", , false, , false)
-        ActivateRoblox()
-        rn := KeyDelay
-        SetKeyDelay 250 + KeyDelay
-        Send "{" EscKey "}{" Lkey "}{" EnterKey "}"
-        SetKeyDelay rn
-        Sleep(500)
         return
     }
 
