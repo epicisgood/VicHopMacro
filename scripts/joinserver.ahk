@@ -1,9 +1,8 @@
 serverIds := []
-PrimaryServer := ''
 JoinSeverProcesId := ''
 
 joinrandomserver() {
-    global serverIds, PrimaryServer, JoinSeverProcesId
+    global serverIds, JoinSeverProcesId
     file := A_ScriptDir "\serverlist.txt"
 
     if FileExist(file) {
@@ -14,21 +13,26 @@ joinrandomserver() {
         }
         FileDelete file
         try WinClose "ahk_class AutoHotkey ahk_pid " JoinSeverProcesId.pid
-        PlayerStatus("Finished New Server Id's" ,0,,false,,false)
+        PlayerStatus("Found " serverIds.Length " Server Id's" ,0,,false,,false)
     }
     
     if (serverIds.Length > 1) {
         RandomServer := serverIds.RemoveAt(Random(1, serverIds.Length))
-        ; CloseRoblox()
         Run 'roblox://placeId=1537690962&gameInstanceId=' RandomServer
-    } else {
-        if FileExist(A_ScriptDir "\pendingserverlist.txt") {
-            PlayerStatus("Waiting for New Server Id's..." ,0,,false,,false)
-            while (!FileExist(file)){
-                Sleep(100)
-            }
-        }
+        return true
     }
+
+    if FileExist(A_ScriptDir "\pendingserverlist.txt") {
+        PlayerStatus("Waiting for New Server Id's..." ,0,,false,,false)
+        while (!FileExist(file)){
+            Sleep(100)
+        }        
+    } else {
+        GetServerIds(8)
+        CloseRoblox()
+    }   
+
+    return false
 }
 
 GetServerIds(amount) {

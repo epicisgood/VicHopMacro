@@ -299,6 +299,7 @@ GameLoaded() {
         if !GetRobloxClientPos() {
             PlayerStatus("Disconnected from roblox", "0xfa7900", ,false, ,false)
             Gdip_DisposeImage(pBMScreen)
+            CloseRoblox()
             return 0
         }
         If (Gdip_ImageSearch(pBMScreen, bitmaps["loading"], , , , , 150, 4) = 1) {
@@ -314,6 +315,7 @@ GameLoaded() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["disconnected"], , , , , , 2) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Disconnected join error", "0xfa7900", ,false, ,false)
+            CloseRoblox()
             return 0
         }
         if (Gdip_ImageSearch(pBMScreen, bitmaps["X"], &OutputList , , , , , 5) = 1) {
@@ -323,14 +325,24 @@ GameLoaded() {
             Click
             Click
         }
-        ; InGame Errors Detection
+        
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["GameCheckMark"], , , , , , 15) = 0) {
+            Gdip_DisposeImage(pBMScreen)
+            continue
+        }
+        
         Gdip_DisposeImage(pBMScreen)
+
+
+
         hwnd := GetRobloxHWND()
         GetRobloxClientPos(hwnd)
         pBMScreen := Gdip_BitmapFromScreen(windowX + windowWidth * 0.4 "|" windowY + windowHeight - windowHeight * 0.2 "|" windowWidth * 0.2 "|" windowHeight * 0.2)
-        Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+        ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+
         static restictedCount := 0
         static systemCount := 0
+
         if (Gdip_ImageSearch(pBMScreen, bitmaps["GameRestricted"], , , , , , 15) = 1) {
             Gdip_DisposeImage(pBMScreen)
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
@@ -368,9 +380,8 @@ GameLoaded() {
         }
         if (A_Index = BSSLoadTime * 2) { ; Default, 15 seconds.
             Gdip_DisposeImage(pBMScreen)
-            ; MsgBox("WSP")
             PlayerStatus("BSS Join Error.", "0xff0000", ,true)
-            ; PlayerStatus("BSS Join Error.", "0xff0000", ,false)
+            CloseRoblox()
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
@@ -396,6 +407,7 @@ GameLoaded() {
         Gdip_DisposeImage(pBMScreen)
         if (A_Index = 90) {
             PlayerStatus("BSS Load Timeout", "0xff0000", ,false, ,false)
+            CloseRoblox()
             return 0
         }
         Gdip_DisposeImage(pBMScreen)
@@ -811,7 +823,6 @@ AttackVicLoop(field) {
 
 
 Dead := false
-ViciousLeft := false
 ; returns 2 if timeout reached or vic bee left for some reason
 ; returns 1 if vicious bee killed
 ; returns 0 if player died
@@ -822,19 +833,23 @@ AttackVic(field := '') {
     currentMinute := A_Min
 
     global Dead := false
-    global ViciousLeft := false
 
     VIC_TIMEOUT := 90000 ; 90 Seconds
 
 
     while (!detectViciousDefeated()) {
         ElapsedTime := A_TickCount - StartTime
-        if (ElapsedTime > VIC_TIMEOUT || ViciousLeft == true) {
+        if (ElapsedTime > VIC_TIMEOUT) {
             PlayerStatus("Took too long to kill vicious bee.", "0x000000", , false)
             return 2
         }
         if (Dead == true) {
             return 0
+        }
+
+        if (detectViciousLeft()) {
+            PlayerStatus("Leaving server: Vicious bee left. (Attacking)", "0x206694", , false)
+            return 2
         }
 
         if (field == "mountain" && currentMinute <= 14) {
@@ -892,7 +907,6 @@ AttackVic(field := '') {
 
 CheckPlayerDied() {
     global Dead
-    global ViciousLeft
     pBMScreen := GetpBMScreen(windowWidth - 400, windowHeight - 125, 400, 125)
     if (Gdip_ImageSearch(pBMScreen, bitmaps["YouDied"], , , , , , 2)) {
         Dead := true
@@ -900,13 +914,6 @@ CheckPlayerDied() {
         nm_endWalk()
         Gdip_DisposeImage(pBMScreen)
         return 1
-    }
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)) {
-        ViciousLeft := true
-        PlayerStatus("Vicious bee left sadly...", "0x4f2663", , false)
-        nm_endWalk()
-        Gdip_DisposeImage(pBMScreen)
-        return 0
     }
     Gdip_DisposeImage(pBMScreen)
 
@@ -955,11 +962,34 @@ detectViciousDefeated() {
     return false
 
 }
+
+detectViciousLeft(){
+    pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
+    if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)) {
+        Gdip_DisposeImage(pBMScreen)
+        return true
+    }
+    Gdip_DisposeImage(pBMScreen)
+    return false
+}
+
+LeaveServerEarly() {
+    if (detectViciousDefeated()) {
+        PlayerStatus("Leaving server: Vicious bee defeated.", "0x206694", , false)
+        return true
+    }
+    if (detectViciousLeft()) {
+        PlayerStatus("Leaving server: Vicious bee left.", "0x206694", , false)
+        return true
+    }
+    return false
+}
+
 global ViciousField := "none"
 ViciousSpawnLocation() {
     global ViciousField
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
-    Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+    ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
         return 0
@@ -995,14 +1025,6 @@ VicSpawnedDetection(currentField, reset := true) { ; if we at cannon we dont nee
     if (currentField == "none" && ViciousField == "pepper")
         return 0
 
-
-    pBMScreen := GetpBMScreen(windowWidth - 400, windowHeight - 125, 400, 125)
-    if (Gdip_ImageSearch(pBMScreen, bitmaps["ViciousLeft"], , , , , , 20)){
-        Gdip_DisposeImage(pBMScreen)
-        PlayerStatus("Vicious bee left sadly...", "0x4f2663", , false)
-        return 1
-    }
-    Gdip_DisposeImage(pBMScreen)
     if (ViciousField == currentField) {
         AttackVicLoop(ViciousField)
         return 1
@@ -1021,10 +1043,3 @@ VicSpawnedDetection(currentField, reset := true) { ; if we at cannon we dont nee
     
 }
 
-LeaveServerEarly() {
-    if (detectViciousDefeated()) {
-        PlayerStatus("Leaving server: Vicious bee defeated already", "0x206694", , false)
-        return true
-    }
-    return false
-}

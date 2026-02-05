@@ -238,6 +238,8 @@ MainLoop() {
         }
 
         openChat()
+        if LeaveServerEarly()
+            return
         if VicSpawnedDetection("rose") {
             return
         }
@@ -257,6 +259,8 @@ MainLoop() {
         }
         Spider()
         openChat()
+        if LeaveServerEarly()
+            return
         if VicSpawnedDetection("spider") {
             return
         }
@@ -276,6 +280,8 @@ MainLoop() {
         }
         Clover()
         openChat()
+        if LeaveServerEarly()
+            return
         if VicSpawnedDetection("clover") {
             return
         }
@@ -293,10 +299,6 @@ MainLoop() {
 
 
 
-; F3::{
-;     openChat()
-;     ViciousSpawnLocation()
-; }
 
 ElevateScript() {
 	try
