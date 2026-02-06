@@ -16,28 +16,32 @@ joinrandomserver() {
         PlayerStatus("Found " serverIds.Length " Server Id's" ,0,,false,,false)
     }
     
-    if (serverIds.Length > 1) {
+    if (serverIds.Length > 15) {
         RandomServer := serverIds.RemoveAt(Random(1, serverIds.Length))
         Run 'roblox://placeId=1537690962&gameInstanceId=' RandomServer
         return true
+    } else {
+        GetServerIds(8)
+        CloseRoblox()
     }
-
+    
+    if (serverIds.Length > 1) {
+        return false
+    }
+    
     if FileExist(A_ScriptDir "\pendingserverlist.txt") {
         PlayerStatus("Waiting for New Server Id's..." ,0,,false,,false)
         while (!FileExist(file)){
             Sleep(100)
         }        
-    } else {
-        GetServerIds(8)
-        CloseRoblox()
-    }   
+    }
 
     return false
 }
 
 GetServerIds(amount) {
     global serverIds
-    PlayerStatus("Getting New Server Id's" ,0,,false,,false)
+    PlayerStatus("Getting " amount "00 Server Id's" ,0,,false,,false)
     script := 
     (
         '
