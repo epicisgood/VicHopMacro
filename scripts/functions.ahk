@@ -889,15 +889,18 @@ AttackVic(field := '') {
                 Sleep(500)
             
             '
-        )
+            )
         }
         nm_createWalk(movement)
         SetTimer(CheckPlayerDied, 250)
         KeyWait "F14", "D T5 L"
         KeyWait "F14", "T20 L"
         nm_endWalk()
+        openChat()
         SetTimer(CheckPlayerDied, 0)
+
     }
+
 
     ; global ViciousDeaftedCounter += 1
     Sleep(5000)
@@ -1001,12 +1004,12 @@ ViciousSpawnLocation() {
         if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
             field := StrReplace(field, "2")
             global ViciousField := field
-            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 10)){
-                PlayerStatus("Gifted vicious was detected in " StrTitle(ViciousField) "!", "0x7004eb",,false)
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 20)){
+                PlayerStatus("Gifted Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x7004eb",,false)
                 Gdip_DisposeImage(pBMScreen)
                 return field
             }
-            PlayerStatus("Vicious was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false)
+            PlayerStatus("Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false)
             Gdip_DisposeImage(pBMScreen)
             return field
         }
