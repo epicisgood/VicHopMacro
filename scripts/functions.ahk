@@ -1011,7 +1011,7 @@ ViciousSpawnLocation() {
                 Gdip_DisposeImage(pBMScreen)
                 return field
             }
-            PlayerStatus("Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false,,false)
+            PlayerStatus("Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false,,true)
             Gdip_DisposeImage(pBMScreen)
             return field
         } else {
