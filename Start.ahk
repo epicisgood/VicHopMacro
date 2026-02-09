@@ -297,7 +297,9 @@ MainLoop() {
 
 }
 
-
+; F3::{
+;     ViciousSpawnLocation()
+; }
 
 
 ElevateScript() {

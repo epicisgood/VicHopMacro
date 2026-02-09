@@ -348,7 +348,8 @@ GameLoaded() {
             PlayerStatus("Experience is restricted", "0xaaf861", ,false, ,false)
             CloseRoblox()
             restictedCount += 1
-            if (restictedCount == 5){
+            if (restictedCount == 4){
+                restictedCount := 0
                 GetServerIds(8)
                 Sleep(5000)
             }
@@ -372,7 +373,8 @@ GameLoaded() {
             PlayerStatus("Roblox SystemError", "0x000986", ,false, ,false)
             CloseRoblox()
             systemCount += 1
-            if (systemCount == 5){
+            if (systemCount == 4){
+                systemCount := 0
                 GetServerIds(8)
                 Sleep(5000)
             }
@@ -992,8 +994,9 @@ global ViciousField := "none"
 ViciousSpawnLocation() {
     global ViciousField
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
-    ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+    Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
+        MsgBox("Didnt even see active")
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
@@ -1001,17 +1004,19 @@ ViciousSpawnLocation() {
 
     VicSpawned := ["pepper", "mountain", "cactus", "rose", "spider", "clover"]
     for i, field in VicSpawned {
-        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 9)) {
+        if (Gdip_ImageSearch(pBMScreen, bitmaps["Viciousbee"][field], , , , , , 50)) {
             field := StrReplace(field, "2")
             global ViciousField := field
-            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 20)){
+            if (Gdip_ImageSearch(pBMScreen, bitmaps["GiftedVicious"], , , , , , 67)){
                 PlayerStatus("Gifted Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x7004eb",,false)
                 Gdip_DisposeImage(pBMScreen)
                 return field
             }
-            PlayerStatus("Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false)
+            PlayerStatus("Vicious Bee was detected in " StrTitle(ViciousField) "!", "0x213fc4",,false,,false)
             Gdip_DisposeImage(pBMScreen)
             return field
+        } else {
+            ; PlayerStatus("Vicious Bee was NOT detected in " StrTitle(field) "!", "0x213fc4",,false,,false)
         }
     }
     Gdip_DisposeImage(pBMScreen)
