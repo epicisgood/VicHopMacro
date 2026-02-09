@@ -994,7 +994,7 @@ global ViciousField := "none"
 ViciousSpawnLocation() {
     global ViciousField
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
-    Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
+    ; Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
         Gdip_DisposeImage(pBMScreen)
         return 0
