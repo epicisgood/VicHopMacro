@@ -996,7 +996,6 @@ ViciousSpawnLocation() {
     pBMScreen := GetpBMScreen(windowX + windowWidth - 500, windowY, 500, 300)
     Gdip_SaveBitmapToFile(pBMScreen, "ss.png")
     if (!Gdip_ImageSearch(pBMScreen, bitmaps["ViciousActive"], , , , , , 8)) {
-        MsgBox("Didnt even see active")
         Gdip_DisposeImage(pBMScreen)
         return 0
     }
