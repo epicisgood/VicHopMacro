@@ -41,6 +41,10 @@ joinrandomserver() {
 
 GetServerIds(amount) {
     global serverIds
+    if FileExist(A_ScriptDir "\pendingserverlist.txt") {
+        PlayerStatus("Already getting Server Id's" ,0,,false,,false)
+        return
+    }
     PlayerStatus("Getting " amount "00 Server Id's" ,0,,false,,false)
     script := 
     (

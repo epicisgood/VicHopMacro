@@ -55,7 +55,7 @@ PepperPatch() {
         nm_walk(16,Dkey)
         ' PressSpace() '
         nm_Walk(6, WKey)
-    
+        hyperSleep(750)
         ' PressSpace() '
         nm_Walk(9, DKey)
     
@@ -144,7 +144,8 @@ MountainToCactus() {
     nm_Walk(15, Dkey)
     nm_walk(1, Akey)
     nm_walk(2,SKey)
-    nm_Walk(5.5, WKey)
+    nm_Walk(5, WKey)
+    hyperSleep(500)
     ' glider() '
 
     Send "{" WKey " down}"
@@ -340,28 +341,32 @@ Clover(){
     Send "{" EKey " down}"
     HyperSleep(100)
     Send "{" EKey " up}"
+    HyperSleep(170)
     Send "{" AKey " down}"
-    HyperSleep(200)
-    ' PressSpace() '
     HyperSleep(100)
-    ' PressSpace() '
+    Send "{" SpaceKey " down}"
+    HyperSleep(25)
+    Send "{" SpaceKey " up}"
+    Send "{" SpaceKey " down}"
+    HyperSleep(25)
+    Send "{" SpaceKey " up}"
+    HyperSleep(5000)
     Send "{" AKey " up}"
-    HyperSleep(7000)
+    HyperSleep(1000)
     
-    nm_walk(15,Wkey)
-    nm_walk(13,Dkey)
-    nm_walk(5,Skey)
-    nm_walk(6,Akey)
+    nm_walk(12,Wkey)
+    ' PressSpace() '
+    nm_walk(5,Akey)
+    nm_walk(7,Skey)
 
-    nm_walk(5,Skey)
-    nm_walk(6,Dkey)
+    nm_walk(17,Akey)
+    nm_walk(5.5,Skey)
+    nm_walk(16,Dkey)
+    nm_walk(5.5,Skey)
+    nm_walk(16,Akey)
+    nm_walk(5.5,Skey)
+    nm_walk(15,Dkey)
     
-    nm_walk(5,Skey)
-    nm_walk(6,Akey)
-
-    nm_walk(5,Skey)
-    nm_walk(6,Dkey)
-                
         '
     )
 
