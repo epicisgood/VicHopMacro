@@ -87,11 +87,10 @@ The macro is mainly for **mid-to-endgame** players farming **stingers** for Star
 
 ## :speech_balloon: Contact
 
-This macro is **only** published on GitHub. I do **not** run a Discord server for this macro.
+Need help extracting ZIPs or setting things up?
 
-Need help, even if it’s just unzipping a file? DM me any time.
-
-* **Discord:** `_epic.`
+* **Discord Server:** [link](https://discord.gg/QfU2tm2Nf4)
+* **Discord user:** [`_epic.`](https://discord.com/users/726162926851063919)
 * **GitHub:** [epicisgood/VicHopMacro](https://github.com/epicisgood/VicHopMacro)
 * **Donate:** [Give me robux!](https://www.roblox.com/games/17723449397/Bee-Swarm-Vicious-Hop-Donation-Center#!/store)
 
