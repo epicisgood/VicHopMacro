@@ -1,4 +1,10 @@
 # :bee: BSS VicHopMacro
+
+![GitHub Repo stars](https://img.shields.io/github/stars/epicisgood/VicHopMacro?style=flat)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/epicisgood/VicHopMacro/total)
+![GitHub Created At](https://img.shields.io/github/created-at/epicisgood/VicHopMacro)
+![GitHub License](https://img.shields.io/github/license/epicisgood/VicHopMacro)
+
 A Bee Swarm Simulator macro designed to hop servers to find **Vicious Bees** - (**without passive alts or searchers**) — only your **main account**.
 
 <img width="450" height="300" alt="image" src="https://github.com/user-attachments/assets/49dd1c83-5777-4dfb-be8c-fc30cf502bf2" />
